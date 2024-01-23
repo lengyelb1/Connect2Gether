@@ -13,5 +13,7 @@ public partial class Alertmessage
     public int UserId { get; set; }
 
     public string Description { get; set; } = null!;
+
+    [JsonIgnore]
     public virtual User? User { get; set; } = null!;
 }

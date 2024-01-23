@@ -16,7 +16,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.ToListAsync();
+                    var result = await context.UserPosts.Include(f => f.Comments).ToListAsync();
                     context.SaveChanges();
                     return Ok(result);
                 }

@@ -18,7 +18,8 @@ public partial class UserPost
 
     public int UserId { get; set; }
 
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
 
-    public virtual User User { get; set; } = null!;
+    [JsonIgnore]
+    public virtual User? User { get; set; } = null!;
 }
