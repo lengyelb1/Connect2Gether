@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Connect2Gether_API.Controllers
 {
+
+    /* Oldal funkciók */
+    /* Jelszó / azonosítóval való lekérés*/
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
