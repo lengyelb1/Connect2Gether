@@ -4158,23 +4158,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jbalázs\\.nuget\\packages\\": {},
+    "C:\\Users\\Felhasználó\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jbalázs\\source\\repos\\Connect2Gether_API\\Connect2Gether_API\\Connect2Gether_API.csproj",
+      "projectUniqueName": "C:\\Users\\Felhasználó\\Desktop\\Connect2Gether-main\\Connect2Gether_API.csproj",
       "projectName": "Connect2Gether_API",
-      "projectPath": "C:\\Users\\jbalázs\\source\\repos\\Connect2Gether_API\\Connect2Gether_API\\Connect2Gether_API.csproj",
-      "packagesPath": "C:\\Users\\jbalázs\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jbalázs\\source\\repos\\Connect2Gether_API\\Connect2Gether_API\\obj\\",
+      "projectPath": "C:\\Users\\Felhasználó\\Desktop\\Connect2Gether-main\\Connect2Gether_API.csproj",
+      "packagesPath": "C:\\Users\\Felhasználó\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Felhasználó\\Desktop\\Connect2Gether-main\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\jbalázs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Felhasználó\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4244,7 +4244,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

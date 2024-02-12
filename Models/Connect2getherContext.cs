@@ -31,7 +31,7 @@ public partial class Connect2getherContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("SERVER=localhost;PORT=3306;DATABASE=connect2gether;USER=root;PASSWORD=;SSL MODE=none;");
+        => optionsBuilder.UseMySQL(@"SERVER=connect2gether.mysql.database.azure.com;PORT=50001;DATABASE=connect2gether;USER=szoszieat;PASSWORD=12345678-Sz;SSL MODE=Required; SslCa=DigiCertGlobalRootCA.crt");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
