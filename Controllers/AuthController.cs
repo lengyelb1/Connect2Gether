@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using System.Data;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -32,9 +33,16 @@ namespace Connect2Gether_API.Controllers
                     defaultPermission.Id = 1;
                     defaultPermission.Name = "Default";
 
-                    
-                    
-                    
+                    if (registrationRequestDto.Password.Length <8)
+                    {
+                        return BadRequest("The password need to be 8 character lenght!");
+                    }else if (!(registrationRequestDto.Password.Any(char.IsUpper) && registrationRequestDto.Password.Any(char.IsLower)))
+                    {
+                        return BadRequest("The password need to contain upper and lower character!");
+                    }else if (!registrationRequestDto.Password.Any(char.IsDigit))
+                    {
+                        return BadRequest("The password need to contain number!");
+                    }
 
                     string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password);
                     User user = new User();
@@ -46,6 +54,7 @@ namespace Connect2Gether_API.Controllers
                     if (context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name) != null)
                     {
                         user.PermissionId = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name).Id;
+                        user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
                     }
                     else
                     {
@@ -95,33 +104,40 @@ namespace Connect2Gether_API.Controllers
                 
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);   
+                return BadRequest("Wrong username or password!");   
             }
             
         }
 
         private string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>()
+            using (var context = new Connect2getherContext())
             {
-                new Claim(ClaimTypes.Name,user.Username),
-            };
+                string permission = context.Permissions.FirstOrDefault((x)=> x.Id == context.Users.FirstOrDefault((x) => x.Username == user.Username).PermissionId).Name;
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
+                List<Claim> claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name,user.Username),
+                    new Claim("Permission",permission)
+                };
 
-            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
 
-            var token = new JwtSecurityToken(
-                claims:claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds
-                );
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
 
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+                var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
 
-            return jwt;
+                var token = new JwtSecurityToken(
+                    claims:claims,
+                    expires: DateTime.Now.AddDays(1),
+                    signingCredentials: creds
+                    );
+
+                var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+                return jwt;
+            }
 
         }
     }
