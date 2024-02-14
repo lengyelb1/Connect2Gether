@@ -52,7 +52,11 @@ namespace Connect2Gether_API.Controllers
                         user.PermissionId = defaultPermission.Id;
                     }
 
-                    // Duplicated user hiba van benne, vizsgálni kell hogy létezik e már a user
+                    if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
+                    {
+                        return BadRequest("User existing!");
+                    }
+
                     context.Users.Add(user);
                     context.SaveChanges();
                     return Ok("User added!");
