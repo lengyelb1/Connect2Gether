@@ -44,7 +44,7 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("The password need to contain number!");
                     }
 
-                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password);
+                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,3);
                     User user = new User();
                     user.Username = registrationRequestDto.UserName;
                     user.Hash = passwordHash;
@@ -119,7 +119,7 @@ namespace Connect2Gether_API.Controllers
 
                 List<Claim> claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name,user.Username),
+                    new Claim("Name",user.Username),
                     new Claim("Permission",permission)
                 };
 
