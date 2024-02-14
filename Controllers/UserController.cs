@@ -1,7 +1,10 @@
 ﻿using Connect2Gether_API.Models;
+using Connect2Gether_API.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -12,6 +15,9 @@ namespace Connect2Gether_API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        public static User user = new User();
+
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -29,5 +35,10 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
+
+
+        
+
+
     }
 }
