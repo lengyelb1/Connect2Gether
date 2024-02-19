@@ -11,7 +11,7 @@ using System.Data;
 
 namespace Connect2Gether_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -44,22 +44,26 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("The password need to contain number!");
                     }
 
-                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,3);
+                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
                     User user = new User();
                     user.Username = registrationRequestDto.UserName;
                     user.Hash = passwordHash;
                     user.Email = registrationRequestDto.Email;
                     user.RegistrationDate = DateTime.Today;
+                    user.PermissionId = defaultPermission.Id;
+                    user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
 
+                    /*
                     if (context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name) != null)
                     {
-                        user.PermissionId = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name).Id;
-                        user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+                        //user.PermissionId = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name).Id;
+                        //user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+
                     }
                     else
                     {
-                        user.PermissionId = defaultPermission.Id;
                     }
+                    */
 
                     if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
                     {

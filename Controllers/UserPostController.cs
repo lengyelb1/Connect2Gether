@@ -1,4 +1,5 @@
 ﻿using Connect2Gether_API.Models;
+using Connect2Gether_API.Models.Dtos.UserDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,5 +27,31 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(UserPostDto userPostDto)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+
+                    UserPost post = new UserPost();
+                    post.UserId = userPostDto.UserId;
+                    post.Title = userPostDto.Title;
+                    post.Description = userPostDto.Description;
+                    post.Like = 0;
+
+                    context.UserPosts.Add(post);
+                    context.SaveChanges();
+                    return Ok("Post added!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
     }
 }
