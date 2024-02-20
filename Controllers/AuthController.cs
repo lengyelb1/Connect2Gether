@@ -42,9 +42,12 @@ namespace Connect2Gether_API.Controllers
                     }else if (!registrationRequestDto.Password.Any(char.IsDigit))
                     {
                         return BadRequest("The password need to contain number!");
+                    }else if (!registrationRequestDto.Password.Any(char.IsSymbol))
+                    {
+                        return BadRequest("The password need to contain special character!");
                     }
 
-                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
                     User user = new User();
                     user.Username = registrationRequestDto.UserName;
                     user.Hash = passwordHash;
@@ -58,7 +61,6 @@ namespace Connect2Gether_API.Controllers
                     {
                         //user.PermissionId = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name).Id;
                         //user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
-
                     }
                     else
                     {

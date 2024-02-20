@@ -35,8 +35,8 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-
                     UserPost post = new UserPost();
+
                     post.UserId = userPostDto.UserId;
                     post.Title = userPostDto.Title;
                     post.Description = userPostDto.Description;

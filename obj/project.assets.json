@@ -4413,11 +4413,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lbálint\\Desktop\\Connect2Gether-main (1)\\Connect2Gether-main\\Connect2Gether_API.csproj",
+      "projectUniqueName": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
       "projectName": "Connect2Gether_API",
-      "projectPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether-main (1)\\Connect2Gether-main\\Connect2Gether_API.csproj",
+      "projectPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
       "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether-main (1)\\Connect2Gether-main\\obj\\",
+      "outputPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
