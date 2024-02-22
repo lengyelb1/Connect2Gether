@@ -2,14 +2,19 @@
   "format": 1,
   "restore": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj": {}
+=======
+    "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {}
+>>>>>>> parent of 5589f92 (post and comment cannot be empty)
   },
   "projects": {
-    "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj": {
+    "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj",
+        "projectUniqueName": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
         "projectName": "Connect2Gether_API",
+<<<<<<< HEAD
         "projectPath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj",
         "packagesPath": "C:\\Users\\Blackhood\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\obj\\",
@@ -26,12 +31,17 @@
         "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
         "outputPath": "C:\\Visual Studio Projects\\Connect2Gether\\obj\\",
 >>>>>>> faba0ffe68ff0591393035cca5301bd011287a25
+=======
+        "projectPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
+        "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\obj\\",
+>>>>>>> parent of 5589f92 (post and comment cannot be empty)
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "E:\\Visual Studio\\Visual Studio Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Blackhood\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lbálint\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

@@ -3,7 +3,6 @@ using Connect2Gether_API.Models.Dtos.UserDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Sec;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -36,14 +35,6 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    if (userPostDto.Title == "" || userPostDto.Title ==null)
-                    {
-                        return BadRequest("The title cannot be empty!");
-                    }else if (userPostDto.Description == "" || userPostDto.Description == null)
-                    {
-                        return BadRequest("The description cannot be empty!");
-                    }
-
                     UserPost post = new UserPost();
 
                     post.UserId = userPostDto.UserId;
