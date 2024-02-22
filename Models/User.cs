@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Connect2Gether_API.Models;
 
@@ -35,9 +34,9 @@ public partial class User
 
     public DateTime LastLogin { get; set; }
 
-    public virtual ICollection<Alertmessage>? Alertmessages { get; set; } = new List<Alertmessage>();
+    public virtual ICollection<Alertmessage> Alertmessages { get; set; } = new List<Alertmessage>();
 
-    public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual Permission Permission { get; set; } = null!;
 

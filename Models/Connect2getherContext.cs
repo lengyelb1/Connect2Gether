@@ -21,6 +21,8 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<Image> Images { get; set; }
 
+    public virtual DbSet<LikedPost> LikedPosts { get; set; }
+
     public virtual DbSet<Permission> Permissions { get; set; }
 
     public virtual DbSet<Rank> Ranks { get; set; }
@@ -31,8 +33,7 @@ public partial class Connect2getherContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-       => optionsBuilder.UseMySQL(@"SERVER=localhost;PORT=3306;DATABASE=connect2gether;USER=root;PASSWORD=;");
-    //  => optionsBuilder.UseMySQL(@"SERVER=connect2gether.mysql.database.azure.com;DATABASE=connect2gether;USER=szoszieat;PASSWORD=12345678-Sz;SSL MODE=Required; SslCa=DigiCertGlobalRootCA.crt");
+        => optionsBuilder.UseMySQL("SERVER=localhost;PORT=3306;DATABASE=connect2gether;USER=root;PASSWORD=;SSL MODE=none;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -95,6 +96,25 @@ public partial class Connect2getherContext : DbContext
             entity.Property(e => e.Image2).HasColumnType("mediumblob");
             entity.Property(e => e.Image3).HasColumnType("mediumblob");
             entity.Property(e => e.Image4).HasColumnType("mediumblob");
+        });
+
+        modelBuilder.Entity<LikedPost>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("liked_posts");
+
+            entity.HasIndex(e => e.PostId, "PostID");
+
+            entity.HasIndex(e => e.UserId, "UserID");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.PostId)
+                .HasColumnType("int(11)")
+                .HasColumnName("PostID");
+            entity.Property(e => e.UserId)
+                .HasColumnType("int(11)")
+                .HasColumnName("UserID");
         });
 
         modelBuilder.Entity<Permission>(entity =>

@@ -41,7 +41,6 @@ namespace Connect2Gether_API.Controllers
                     post.Title = userPostDto.Title;
                     post.Description = userPostDto.Description;
                     post.Like = 0;
-
                     context.UserPosts.Add(post);
                     context.SaveChanges();
                     return Ok("Post added!");
@@ -53,5 +52,25 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Like(int postId,int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    LikedPost like = new LikedPost();
+                    like.PostId = postId;
+                    like.UserId = userId;
+                    context.LikedPosts.Add(like);
+                    context.SaveChanges();
+                    return Ok("Post liked!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
     }
 }
