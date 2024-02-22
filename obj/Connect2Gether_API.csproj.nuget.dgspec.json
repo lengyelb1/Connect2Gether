@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj": {}
   },
   "projects": {
@@ -12,6 +13,19 @@
         "projectPath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj",
         "packagesPath": "C:\\Users\\Blackhood\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\obj\\",
+=======
+    "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj": {}
+  },
+  "projects": {
+    "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj",
+        "projectName": "Connect2Gether_API",
+        "projectPath": "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj",
+        "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
+        "outputPath": "C:\\Visual Studio Projects\\Connect2Gether\\obj\\",
+>>>>>>> faba0ffe68ff0591393035cca5301bd011287a25
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "E:\\Visual Studio\\Visual Studio Shared\\NuGetPackages"

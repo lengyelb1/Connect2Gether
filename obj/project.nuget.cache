@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "PNqqCWNxA7ZCUe/Wh2avv2/9sQnwNdtSfTnX91aJgz4jdQAszyn/QUF5jb49RoZeB7jL5Gbl++oeZP/55pzj+g==",
   "success": true,
   "projectFilePath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj",
+=======
+  "dgSpecHash": "aCgiZdDWWpPfGsCyTAawKueOooc2xw37pvp62G9pG/+WFgb3QyC5BT0Y+22GP1mHGtURfpjUwt6SxWOU//OHMQ==",
+  "success": true,
+  "projectFilePath": "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj",
+>>>>>>> faba0ffe68ff0591393035cca5301bd011287a25
   "expectedPackageFiles": [
     "C:\\Users\\Blackhood\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Blackhood\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
