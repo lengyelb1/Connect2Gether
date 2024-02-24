@@ -52,7 +52,7 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("Lke")]
         public async Task<IActionResult> Like(int postId,int userId)
         {
             using (var context = new Connect2getherContext())

@@ -1,47 +1,23 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj": {}
-=======
-    "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {}
->>>>>>> parent of 5589f92 (post and comment cannot be empty)
+    "C:\\Users\\Black\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {
+    "C:\\Users\\Black\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
+        "projectUniqueName": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
         "projectName": "Connect2Gether_API",
-<<<<<<< HEAD
-        "projectPath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\Connect2Gether_API.csproj",
-        "packagesPath": "C:\\Users\\Blackhood\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Blackhood\\Downloads\\Connect2Gether\\obj\\",
-=======
-    "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj": {}
-  },
-  "projects": {
-    "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj",
-        "projectName": "Connect2Gether_API",
-        "projectPath": "C:\\Visual Studio Projects\\Connect2Gether\\Connect2Gether_API.csproj",
-        "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
-        "outputPath": "C:\\Visual Studio Projects\\Connect2Gether\\obj\\",
->>>>>>> faba0ffe68ff0591393035cca5301bd011287a25
-=======
-        "projectPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
-        "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\obj\\",
->>>>>>> parent of 5589f92 (post and comment cannot be empty)
+        "projectPath": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
+        "packagesPath": "C:\\Users\\Black\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Black\\Desktop\\Connect2Gether\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\lbálint\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Black\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -63,6 +38,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -123,7 +103,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
