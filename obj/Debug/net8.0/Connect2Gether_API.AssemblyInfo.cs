@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Connect2Gether_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1b5db50039a6837f1908962744683f4e315da60")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+03028fa23ddb9ae7e59740634a9620b8877ca699")]
 [assembly: System.Reflection.AssemblyProductAttribute("Connect2Gether_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Connect2Gether_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
