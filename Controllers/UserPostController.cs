@@ -38,6 +38,7 @@ namespace Connect2Gether_API.Controllers
                     UserPost post = new UserPost();
 
                     post.UserId = userPostDto.UserId;
+                    post.User = context.Users.FirstOrDefault(u => u.Id == userPostDto.UserId);
                     post.Title = userPostDto.Title;
                     post.Description = userPostDto.Description;
                     post.Like = 0;

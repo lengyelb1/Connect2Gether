@@ -106,7 +106,7 @@
   {
     "ContainingType": "Connect2Gether_API.Controllers.UserPostController",
     "Method": "Like",
-    "RelativePath": "UserPost",
+    "RelativePath": "UserPost/Like",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
