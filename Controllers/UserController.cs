@@ -15,30 +15,6 @@ namespace Connect2Gether_API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public static User user = new User();
-
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var result = await context.Users.Include(f => f.UserPosts).Include(f => f.Comments).Include(f => f.Alertmessages).ToListAsync();
-                    context.SaveChanges();
-                    return Ok(result);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-
         
-
-
     }
 }
