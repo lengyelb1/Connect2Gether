@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Black\\Desktop\\Connect2Gether\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\models\\userpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\userpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\models\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\controllers\\userpostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:controllers\\userpostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\controllers\\commentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:controllers\\commentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,10 +33,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\models\\connect2gethercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\connect2gethercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\black\\desktop\\connect2gether\\models\\dtos\\userdtos\\userpostdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,11 +46,60 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CommentController.cs",
+              "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Controllers\\CommentController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CommentController.cs",
+              "ToolTip": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Controllers\\CommentController.cs",
+              "RelativeToolTip": "Controllers\\CommentController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAwBgAAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T19:08:28.961Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Comment.cs",
+              "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\Comment.cs",
+              "RelativeDocumentMoniker": "Models\\Comment.cs",
+              "ToolTip": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\Comment.cs",
+              "RelativeToolTip": "Models\\Comment.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAwAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T09:17:33.518Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAA/wCYAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T19:01:17.733Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserPost.cs",
+              "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\UserPost.cs",
+              "RelativeDocumentMoniker": "Models\\UserPost.cs",
+              "ToolTip": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\UserPost.cs",
+              "RelativeToolTip": "Models\\UserPost.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAAABMAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-24T09:29:15.567Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "UserPostDto.cs",
               "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\Dtos\\UserDtos\\UserPostDto.cs",
               "RelativeDocumentMoniker": "Models\\Dtos\\UserDtos\\UserPostDto.cs",
@@ -46,20 +111,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "UserPostController.cs",
               "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Controllers\\UserPostController.cs",
               "RelativeDocumentMoniker": "Controllers\\UserPostController.cs",
               "ToolTip": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Controllers\\UserPostController.cs",
               "RelativeToolTip": "Controllers\\UserPostController.cs",
-              "ViewState": "AQIAACEAAAAAAAAAAAAYwC8AAAAkAAAA",
+              "ViewState": "AQIAABwAAAAAAAAAAAAQwCsAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-24T08:56:04.656Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-24T08:56:04.656Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "Connect2getherContext.cs",
               "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Models\\Connect2getherContext.cs",
               "RelativeDocumentMoniker": "Models\\Connect2getherContext.cs",
@@ -71,19 +135,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "C:\\Users\\Black\\Desktop\\Connect2Gether\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAABfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-02-24T08:56:04.662Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -91,8 +155,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AQIAABwAAAAAAAAAAAAqwBEAAAA3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-02-24T08:56:04.664Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-02-24T08:56:04.664Z"
             }
           ]
         }

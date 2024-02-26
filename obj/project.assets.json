@@ -4407,23 +4407,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Black\\.nuget\\packages\\": {},
+    "C:\\Users\\lbálint\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
+      "projectUniqueName": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
       "projectName": "Connect2Gether_API",
-      "projectPath": "C:\\Users\\Black\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
-      "packagesPath": "C:\\Users\\Black\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Black\\Desktop\\Connect2Gether\\obj\\",
+      "projectPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
+      "packagesPath": "C:\\Users\\lbálint\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Black\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lbálint\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4432,6 +4432,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4444,11 +4445,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -4509,16 +4505,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\Black\\Desktop\\Connect2Gether\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

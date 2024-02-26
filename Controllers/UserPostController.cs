@@ -38,6 +38,7 @@ namespace Connect2Gether_API.Controllers
                     UserPost post = new UserPost();
 
                     post.UserId = userPostDto.UserId;
+                    post.User = context.Users.FirstOrDefault(u => u.Id == userPostDto.UserId);
                     post.Title = userPostDto.Title;
                     post.Description = userPostDto.Description;
                     post.Like = 0;
@@ -52,7 +53,9 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpPost("Lke")]
+
+        /*Test*/
+        [HttpPost("Like")]
         public async Task<IActionResult> Like(int postId,int userId)
         {
             using (var context = new Connect2getherContext())
