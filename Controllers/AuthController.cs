@@ -126,18 +126,20 @@ namespace Connect2Gether_API.Controllers
                 List<Claim> claims = new List<Claim>()
                 {
                     new Claim("Name",user.Username),
-                    new Claim("Permission",permission)
+                    new Claim("role",permission)
                 };
 
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AuthSettings:JwtOptions:Token").Value!));
 
                 var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
 
                 var token = new JwtSecurityToken(
                     claims:claims,
                     expires: DateTime.Now.AddDays(1),
-                    signingCredentials: creds
+                    signingCredentials: creds,
+                    audience: _configuration.GetSection("AuthSettings:JwtOptions:Audience").Value,
+                    issuer: _configuration.GetSection("AuthSettings:JwtOptions:Issuer").Value
                     );
 
                 var jwt = new JwtSecurityTokenHandler().WriteToken(token);
