@@ -83,9 +83,9 @@ namespace Connect2Gether_API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.MapControllers();
 
