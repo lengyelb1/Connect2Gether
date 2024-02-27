@@ -10,6 +10,79 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Connect2Gether_API.Controllers.AdminControllers.AdminUsersController",
+    "Method": "RegisterPut",
+    "RelativePath": "AdminUsers/id",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userPutDto",
+        "Type": "Connect2Gether_API.Models.Dtos.UserDtos.UserPutDto",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Connect2Gether_API.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Connect2Gether_API.Controllers.AdminControllers.AdminUsersController",
+    "Method": "Delete",
+    "RelativePath": "AdminUsers/id",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Connect2Gether_API.Controllers.AdminControllers.AdminUsersController",
+    "Method": "RegisterWithOutCriterion",
+    "RelativePath": "AdminUsers/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registrationRequestDto",
+        "Type": "Connect2Gether_API.Models.Dtos.RegistrationRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Connect2Gether_API.Models.User",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Connect2Gether_API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "Auth/login",
