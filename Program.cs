@@ -56,7 +56,7 @@ namespace Connect2Gether_API
                 options.AddPolicy(MyAllowSpecificOrigins,
                                       policy =>
                                       {
-                                          policy.WithOrigins("*")
+                                          policy
                                                                 .AllowAnyHeader()
                                                                 .AllowAnyOrigin()
                                                                 .AllowAnyMethod();
@@ -70,7 +70,7 @@ namespace Connect2Gether_API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-            app.Urls.Add("http://*:7043");
+            app.Urls.Add("https://*:7043");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment() || !app.Environment.IsDevelopment())
