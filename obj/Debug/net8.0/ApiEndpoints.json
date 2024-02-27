@@ -1,5 +1,15 @@
 [
   {
+    "ContainingType": "Connect2Gether_API.Controllers.AdminControllers.AdminUsersController",
+    "Method": "GetAll",
+    "RelativePath": "AdminUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Connect2Gether_API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "Auth/login",
@@ -65,16 +75,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Connect2Gether_API.Controllers.UserController",
-    "Method": "Get",
-    "RelativePath": "User",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   },
   {
