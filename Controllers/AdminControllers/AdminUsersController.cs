@@ -68,28 +68,9 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         {
             using (var context = new Connect2getherContext())
             {
-                if (userPutDto.Password.Length < 8)
-                {
-                    return BadRequest("The password need to be 8 character lenght!");
-                }
-                else if (!(userPutDto.Password.Any(char.IsUpper) && userPutDto.Password.Any(char.IsLower)))
-                {
-                    return BadRequest("The password need to contain upper and lower character!");
-                }
-                else if (!userPutDto.Password.Any(char.IsDigit))
-                {
-                    return BadRequest("The password need to contain number!");
-                }
-                else if (!userPutDto.Password.Any(char.IsSymbol))
-                {
-                    return BadRequest("The password need to contain special character!");
-                }
-
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(userPutDto.Password, 4);
                 User user = new User();
                 user.Id = id;
                 user.Username = userPutDto.UserName;
-                user.Hash = passwordHash;
                 user.Email = userPutDto.Email;
                 user.RegistrationDate = DateTime.Today;
                 user.PermissionId = userPutDto.PermissionId;
