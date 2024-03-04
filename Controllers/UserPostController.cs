@@ -29,22 +29,22 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(UserPostDto userPostDto)
+        public IActionResult Post(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
-                {
-                    UserPost post = new UserPost();
+                {   
+                    UserPost userPost = new UserPost();
+                    userPost.UserId = userPostDto.UserId;
+                    userPost.Description = userPostDto.Description;
+                    userPost.Title = userPostDto.Title;
+                    userPost.Like = 0;
+                    userPost.User = context.Users.FirstOrDefault(x => x.Id == userPost.Id);
 
-                    post.UserId = userPostDto.UserId;
-                    post.User = context.Users.FirstOrDefault(u => u.Id == userPostDto.UserId);
-                    post.Title = userPostDto.Title;
-                    post.Description = userPostDto.Description;
-                    post.Like = 0;
-                    context.UserPosts.Add(post);
+                    context.UserPosts.Add(userPost);
                     context.SaveChanges();
-                    return Ok("Post added!");
+                    return Ok(userPost);
                 }
                 catch (Exception ex)
                 {
@@ -56,7 +56,7 @@ namespace Connect2Gether_API.Controllers
 
         /*Test*/
         [HttpPost("Like")]
-        public async Task<IActionResult> Like(int postId,int userId)
+        public IActionResult Like(int postId,int userId)
         {
             using (var context = new Connect2getherContext())
             {
