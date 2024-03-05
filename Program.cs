@@ -56,7 +56,7 @@ namespace Connect2Gether_API
                 options.AddPolicy(MyAllowSpecificOrigins,
                                       policy =>
                                       {
-                                          policy.WithOrigins("*")
+                                          policy
                                                                 .AllowAnyHeader()
                                                                 .AllowAnyOrigin()
                                                                 .AllowAnyMethod();
