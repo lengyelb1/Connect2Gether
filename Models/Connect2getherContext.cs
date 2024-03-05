@@ -194,10 +194,14 @@ public partial class Connect2getherContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Description).HasColumnType("text");
-            entity.Property(e => e.ImageId).HasColumnType("int(11)");
+            entity.Property(e => e.ImageId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.Like).HasColumnType("bigint(20)");
             entity.Property(e => e.Title).HasMaxLength(128);
-            entity.Property(e => e.UserId).HasColumnType("int(11)");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserPosts)
                 .HasForeignKey(d => d.UserId)

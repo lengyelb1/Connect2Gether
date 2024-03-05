@@ -7,10 +7,6 @@
       "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:controllers\\userpostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\models\\userpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\userpost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -19,12 +15,28 @@
       "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\dtos\\userdtos\\userpostdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\models\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\models\\connect2gethercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\connect2gethercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\controllers\\commentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:controllers\\commentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|c:\\users\\jbal\u00E1zs\\desktop\\repo clone\\connect2gether\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EFC6DF3C-6E64-4E9B-AA59-3A78227C648A}|Connect2Gether_API.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -33,38 +45,77 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "DockedWidth": 209,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserPost.cs",
+              "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\UserPost.cs",
+              "RelativeDocumentMoniker": "Models\\UserPost.cs",
+              "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\UserPost.cs",
+              "RelativeToolTip": "Models\\UserPost.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAzwA8AAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-05T11:43:51.953Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\Dtos\\UserDto.cs",
+              "RelativeDocumentMoniker": "Models\\Dtos\\UserDto.cs",
+              "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\Dtos\\UserDto.cs",
+              "RelativeToolTip": "Models\\Dtos\\UserDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-05T11:18:58.219Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Connect2getherContext.cs",
+              "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\Connect2getherContext.cs",
+              "RelativeDocumentMoniker": "Models\\Connect2getherContext.cs",
+              "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\Connect2getherContext.cs",
+              "RelativeToolTip": "Models\\Connect2getherContext.cs",
+              "ViewState": "AQIAACIAAAAAAAAAAAAcwB8AAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-05T11:22:14.145Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAADwvyoAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-05T11:10:21.935Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "UserPostDto.cs",
               "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\Dtos\\UserDtos\\UserPostDto.cs",
               "RelativeDocumentMoniker": "Models\\Dtos\\UserDtos\\UserPostDto.cs",
               "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\Dtos\\UserDtos\\UserPostDto.cs",
               "RelativeToolTip": "Models\\Dtos\\UserDtos\\UserPostDto.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAnAAAA",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-04T10:05:18.196Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserPost.cs",
-              "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\UserPost.cs",
-              "RelativeDocumentMoniker": "Models\\UserPost.cs",
-              "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Models\\UserPost.cs",
-              "RelativeToolTip": "Models\\UserPost.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-04T10:04:56.979Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -72,12 +123,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAEgAAAAeAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-04T09:54:42.523Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-04T09:54:42.523Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
@@ -85,8 +135,7 @@
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-03-04T09:54:06.039Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-04T09:54:06.039Z"
             },
             {
               "$type": "Document",
@@ -109,7 +158,7 @@
               "RelativeDocumentMoniker": "Controllers\\UserPostController.cs",
               "ToolTip": "C:\\Users\\jbal\u00E1zs\\Desktop\\repo clone\\Connect2Gether\\Controllers\\UserPostController.cs",
               "RelativeToolTip": "Controllers\\UserPostController.cs",
-              "ViewState": "AQIAAB0AAAAAAAAAAAAAACwAAAAUAAAA",
+              "ViewState": "AQIAAFEAAAAAAAAAAAAuwF4AAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-27T08:11:57.419Z",
               "EditorCaption": ""
