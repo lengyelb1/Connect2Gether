@@ -28,19 +28,46 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
+        [HttpGet("id")]
+        public async Task<IActionResult> GetById(int id) 
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    UserPost result = await context.UserPosts.FirstOrDefaultAsync(x => x.Id == id);
+                    result.User = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpPost]
         public IActionResult Post(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
-                {   
-                    UserPost userPost = new UserPost();
+                {
+
+                    UserPost userPost = new UserPost { 
+                        
+                        UserId=userPostDto.UserId,
+                        Description=userPostDto.Description,
+                        Title=userPostDto.Title,
+                    };
+
+
+                    /*UserPost userPost = new UserPost();
                     userPost.UserId = userPostDto.UserId;
                     userPost.Description = userPostDto.Description;
                     userPost.Title = userPostDto.Title;
                     userPost.Like = 0;
-                    userPost.User = context.Users.FirstOrDefault(x => x.Id == userPost.Id);
+                    userPost.User = context.Users.FirstOrDefault(x => x.Id == userPostDto.UserId);*/
 
                     context.UserPosts.Add(userPost);
                     context.SaveChanges();
