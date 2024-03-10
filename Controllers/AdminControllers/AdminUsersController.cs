@@ -1,6 +1,4 @@
 ﻿using Connect2Gether_API.Models;
-using Connect2Gether_API.Models.Dtos;
-using Connect2Gether_API.Models.Dtos.UserDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,72 +28,6 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 {
                     return BadRequest(ex.Message);
                 }
-            }
-        }
-
-        [HttpPost("register")]
-
-        public ActionResult<User> RegisterWithOutCriterion(RegistrationRequestDto registrationRequestDto)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                Permission defaultPermission = new Permission();
-                defaultPermission.Id = 1;
-                defaultPermission.Name = "Default";
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password, 4);
-                User user = new User();
-                user.Username = registrationRequestDto.UserName;
-                user.Hash = passwordHash;
-                user.Email = registrationRequestDto.Email;
-                user.RegistrationDate = DateTime.Today;
-                user.PermissionId = defaultPermission.Id;
-                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
-
-                if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
-                {
-                    return BadRequest("User existing!");
-                }
-
-                context.Users.Add(user);
-                context.SaveChanges();
-                return Ok("User added!");
-            }
-        }
-
-        [HttpPut("id")]
-
-        public ActionResult<User> RegisterPut(UserPutDto userPutDto, int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                User user = new User();
-                user.Id = id;
-                user.Username = userPutDto.UserName;
-                user.Email = userPutDto.Email;
-                user.RegistrationDate = DateTime.Today;
-                user.PermissionId = userPutDto.PermissionId;
-                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == id);
-
-                if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
-                {
-                    return BadRequest("User existing!");
-                }
-
-                context.Users.Update(user);
-                context.SaveChanges();
-                return Ok("User changes!");
-            }
-        }
-
-        [HttpDelete("id")]
-        public ActionResult Delete(int id) 
-        {
-            using (var context = new Connect2getherContext())
-            {
-                User user = new User { Id = id };
-                context.Users.Remove(user);
-                context.SaveChanges();
-                return Ok($"User deleted!");
             }
         }
     }

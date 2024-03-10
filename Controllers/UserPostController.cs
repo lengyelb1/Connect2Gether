@@ -1,5 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos.UserDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +9,11 @@ namespace Connect2Gether_API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,Default")]
     public class UserPostController : ControllerBase
     {
         [HttpGet]
+        
         public async Task<IActionResult> Get()
         {
             using (var context = new Connect2getherContext())
@@ -28,50 +31,24 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetById(int id) 
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    UserPost result = await context.UserPosts.FirstOrDefaultAsync(x => x.Id == id);
-                    result.User = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
-                    return Ok(result);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
         [HttpPost]
-        public IActionResult Post(UserPostDto userPostDto)
+        [Authorize(Roles = "Default")]
+        public async Task<IActionResult> Post(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
+                    UserPost post = new UserPost();
 
-                    UserPost userPost = new UserPost { 
-                        
-                        UserId=userPostDto.UserId,
-                        Description=userPostDto.Description,
-                        Title=userPostDto.Title,
-                    };
-
-
-                    /*UserPost userPost = new UserPost();
-                    userPost.UserId = userPostDto.UserId;
-                    userPost.Description = userPostDto.Description;
-                    userPost.Title = userPostDto.Title;
-                    userPost.Like = 0;
-                    userPost.User = context.Users.FirstOrDefault(x => x.Id == userPostDto.UserId);*/
-
-                    context.UserPosts.Add(userPost);
+                    post.UserId = userPostDto.UserId;
+                    post.User = context.Users.FirstOrDefault(u => u.Id == userPostDto.UserId);
+                    post.Title = userPostDto.Title;
+                    post.Description = userPostDto.Description;
+                    post.Like = 0;
+                    context.UserPosts.Add(post);
                     context.SaveChanges();
-                    return Ok(userPost);
+                    return Ok("Post added!");
                 }
                 catch (Exception ex)
                 {
@@ -83,7 +60,8 @@ namespace Connect2Gether_API.Controllers
 
         /*Test*/
         [HttpPost("Like")]
-        public IActionResult Like(int postId,int userId)
+     
+        public async Task<IActionResult> Like(int postId, int userId)
         {
             using (var context = new Connect2getherContext())
             {
@@ -102,5 +80,17 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                return StatusCode(200, context.UserPosts.Find(id));
+            
+            }
+            
+        }
+
     }
 }

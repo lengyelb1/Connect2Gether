@@ -11,12 +11,14 @@ using System.Data;
 
 namespace Connect2Gether_API.Controllers
 {
+   
+
     [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-
+        public static char[] SymbolsForPassword = { '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`' };
         public AuthController(IConfiguration configuration) { 
             _configuration = configuration;
         }
@@ -42,7 +44,7 @@ namespace Connect2Gether_API.Controllers
                     }else if (!registrationRequestDto.Password.Any(char.IsDigit))
                     {
                         return BadRequest("The password need to contain number!");
-                    }else if (!registrationRequestDto.Password.Any(char.IsSymbol))
+                    }else if (!registrationRequestDto.Password.Any(c => SymbolsForPassword.Contains(c)))
                     {
                         return BadRequest("The password need to contain special character!");
                     }
@@ -126,7 +128,8 @@ namespace Connect2Gether_API.Controllers
                 List<Claim> claims = new List<Claim>()
                 {
                     new Claim("Name",user.Username),
-                    new Claim("role",permission)
+                    new Claim("role",permission),
+                    new Claim("id",user.Id.ToString())
                 };
 
 

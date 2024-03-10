@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jbalázs\\Desktop\\repo clone\\Connect2Gether\\Connect2Gether_API.csproj": {}
+    "C:\\Users\\User\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jbalázs\\Desktop\\repo clone\\Connect2Gether\\Connect2Gether_API.csproj": {
+    "C:\\Users\\User\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jbalázs\\Desktop\\repo clone\\Connect2Gether\\Connect2Gether_API.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
         "projectName": "Connect2Gether_API",
-        "projectPath": "C:\\Users\\jbalázs\\Desktop\\repo clone\\Connect2Gether\\Connect2Gether_API.csproj",
-        "packagesPath": "C:\\Users\\jbalázs\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jbalázs\\Desktop\\repo clone\\Connect2Gether\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\Connect2Gether\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\jbalázs\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -70,7 +65,7 @@
             },
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
-              "version": "[7.4.0, )"
+              "version": "[7.3.1, )"
             },
             "MySql.Data": {
               "target": "Package",
@@ -90,7 +85,7 @@
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[7.4.0, )"
+              "version": "[7.3.1, )"
             }
           },
           "imports": [
