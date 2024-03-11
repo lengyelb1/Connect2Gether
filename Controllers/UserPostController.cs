@@ -102,5 +102,45 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-    }
+
+
+        [HttpPut("id")]
+        public IActionResult Put(UserPostPutDto userPostPutDto, int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    UserPost changedPost = new UserPost { Id = id };
+                    changedPost.Description = userPostPutDto.Description;
+                    changedPost.Title = userPostPutDto.Title;
+                    context.UserPosts.Update(changedPost);
+                    context.SaveChanges();
+                    return Ok("Sikeres módosítás!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpDelete("id")]
+        public IActionResult Delete(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    UserPost deletePost = new UserPost { Id = id };
+                    context.UserPosts.Remove(deletePost);
+                    context.SaveChanges();
+                    return Ok("Sikeres törlés!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
 }
