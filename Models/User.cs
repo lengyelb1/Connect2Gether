@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Connect2Gether_API.Models;
 
@@ -40,5 +41,6 @@ public partial class User
 
     public virtual Permission Permission { get; set; } = null!;
 
-    public virtual ICollection<UserPost> UserPosts { get; set; } = new List<UserPost>();
+    [JsonIgnore]
+    public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
 }

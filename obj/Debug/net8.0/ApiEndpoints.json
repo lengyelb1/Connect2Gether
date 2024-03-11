@@ -188,19 +188,14 @@
   },
   {
     "ContainingType": "Connect2Gether_API.Controllers.UserPostController",
-    "Method": "Like",
-    "RelativePath": "UserPost/Like",
-    "HttpMethod": "POST",
+    "Method": "GetById",
+    "RelativePath": "UserPost/id",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "postId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "userId",
+        "Name": "id",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -209,9 +204,30 @@
   },
   {
     "ContainingType": "Connect2Gether_API.Controllers.UserPostController",
-    "Method": "GetById",
+    "Method": "Put",
     "RelativePath": "UserPost/id",
-    "HttpMethod": "GET",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userPostPutDto",
+        "Type": "Connect2Gether_API.Models.Dtos.UserDtos.UserPostPutDto",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Connect2Gether_API.Controllers.UserPostController",
+    "Method": "Delete",
+    "RelativePath": "UserPost/id",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
