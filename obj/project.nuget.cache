@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9GI+IWk8vc0m7IJYNlbeeQ4I+kmBqHXlrJallJgnrPn8ATUJR9QrZgutYWpvDwrZVctgyAq+IPV5Du+WBZU0eg==",
+  "dgSpecHash": "spJvXjT3ADKQ4O0nLu50rSk7rqZHnJUwxfg1c+L9XflFXHooxtVI7HrDlr7pORGax+MORmSCSbC7nr4/NNIFxg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lbálint\\Desktop\\connect2gether_2\\Connect2Gether\\Connect2Gether_API.csproj",
+  "projectFilePath": "C:\\Users\\lbálint\\Desktop\\Connect2Gether\\Connect2Gether_API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lbálint\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\lbálint\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",

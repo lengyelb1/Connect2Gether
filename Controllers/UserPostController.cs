@@ -29,7 +29,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<IActionResult> GetById(int id) 
+        public async Task<IActionResult> GetById(int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -54,11 +54,12 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
 
-                    UserPost userPost = new UserPost { 
-                        
-                        UserId=userPostDto.UserId,
-                        Description=userPostDto.Description,
-                        Title=userPostDto.Title,
+                    UserPost userPost = new UserPost
+                    {
+
+                        UserId = userPostDto.UserId,
+                        Description = userPostDto.Description,
+                        Title = userPostDto.Title,
                     };
 
 
@@ -83,7 +84,7 @@ namespace Connect2Gether_API.Controllers
 
         /*Test*/
         [HttpPost("Like")]
-        public IActionResult Like(int postId,int userId)
+        public IActionResult Like(int postId, int userId)
         {
             using (var context = new Connect2getherContext())
             {
@@ -143,4 +144,5 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
+    }
 }
