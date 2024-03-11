@@ -126,7 +126,8 @@ namespace Connect2Gether_API.Controllers
                 List<Claim> claims = new List<Claim>()
                 {
                     new Claim("Name",user.Username),
-                    new Claim("role",permission)
+                    new Claim("role",permission),
+                    new Claim("id", user.Id.ToString())
                 };
 
 
