@@ -67,7 +67,7 @@ namespace Connect2Gether_API.Controllers
             {
                 using (var context = new Connect2getherContext())
                 {
-                    return Ok(context.Comments.ToList());
+                    return Ok(context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToList());
 
                 }
 
