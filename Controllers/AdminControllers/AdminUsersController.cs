@@ -22,7 +22,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var result = await context.Users.Include(f => f.UserPosts).Include(f => f.Comments).Include(f => f.Alertmessages).ToListAsync();
+                    var result = await context.Users.Include(f => f.UserPosts).Include(f => f.Permission).Include(f => f.Comments).Include(f => f.Alertmessages).ToListAsync();
                     context.SaveChanges();
                     return Ok(result);
                 }
