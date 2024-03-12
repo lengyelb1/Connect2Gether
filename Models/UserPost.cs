@@ -20,6 +20,5 @@ public partial class UserPost
 
     public virtual ICollection<Comment>? Comments { get; set; } = null;
 
-    [JsonIgnore]
     public virtual User? User { get; set; } = null!;
 }

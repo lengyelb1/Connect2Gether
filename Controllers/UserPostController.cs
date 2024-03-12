@@ -17,7 +17,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.Include(f => f.Comments).ToListAsync();
+                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
                     context.SaveChanges();
                     return Ok(result);
                 }
@@ -36,8 +36,9 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
 
-                    UserPost result = await context.UserPosts.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == id);
-                    result.User = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+                    UserPost result = await context.UserPosts.Include(x => x.Comments).Include(f => f.User).Include(f => f.User!.Permission).FirstOrDefaultAsync(x => x.Id == id);
+                    result!.User = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+
                     return Ok(result);
                 }
                 catch (Exception ex)
