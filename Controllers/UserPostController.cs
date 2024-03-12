@@ -35,7 +35,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    UserPost result = await context.UserPosts.FirstOrDefaultAsync(x => x.Id == id);
+                    UserPost result = await context.UserPosts.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id == id);
                     result.User = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
                     return Ok(result);
                 }
