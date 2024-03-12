@@ -1,5 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     /* Jelszó / azonosítóval való lekérés*/
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Roles = "Default")]
     public class UserController : ControllerBase
     {
 

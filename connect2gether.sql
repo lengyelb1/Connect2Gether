@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Feb 22. 12:17
+-- Létrehozás ideje: 2024. Már 12. 11:03
 -- Kiszolgáló verziója: 10.4.32-MariaDB
--- PHP verzió: 8.0.30
+-- PHP verzió: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,13 +29,11 @@ USE `connect2gether`;
 -- Tábla szerkezet ehhez a táblához `alertmessage`
 --
 
-CREATE TABLE IF NOT EXISTS `alertmessage` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `alertmessage` (
+  `Id` int(11) NOT NULL,
   `Title` varchar(128) NOT NULL,
   `UserId` int(11) NOT NULL,
-  `Description` varchar(128) NOT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `UserId` (`UserId`)
+  `Description` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -44,25 +42,20 @@ CREATE TABLE IF NOT EXISTS `alertmessage` (
 -- Tábla szerkezet ehhez a táblához `comment`
 --
 
-CREATE TABLE IF NOT EXISTS `comment` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `comment` (
+  `Id` int(11) NOT NULL,
   `Text` text NOT NULL,
   `PostId` int(11) NOT NULL,
   `UserId` int(11) NOT NULL,
-  `CommentId` int(11) NOT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `CommentId` (`CommentId`),
-  KEY `UserId` (`UserId`),
-  KEY `PostId` (`PostId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `CommentId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `comment`
 --
 
 INSERT INTO `comment` (`Id`, `Text`, `PostId`, `UserId`, `CommentId`) VALUES
-(1, 'Nice comment', 1, 1, 0),
-(2, 'Random comment', 2, 1, 0);
+(1, 'Nice comment', 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -70,14 +63,13 @@ INSERT INTO `comment` (`Id`, `Text`, `PostId`, `UserId`, `CommentId`) VALUES
 -- Tábla szerkezet ehhez a táblához `images`
 --
 
-CREATE TABLE IF NOT EXISTS `images` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `images` (
+  `Id` int(11) NOT NULL,
   `Image1` mediumblob NOT NULL,
   `Image2` mediumblob NOT NULL,
   `Image3` mediumblob NOT NULL,
-  `Image4` mediumblob NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `Image4` mediumblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `images`
@@ -92,14 +84,18 @@ INSERT INTO `images` (`Id`, `Image1`, `Image2`, `Image3`, `Image4`) VALUES
 -- Tábla szerkezet ehhez a táblához `liked_posts`
 --
 
-CREATE TABLE IF NOT EXISTS `liked_posts` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `liked_posts` (
+  `Id` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
-  `PostID` int(11) NOT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `UserID` (`UserID`),
-  KEY `PostID` (`PostID`)
+  `PostID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- A tábla adatainak kiíratása `liked_posts`
+--
+
+INSERT INTO `liked_posts` (`Id`, `UserID`, `PostID`) VALUES
+(1, 1, 8);
 
 -- --------------------------------------------------------
 
@@ -107,11 +103,10 @@ CREATE TABLE IF NOT EXISTS `liked_posts` (
 -- Tábla szerkezet ehhez a táblához `permissions`
 --
 
-CREATE TABLE IF NOT EXISTS `permissions` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(128) NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+CREATE TABLE `permissions` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `permissions`
@@ -127,13 +122,12 @@ INSERT INTO `permissions` (`Id`, `Name`) VALUES
 -- Tábla szerkezet ehhez a táblához `ranks`
 --
 
-CREATE TABLE IF NOT EXISTS `ranks` (
+CREATE TABLE `ranks` (
   `Id` int(11) NOT NULL,
   `Name` varchar(128) NOT NULL,
   `Min_pont` int(11) NOT NULL,
   `Max_pont` int(11) NOT NULL,
-  `Description` text NOT NULL,
-  PRIMARY KEY (`Id`)
+  `Description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
@@ -149,8 +143,8 @@ INSERT INTO `ranks` (`Id`, `Name`, `Min_pont`, `Max_pont`, `Description`) VALUES
 -- Tábla szerkezet ehhez a táblához `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `Id` int(11) NOT NULL,
   `Username` varchar(128) NOT NULL,
   `HASH` varchar(128) NOT NULL,
   `Email` varchar(320) NOT NULL,
@@ -159,12 +153,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `RegistrationDate` date NOT NULL,
   `Point` int(11) NOT NULL COMMENT 'Pontszám',
   `PermissionId` int(11) NOT NULL COMMENT 'Felhasználói szint',
-  `LastLogin` datetime NOT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `Username` (`Username`),
-  KEY `RankId` (`RankId`),
-  KEY `PermissionId` (`PermissionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `LastLogin` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `user`
@@ -173,7 +163,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`) VALUES
 (1, 'DefaultUser1', 'Password', 'asd@gmail.com', 1, 1, '2024-01-15', 0, 3, '2024-01-15 11:23:37'),
 (4, 'balint', '$2a$04$DdxDsmRsjB.1e/GDo2gEhOcM57NZjJ0KK15OVPgrth7PJswAaUBHW', 'Balint@gmail.com', 0, 0, '2024-02-20', 0, 1, '0001-01-01 00:00:00'),
-(5, 'balazs', '$2a$04$1sGMmURlGttgS0NAzBTGoe/jB18eV2zUM22Lco41xoYNeGwmqYLR6', 'Balazs@gmail.com', 0, 0, '2024-02-20', 0, 1, '0001-01-01 00:00:00');
+(5, 'balazs', '$2a$04$1sGMmURlGttgS0NAzBTGoe/jB18eV2zUM22Lco41xoYNeGwmqYLR6', 'Balazs@gmail.com', 0, 0, '2024-02-20', 0, 1, '0001-01-01 00:00:00'),
+(6, 'bazsi', '$2a$04$e3Ejfu8mDeLzv6zw9dn8LORIUa5htWaAhpbBiyEqhcCunG2Z5gudW', 'jb@gmail.com', 0, 0, '2024-02-27', 0, 3, '0001-01-01 00:00:00'),
+(10, 'asdadsa', '$2a$04$agsitbmoPAxO7uAURARkJ.CZrwT56m7kc7P2gs.c1O89TRIVy0crq', 'asdasd@gmail.com', 0, 0, '2024-03-05', 0, 1, '0001-01-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -181,18 +173,14 @@ INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `
 -- Tábla szerkezet ehhez a táblához `user_post`
 --
 
-CREATE TABLE IF NOT EXISTS `user_post` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `ImageId` int(11) NOT NULL,
+CREATE TABLE `user_post` (
+  `Id` int(11) NOT NULL,
+  `ImageId` int(11) DEFAULT NULL,
   `Description` text NOT NULL,
   `Title` varchar(128) NOT NULL,
-  `Like` bigint(20) NOT NULL,
-  `UserId` int(11) NOT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `ImageId_2` (`ImageId`,`UserId`),
-  KEY `ImageId` (`ImageId`),
-  KEY `UserId` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `Like` bigint(20) NOT NULL DEFAULT 0,
+  `UserId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `user_post`
@@ -200,7 +188,121 @@ CREATE TABLE IF NOT EXISTS `user_post` (
 
 INSERT INTO `user_post` (`Id`, `ImageId`, `Description`, `Title`, `Like`, `UserId`) VALUES
 (1, 1, 'Embark on a journey of imagination and exploration with our latest collection! 🌟 From captivating stories to breathtaking visuals, we\'ve curated an experience that transcends boundaries. Dive into a world where creativity knows no limits. Are you ready to make ordinary moments extraordinary? Join us on this adventure! #UnleashYourImagination ✨🚀', 'Embark on a journey', 0, 1),
-(2, 0, 'Sparks of joy in every pixel! 🔥✨ Our newest release is a symphony of color and innovation. Elevate your senses with cutting-edge design and immersive technology. Each detail tells a story, inviting you to embrace a universe of possibilities. Ready to redefine your reality? Dive into the extraordinary with us! #InnovationUnleashed 🌈🚀', 'Sparks of joy in every pixel!', 0, 1);
+(2, 0, 'Sparks of joy in every pixel! 🔥✨ Our newest release is a symphony of color and innovation. Elevate your senses with cutting-edge design and immersive technology. Each detail tells a story, inviting you to embrace a universe of possibilities. Ready to redefine your reality? Dive into the extraordinary with us! #InnovationUnleashed 🌈🚀', 'Sparks of joy in every pixel!', 0, 1),
+(7, NULL, 'stringasd', 'stringasd', 0, NULL),
+(8, NULL, 'string', 'string', 0, 1),
+(11, NULL, 'dasdasd', 'dsadada', 0, 10),
+(12, NULL, 'string', 'string', 0, 1);
+
+--
+-- Indexek a kiírt táblákhoz
+--
+
+--
+-- A tábla indexei `alertmessage`
+--
+ALTER TABLE `alertmessage`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `UserId` (`UserId`);
+
+--
+-- A tábla indexei `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `CommentId` (`CommentId`),
+  ADD KEY `UserId` (`UserId`),
+  ADD KEY `PostId` (`PostId`);
+
+--
+-- A tábla indexei `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- A tábla indexei `liked_posts`
+--
+ALTER TABLE `liked_posts`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `PostID` (`PostID`);
+
+--
+-- A tábla indexei `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- A tábla indexei `ranks`
+--
+ALTER TABLE `ranks`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- A tábla indexei `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`Id`),
+  ADD UNIQUE KEY `Username` (`Username`),
+  ADD KEY `RankId` (`RankId`),
+  ADD KEY `PermissionId` (`PermissionId`);
+
+--
+-- A tábla indexei `user_post`
+--
+ALTER TABLE `user_post`
+  ADD PRIMARY KEY (`Id`),
+  ADD UNIQUE KEY `ImageId_2` (`ImageId`,`UserId`),
+  ADD KEY `ImageId` (`ImageId`),
+  ADD KEY `UserId` (`UserId`);
+
+--
+-- A kiírt táblák AUTO_INCREMENT értéke
+--
+
+--
+-- AUTO_INCREMENT a táblához `alertmessage`
+--
+ALTER TABLE `alertmessage`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT a táblához `images`
+--
+ALTER TABLE `images`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT a táblához `liked_posts`
+--
+ALTER TABLE `liked_posts`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT a táblához `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT a táblához `user`
+--
+ALTER TABLE `user`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT a táblához `user_post`
+--
+ALTER TABLE `user_post`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Megkötések a kiírt táblákhoz
