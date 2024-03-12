@@ -15,6 +15,40 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     {
         public static User user = new User();
 
+        [HttpGet("userdb")]
+        public IActionResult UserDB()
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var db = context.Users.ToList().Count();
+                    return Ok(db);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpGet("userpostdb")]
+        public IActionResult UserPostDB()
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var db = context.UserPosts.ToList().Count();
+                    return Ok(db);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -25,6 +59,38 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     var result = await context.Users.Include(f => f.UserPosts).Include(f => f.Permission).Include(f => f.Comments).Include(f => f.Alertmessages).ToListAsync();
                     context.SaveChanges();
                     return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpGet("nev")]
+        public IActionResult GetNev(string nev)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpGet("postnev")]
+        public IActionResult GetPostNev(string nev)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    return Ok(context.UserPosts.Where(x => x.Title.Contains(nev)).ToList());
                 }
                 catch (Exception ex)
                 {

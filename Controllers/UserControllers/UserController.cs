@@ -17,6 +17,36 @@ namespace Connect2Gether_API.Controllers.UserControllers
     [Authorize(Roles = "Default")]
     public class UserController : ControllerBase
     {
+        [HttpGet("nev")]
+        public IActionResult GetNev(string nev)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
 
+        [HttpGet("postnev")]
+        public IActionResult GetPostNev(string nev)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    return Ok(context.UserPosts.Where(x => x.Title.Contains(nev)).ToList());
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
     }
 }
