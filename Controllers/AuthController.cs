@@ -100,9 +100,11 @@ namespace Connect2Gether_API.Controllers
 
                     if (!BCrypt.Net.BCrypt.Verify(loginRequestDto.Password, user.Hash))
                     {
-                        return BadRequest("Wrong password!");
+                        return BadRequest("Wrong password or Username!");
                     }
 
+                    context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName).LastLogin = DateTime.Now;
+                    context.SaveChanges();
                     string token = CreateToken(user);
 
                     return Ok(token);
@@ -110,9 +112,9 @@ namespace Connect2Gether_API.Controllers
                 
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest("Wrong username or password!");   
+                return BadRequest("Something went wrong!");   
             }
             
         }
