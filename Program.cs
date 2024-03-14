@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -9,6 +10,14 @@ namespace Connect2Gether_API
 {
     public class Program
     {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddAuthentication(
+                CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate();
+        }
+
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
