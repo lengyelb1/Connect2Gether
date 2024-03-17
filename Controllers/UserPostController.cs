@@ -62,7 +62,8 @@ namespace Connect2Gether_API.Controllers
                         UserId = userPostDto.UserId,
                         Description = userPostDto.Description,
                         Title = userPostDto.Title,
-                    };
+                        UploadDate = DateTime.Now
+                };
 
 
                     /*UserPost userPost = new UserPost();

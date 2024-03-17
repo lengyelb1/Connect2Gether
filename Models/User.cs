@@ -40,8 +40,12 @@ public partial class User
     [JsonIgnore]
     public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
 
+    public virtual ICollection<LikedPost> LikedPosts { get; set; } = new List<LikedPost>();
+
     public virtual Permission Permission { get; set; } = null!;
 
     [JsonIgnore]
     public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
+
+    public virtual UserSuspiciou? UserSuspiciou { get; set; }
 }

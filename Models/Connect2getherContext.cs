@@ -31,6 +31,8 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<UserPost> UserPosts { get; set; }
 
+    public virtual DbSet<UserSuspiciou> UserSuspicious { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySQL("SERVER=localhost;PORT=3306;DATABASE=connect2gether;USER=root;PASSWORD=;SSL MODE=none;");
@@ -72,6 +74,10 @@ public partial class Connect2getherContext : DbContext
             entity.Property(e => e.CommentId).HasColumnType("int(11)");
             entity.Property(e => e.PostId).HasColumnType("int(11)");
             entity.Property(e => e.Text).HasColumnType("text");
+            entity.Property(e => e.UploadDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("date")
+                .HasColumnName("uploadDate");
             entity.Property(e => e.UserId).HasColumnType("int(11)");
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
@@ -115,6 +121,16 @@ public partial class Connect2getherContext : DbContext
             entity.Property(e => e.UserId)
                 .HasColumnType("int(11)")
                 .HasColumnName("UserID");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.LikedPosts)
+                .HasForeignKey(d => d.PostId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("liked_posts_ibfk_2");
+
+            entity.HasOne(d => d.User).WithMany(p => p.LikedPosts)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("liked_posts_ibfk_1");
         });
 
         modelBuilder.Entity<Permission>(entity =>
@@ -199,6 +215,10 @@ public partial class Connect2getherContext : DbContext
                 .HasColumnType("int(11)");
             entity.Property(e => e.Like).HasColumnType("bigint(20)");
             entity.Property(e => e.Title).HasMaxLength(128);
+            entity.Property(e => e.UploadDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("date")
+                .HasColumnName("uploadDate");
             entity.Property(e => e.UserId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
@@ -207,6 +227,23 @@ public partial class Connect2getherContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("user_post_ibfk_3");
+        });
+
+        modelBuilder.Entity<UserSuspiciou>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("user_suspicious");
+
+            entity.HasIndex(e => e.UserId, "UserId").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.UserId).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.User).WithOne(p => p.UserSuspiciou)
+                .HasForeignKey<UserSuspiciou>(d => d.UserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("user_suspicious_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);

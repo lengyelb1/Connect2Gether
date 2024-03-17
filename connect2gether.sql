@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Gép: 127.0.0.1:3306
--- Létrehozás ideje: 2024. Már 14. 08:24
--- Kiszolgáló verziója: 8.2.0
--- PHP verzió: 8.2.13
+-- Gép: localhost
+-- Létrehozás ideje: 2024. Már 17. 18:18
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `connect2gether`
 --
-CREATE DATABASE IF NOT EXISTS `connect2gether` DEFAULT CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci;
-USE `connect2gether`;
 
 -- --------------------------------------------------------
 
@@ -29,14 +27,11 @@ USE `connect2gether`;
 -- Tábla szerkezet ehhez a táblához `alertmessage`
 --
 
-DROP TABLE IF EXISTS `alertmessage`;
-CREATE TABLE IF NOT EXISTS `alertmessage` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Title` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `UserId` int NOT NULL,
-  `Description` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `UserId` (`UserId`)
+CREATE TABLE `alertmessage` (
+  `Id` int(11) NOT NULL,
+  `Title` varchar(128) NOT NULL,
+  `UserId` int(11) NOT NULL,
+  `Description` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -45,19 +40,14 @@ CREATE TABLE IF NOT EXISTS `alertmessage` (
 -- Tábla szerkezet ehhez a táblához `comment`
 --
 
-DROP TABLE IF EXISTS `comment`;
-CREATE TABLE IF NOT EXISTS `comment` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Text` text COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `PostId` int NOT NULL,
-  `UserId` int NOT NULL,
-  `CommentId` int NOT NULL,
-  `uploadDate` date DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `CommentId` (`CommentId`),
-  KEY `UserId` (`UserId`),
-  KEY `PostId` (`PostId`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+CREATE TABLE `comment` (
+  `Id` int(11) NOT NULL,
+  `Text` text NOT NULL,
+  `PostId` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL,
+  `CommentId` int(11) NOT NULL,
+  `uploadDate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
 
@@ -65,15 +55,13 @@ CREATE TABLE IF NOT EXISTS `comment` (
 -- Tábla szerkezet ehhez a táblához `images`
 --
 
-DROP TABLE IF EXISTS `images`;
-CREATE TABLE IF NOT EXISTS `images` (
-  `Id` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `images` (
+  `Id` int(11) NOT NULL,
   `Image1` mediumblob NOT NULL,
   `Image2` mediumblob NOT NULL,
   `Image3` mediumblob NOT NULL,
-  `Image4` mediumblob NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `Image4` mediumblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
 
@@ -81,15 +69,11 @@ CREATE TABLE IF NOT EXISTS `images` (
 -- Tábla szerkezet ehhez a táblához `liked_posts`
 --
 
-DROP TABLE IF EXISTS `liked_posts`;
-CREATE TABLE IF NOT EXISTS `liked_posts` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `UserID` int NOT NULL,
-  `PostID` int NOT NULL,
-  PRIMARY KEY (`Id`),
-  KEY `UserID` (`UserID`),
-  KEY `PostID` (`PostID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `liked_posts` (
+  `Id` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `PostID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -97,12 +81,10 @@ CREATE TABLE IF NOT EXISTS `liked_posts` (
 -- Tábla szerkezet ehhez a táblához `permissions`
 --
 
-DROP TABLE IF EXISTS `permissions`;
-CREATE TABLE IF NOT EXISTS `permissions` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+CREATE TABLE `permissions` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(128) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `permissions`
@@ -110,6 +92,7 @@ CREATE TABLE IF NOT EXISTS `permissions` (
 
 INSERT INTO `permissions` (`Id`, `Name`) VALUES
 (1, 'Default'),
+(2, 'Moderator'),
 (3, 'Admin');
 
 -- --------------------------------------------------------
@@ -118,14 +101,12 @@ INSERT INTO `permissions` (`Id`, `Name`) VALUES
 -- Tábla szerkezet ehhez a táblához `ranks`
 --
 
-DROP TABLE IF EXISTS `ranks`;
-CREATE TABLE IF NOT EXISTS `ranks` (
-  `Id` int NOT NULL,
-  `Name` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `Min_pont` int NOT NULL,
-  `Max_pont` int NOT NULL,
-  `Description` text COLLATE utf8mb4_hungarian_ci NOT NULL,
-  PRIMARY KEY (`Id`)
+CREATE TABLE `ranks` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(128) NOT NULL,
+  `Min_pont` int(11) NOT NULL,
+  `Max_pont` int(11) NOT NULL,
+  `Description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 -- --------------------------------------------------------
@@ -134,23 +115,18 @@ CREATE TABLE IF NOT EXISTS `ranks` (
 -- Tábla szerkezet ehhez a táblához `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Username` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `HASH` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `Email` varchar(320) COLLATE utf8mb4_hungarian_ci NOT NULL,
+CREATE TABLE `user` (
+  `Id` int(11) NOT NULL,
+  `Username` varchar(128) NOT NULL,
+  `HASH` varchar(128) NOT NULL,
+  `Email` varchar(320) NOT NULL,
   `ActiveUser` tinyint(1) NOT NULL,
-  `RankId` int NOT NULL COMMENT 'Pontszámhoz kötött rangok',
+  `RankId` int(11) NOT NULL COMMENT 'Pontszámhoz kötött rangok',
   `RegistrationDate` date NOT NULL,
-  `Point` int NOT NULL COMMENT 'Pontszám',
-  `PermissionId` int NOT NULL COMMENT 'Felhasználói szint',
-  `LastLogin` datetime NOT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `Username` (`Username`),
-  KEY `RankId` (`RankId`),
-  KEY `PermissionId` (`PermissionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+  `Point` int(11) NOT NULL COMMENT 'Pontszám',
+  `PermissionId` int(11) NOT NULL COMMENT 'Felhasználói szint',
+  `LastLogin` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `user`
@@ -158,9 +134,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`) VALUES
 (4, 'balint', '$2a$04$DdxDsmRsjB.1e/GDo2gEhOcM57NZjJ0KK15OVPgrth7PJswAaUBHW', 'Balint@gmail.com', 1, 0, '2024-02-20', 0, 3, '2024-03-14 08:26:40'),
-(5, 'balazs', '$2a$04$1sGMmURlGttgS0NAzBTGoe/jB18eV2zUM22Lco41xoYNeGwmqYLR6', 'Balazs@gmail.com', 0, 0, '2024-02-20', 0, 1, '0001-01-01 00:00:00'),
-(6, 'bazsi', '$2a$04$e3Ejfu8mDeLzv6zw9dn8LORIUa5htWaAhpbBiyEqhcCunG2Z5gudW', 'jb@gmail.com', 0, 0, '2024-02-27', 0, 3, '0001-01-01 00:00:00'),
-(11, 'balintUser', '$2a$04$LMBdSbri8cs1lR4OSkCX..SE6WriXrIE.qm4XwbjRJR3rqbyruU9a', 'balintUser@gmail.com', 0, 0, '2024-03-12', 0, 1, '2024-03-14 08:48:40');
+(6, 'bazsi', '$2a$04$e3Ejfu8mDeLzv6zw9dn8LORIUa5htWaAhpbBiyEqhcCunG2Z5gudW', 'jb@gmail.com', 0, 0, '2024-02-27', 0, 3, '2024-03-17 17:14:02'),
+(11, 'balintUser', '$2a$04$LMBdSbri8cs1lR4OSkCX..SE6WriXrIE.qm4XwbjRJR3rqbyruU9a', 'balintUser@gmail.com', 0, 0, '2024-03-12', 0, 1, '2024-03-14 08:48:40'),
+(12, 'janos', '$2a$04$f1LMILXTZ1/YYVBqAjfHDOJczXmbTULpkqj1NHnajssNOwGnNhJKC', 'janivagyok@gmail.com', 0, 0, '2024-03-17', 0, 2, '2024-03-17 17:45:55');
 
 -- --------------------------------------------------------
 
@@ -168,20 +144,15 @@ INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `
 -- Tábla szerkezet ehhez a táblához `user_post`
 --
 
-DROP TABLE IF EXISTS `user_post`;
-CREATE TABLE IF NOT EXISTS `user_post` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `ImageId` int DEFAULT NULL,
-  `Description` text COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `Title` varchar(128) COLLATE utf8mb4_hungarian_ci NOT NULL,
-  `Like` bigint NOT NULL DEFAULT '0',
-  `UserId` int DEFAULT NULL,
-  `uploadDate` date DEFAULT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `ImageId_2` (`ImageId`,`UserId`),
-  KEY `ImageId` (`ImageId`),
-  KEY `UserId` (`UserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
+CREATE TABLE `user_post` (
+  `Id` int(11) NOT NULL,
+  `ImageId` int(11) DEFAULT NULL,
+  `Description` text NOT NULL,
+  `Title` varchar(128) NOT NULL,
+  `Like` bigint(20) NOT NULL DEFAULT 0,
+  `UserId` int(11) DEFAULT NULL,
+  `uploadDate` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `user_post`
@@ -189,6 +160,140 @@ CREATE TABLE IF NOT EXISTS `user_post` (
 
 INSERT INTO `user_post` (`Id`, `ImageId`, `Description`, `Title`, `Like`, `UserId`, `uploadDate`) VALUES
 (29, NULL, 'dsgdsmvlkdsmcymxlkmymk', 'dyrtewsvdsgvsdvsvxcv', 0, 4, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `user_suspicious`
+--
+
+CREATE TABLE `user_suspicious` (
+  `Id` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Indexek a kiírt táblákhoz
+--
+
+--
+-- A tábla indexei `alertmessage`
+--
+ALTER TABLE `alertmessage`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `UserId` (`UserId`);
+
+--
+-- A tábla indexei `comment`
+--
+ALTER TABLE `comment`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `CommentId` (`CommentId`),
+  ADD KEY `UserId` (`UserId`),
+  ADD KEY `PostId` (`PostId`);
+
+--
+-- A tábla indexei `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- A tábla indexei `liked_posts`
+--
+ALTER TABLE `liked_posts`
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `PostID` (`PostID`);
+
+--
+-- A tábla indexei `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- A tábla indexei `ranks`
+--
+ALTER TABLE `ranks`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- A tábla indexei `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`Id`),
+  ADD UNIQUE KEY `Username` (`Username`),
+  ADD KEY `RankId` (`RankId`),
+  ADD KEY `PermissionId` (`PermissionId`);
+
+--
+-- A tábla indexei `user_post`
+--
+ALTER TABLE `user_post`
+  ADD PRIMARY KEY (`Id`),
+  ADD UNIQUE KEY `ImageId_2` (`ImageId`,`UserId`),
+  ADD KEY `ImageId` (`ImageId`),
+  ADD KEY `UserId` (`UserId`);
+
+--
+-- A tábla indexei `user_suspicious`
+--
+ALTER TABLE `user_suspicious`
+  ADD PRIMARY KEY (`Id`),
+  ADD UNIQUE KEY `UserId` (`UserId`);
+
+--
+-- A kiírt táblák AUTO_INCREMENT értéke
+--
+
+--
+-- AUTO_INCREMENT a táblához `alertmessage`
+--
+ALTER TABLE `alertmessage`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `comment`
+--
+ALTER TABLE `comment`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT a táblához `images`
+--
+ALTER TABLE `images`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT a táblához `liked_posts`
+--
+ALTER TABLE `liked_posts`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT a táblához `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT a táblához `user`
+--
+ALTER TABLE `user`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT a táblához `user_post`
+--
+ALTER TABLE `user_post`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT a táblához `user_suspicious`
+--
+ALTER TABLE `user_suspicious`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -237,6 +342,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `user_post`
   ADD CONSTRAINT `user_post_ibfk_3` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`);
+
+--
+-- Megkötések a táblához `user_suspicious`
+--
+ALTER TABLE `user_suspicious`
+  ADD CONSTRAINT `user_suspicious_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
