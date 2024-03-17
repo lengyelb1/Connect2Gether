@@ -16,8 +16,11 @@ public partial class Comment
 
     public int CommentId { get; set; }
 
+    public DateTime? UploadDate { get; set; }
+
     [JsonIgnore]
     public virtual UserPost? Post { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual User? User { get; set; } = null!;
 }

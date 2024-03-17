@@ -17,6 +17,8 @@ namespace Connect2Gether_API.Controllers
     {
         private readonly IConfiguration _configuration;
 
+        private readonly int expire_day = 1;
+
         public AuthController(IConfiguration configuration) { 
             _configuration = configuration;
         }
@@ -104,8 +106,9 @@ namespace Connect2Gether_API.Controllers
                     }
 
                     context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName).LastLogin = DateTime.Now;
-                    context.SaveChanges();
                     string token = CreateToken(user);
+                    context.UserTokens.Add(new UserToken { UserId = user.Id, Token = token, TokenExpireDate = DateTime.Now.AddDays(expire_day) });
+                    context.SaveChanges();
 
                     return Ok(token);
                 }
@@ -139,9 +142,9 @@ namespace Connect2Gether_API.Controllers
 
                 var token = new JwtSecurityToken(
                     claims:claims,
-                    expires: DateTime.Now.AddDays(1),
+                    expires: DateTime.Now.AddDays(expire_day),
                     signingCredentials: creds,
-                    audience: _configuration.GetSection("AuthSettings:JwtOptions:Audience").Value,
+                    audience: user.Username,
                     issuer: _configuration.GetSection("AuthSettings:JwtOptions:Issuer").Value
                     );
 

@@ -49,6 +49,7 @@ namespace Connect2Gether_API.Controllers
                     comment1.User = context.Users.FirstOrDefault(p => p.Id == comment.UserId);
                     comment1.Text = comment.Text;
                     comment1.CommentId = comment.CommentId;
+                    comment1.UploadDate = DateTime.Now;
 
                     context.Comments.Add(comment1);
                     context.SaveChanges();
