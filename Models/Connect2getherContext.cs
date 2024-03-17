@@ -33,6 +33,8 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<UserSuspiciou> UserSuspicious { get; set; }
 
+    public virtual DbSet<UserToken> UserTokens { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySQL("SERVER=localhost;PORT=3306;DATABASE=connect2gether;USER=root;PASSWORD=;SSL MODE=none;");
@@ -242,8 +244,26 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithOne(p => p.UserSuspiciou)
                 .HasForeignKey<UserSuspiciou>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("user_suspicious_ibfk_1");
+        });
+
+        modelBuilder.Entity<UserToken>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("PRIMARY");
+
+            entity.ToTable("user_token");
+
+            entity.Property(e => e.UserId)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Token).HasColumnType("text");
+            entity.Property(e => e.TokenExpireDate)
+                .HasColumnType("datetime")
+                .HasColumnName("token_expire_date");
+
+            entity.HasOne(d => d.User).WithOne(p => p.UserToken)
+                .HasForeignKey<UserToken>(d => d.UserId)
+                .HasConstraintName("user_token_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);

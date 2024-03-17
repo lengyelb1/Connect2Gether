@@ -48,4 +48,6 @@ public partial class User
     public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
 
     public virtual UserSuspiciou? UserSuspiciou { get; set; }
+
+    public virtual UserToken? UserToken { get; set; }
 }

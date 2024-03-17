@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: localhost
--- Létrehozás ideje: 2024. Már 17. 18:18
+-- Létrehozás ideje: 2024. Már 17. 19:58
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -134,9 +134,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`) VALUES
 (4, 'balint', '$2a$04$DdxDsmRsjB.1e/GDo2gEhOcM57NZjJ0KK15OVPgrth7PJswAaUBHW', 'Balint@gmail.com', 1, 0, '2024-02-20', 0, 3, '2024-03-14 08:26:40'),
-(6, 'bazsi', '$2a$04$e3Ejfu8mDeLzv6zw9dn8LORIUa5htWaAhpbBiyEqhcCunG2Z5gudW', 'jb@gmail.com', 0, 0, '2024-02-27', 0, 3, '2024-03-17 17:14:02'),
+(6, 'bazsi', '$2a$04$e3Ejfu8mDeLzv6zw9dn8LORIUa5htWaAhpbBiyEqhcCunG2Z5gudW', 'jb@gmail.com', 0, 0, '2024-02-27', 0, 3, '2024-03-17 19:34:57'),
 (11, 'balintUser', '$2a$04$LMBdSbri8cs1lR4OSkCX..SE6WriXrIE.qm4XwbjRJR3rqbyruU9a', 'balintUser@gmail.com', 0, 0, '2024-03-12', 0, 1, '2024-03-14 08:48:40'),
-(12, 'janos', '$2a$04$f1LMILXTZ1/YYVBqAjfHDOJczXmbTULpkqj1NHnajssNOwGnNhJKC', 'janivagyok@gmail.com', 0, 0, '2024-03-17', 0, 2, '2024-03-17 17:45:55');
+(12, 'janos', '$2a$04$f1LMILXTZ1/YYVBqAjfHDOJczXmbTULpkqj1NHnajssNOwGnNhJKC', 'janivagyok@gmail.com', 0, 0, '2024-03-17', 0, 2, '2024-03-17 19:54:02');
 
 -- --------------------------------------------------------
 
@@ -170,6 +170,18 @@ INSERT INTO `user_post` (`Id`, `ImageId`, `Description`, `Title`, `Like`, `UserI
 CREATE TABLE `user_suspicious` (
   `Id` int(11) NOT NULL,
   `UserId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `user_token`
+--
+
+CREATE TABLE `user_token` (
+  `UserId` int(11) NOT NULL,
+  `Token` text NOT NULL,
+  `token_expire_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -244,6 +256,12 @@ ALTER TABLE `user_suspicious`
   ADD UNIQUE KEY `UserId` (`UserId`);
 
 --
+-- A tábla indexei `user_token`
+--
+ALTER TABLE `user_token`
+  ADD PRIMARY KEY (`UserId`);
+
+--
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
 
@@ -294,6 +312,12 @@ ALTER TABLE `user_post`
 --
 ALTER TABLE `user_suspicious`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT a táblához `user_token`
+--
+ALTER TABLE `user_token`
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -348,6 +372,23 @@ ALTER TABLE `user_post`
 --
 ALTER TABLE `user_suspicious`
   ADD CONSTRAINT `user_suspicious_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `user_token`
+--
+ALTER TABLE `user_token`
+  ADD CONSTRAINT `user_token_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DELIMITER $$
+--
+-- Események
+--
+CREATE DEFINER=`root`@`localhost` EVENT `token_delete` ON SCHEDULE EVERY 1 MINUTE STARTS '2024-03-17 19:33:00' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM user_token
+WHERE user_token.token_expire_date < NOW()$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `deleteExpiredTokens` ON SCHEDULE EVERY 1 MINUTE STARTS '2024-02-19 08:42:52' ON COMPLETION NOT PRESERVE DISABLE COMMENT 'Clears out sessions table each hour.' DO DELETE FROM user_token WHERE user_token.token_expire_date < NOW()$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
