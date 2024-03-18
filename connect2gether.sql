@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Már 18. 08:14
+-- Létrehozás ideje: 2024. Már 18. 10:07
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -135,10 +135,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`) VALUES
-(4, 'balint', '$2a$04$DdxDsmRsjB.1e/GDo2gEhOcM57NZjJ0KK15OVPgrth7PJswAaUBHW', 'Balint@gmail.com', 1, 0, '2024-02-20', 0, 3, '2024-03-14 08:26:40'),
-(6, 'bazsi', '$2a$04$e3Ejfu8mDeLzv6zw9dn8LORIUa5htWaAhpbBiyEqhcCunG2Z5gudW', 'jb@gmail.com', 0, 0, '2024-02-27', 0, 3, '2024-03-17 19:34:57'),
-(11, 'balintUser', '$2a$04$LMBdSbri8cs1lR4OSkCX..SE6WriXrIE.qm4XwbjRJR3rqbyruU9a', 'balintUser@gmail.com', 0, 0, '2024-03-12', 0, 1, '2024-03-14 08:48:40'),
-(12, 'janos', '$2a$04$f1LMILXTZ1/YYVBqAjfHDOJczXmbTULpkqj1NHnajssNOwGnNhJKC', 'janivagyok@gmail.com', 0, 0, '2024-03-17', 0, 2, '2024-03-17 19:54:02');
+(16, 'bazsi', '$2a$04$Q0C3ffL38mWpwMz1okBehOJxe53Lr8r2dWjyKDJm71av6Ems.43iC', 'jb@gmail.com', 0, 0, '2024-03-18', 0, 3, '2024-03-18 09:56:55'),
+(17, 'balint', '$2a$04$/quw9t7VqhWaO.tks5Q2L.q3JIFmehNUj5TAbZ6He/aOBoDTfNBeW', 'string', 0, 0, '2024-03-18', 0, 3, '0001-01-01 00:00:00'),
+(18, 'balintUser', '$2a$04$echo9khsZ8hNJWAITgbcpuUQSxGHdP50U16x1IobDHB2kAi8h6C9O', 'string@gmail.com', 0, 0, '2024-03-18', 0, 1, '0001-01-01 00:00:00'),
+(19, 'bazsiUser', '$2a$04$iNOetnzZVi9xKL9xCRa0j.pEHaXz.nNjBsPmD3WpYiloi74AI/Kom', 'bazsiUser@gmail.com', 0, 0, '2024-03-18', 0, 1, '0001-01-01 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -155,13 +155,6 @@ CREATE TABLE `user_post` (
   `UserId` int(11) DEFAULT NULL,
   `uploadDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `user_post`
---
-
-INSERT INTO `user_post` (`Id`, `ImageId`, `Description`, `Title`, `Like`, `UserId`, `uploadDate`) VALUES
-(29, NULL, 'dsgdsmvlkdsmcymxlkmymk', 'dyrtewsvdsgvsdvsvxcv', 0, 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -185,6 +178,13 @@ CREATE TABLE `user_token` (
   `Token` text NOT NULL,
   `token_expire_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- A tábla adatainak kiíratása `user_token`
+--
+
+INSERT INTO `user_token` (`UserId`, `Token`, `token_expire_date`) VALUES
+(16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiRGVmYXVsdCIsImlkIjoiMTYiLCJleHAiOjE3MTA4Mzg2MTUsImlzcyI6ImF1dGgtYXBpIiwiYXVkIjoiYmF6c2kifQ.EgpUhdAHV46wplCo9deIfPdfp93Qr-83Hfn4RQxuCSIUvsipghbkwIBa_kFncSc7HVBVnrWBk5eiHh7eT8YGCw', '2024-03-19 09:56:55');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -301,7 +301,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT a táblához `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT a táblához `user_post`
@@ -319,7 +319,7 @@ ALTER TABLE `user_suspicious`
 -- AUTO_INCREMENT a táblához `user_token`
 --
 ALTER TABLE `user_token`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Megkötések a kiírt táblákhoz

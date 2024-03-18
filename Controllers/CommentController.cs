@@ -36,6 +36,7 @@ namespace Connect2Gether_API.Controllers
             return int.Parse(token.Claims.First(claim => claim.Type == "id").Value);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin, Default, Moderator")]
         public IActionResult Post(Comment comment)
         {
             using (var context = new Connect2getherContext())
