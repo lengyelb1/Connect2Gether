@@ -1,5 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos.UserDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,13 +50,13 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Default, Moderator")]
         public IActionResult Post(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-
                     UserPost userPost = new UserPost
                     {
 
@@ -109,6 +110,7 @@ namespace Connect2Gether_API.Controllers
 
 
         [HttpPut("id")]
+        [Authorize(Roles = "Admin, Default, Moderator")]
         public IActionResult Put(UserPostPutDto userPostPutDto, int id)
         {
             using (var context = new Connect2getherContext())
@@ -130,6 +132,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("id")]
+        [Authorize(Roles = "Admin, Default, Moderator")]
         public IActionResult Delete(int id)
         {
             using (var context = new Connect2getherContext())
