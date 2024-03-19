@@ -45,7 +45,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("{suspicious}")]
         public IActionResult Post(int id)
         {
             using (var context = new Connect2getherContext())

@@ -67,6 +67,49 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var request = context.Users.Include(x => x.Permission).FirstOrDefault(x => x.Id == id);
+                    return Ok(request);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost("{suspicious}")]
+        public IActionResult Post(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.Id == id);
+                    if (user == null)
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
+                    else
+                    {
+                        context.UserSuspicious.Add(new UserSuspiciou { UserId = user.Id });
+                        context.SaveChanges();
+                        return Ok("Sikeres hozzáadás!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpGet("nev")]
         public IActionResult GetNev(string nev)
         {
