@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Már 18. 10:07
+-- Létrehozás ideje: 2024. Már 19. 08:31
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -174,17 +174,11 @@ CREATE TABLE `user_suspicious` (
 --
 
 CREATE TABLE `user_token` (
+  `Id` int(11) NOT NULL,
   `UserId` int(11) NOT NULL,
   `Token` text NOT NULL,
-  `token_expire_date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- A tábla adatainak kiíratása `user_token`
---
-
-INSERT INTO `user_token` (`UserId`, `Token`, `token_expire_date`) VALUES
-(16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiRGVmYXVsdCIsImlkIjoiMTYiLCJleHAiOjE3MTA4Mzg2MTUsImlzcyI6ImF1dGgtYXBpIiwiYXVkIjoiYmF6c2kifQ.EgpUhdAHV46wplCo9deIfPdfp93Qr-83Hfn4RQxuCSIUvsipghbkwIBa_kFncSc7HVBVnrWBk5eiHh7eT8YGCw', '2024-03-19 09:56:55');
+  `Token_expire_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
 -- Indexek a kiírt táblákhoz
@@ -261,7 +255,8 @@ ALTER TABLE `user_suspicious`
 -- A tábla indexei `user_token`
 --
 ALTER TABLE `user_token`
-  ADD PRIMARY KEY (`UserId`);
+  ADD PRIMARY KEY (`Id`),
+  ADD KEY `UserId` (`UserId`);
 
 --
 -- A kiírt táblák AUTO_INCREMENT értéke
@@ -319,7 +314,7 @@ ALTER TABLE `user_suspicious`
 -- AUTO_INCREMENT a táblához `user_token`
 --
 ALTER TABLE `user_token`
-  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -385,7 +380,7 @@ DELIMITER $$
 --
 -- Események
 --
-CREATE DEFINER=`root`@`localhost` EVENT `token_delete` ON SCHEDULE EVERY 1 MINUTE STARTS '2024-03-17 19:33:00' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM user_token
+CREATE DEFINER=`root`@`localhost` EVENT `token_delete` ON SCHEDULE EVERY 1 HOUR STARTS '2024-03-17 19:33:00' ON COMPLETION NOT PRESERVE ENABLE DO DELETE FROM user_token
 WHERE user_token.token_expire_date < NOW()$$
 
 CREATE DEFINER=`root`@`localhost` EVENT `deleteExpiredTokens` ON SCHEDULE EVERY 1 MINUTE STARTS '2024-02-19 08:42:52' ON COMPLETION NOT PRESERVE DISABLE COMMENT 'Clears out sessions table each hour.' DO DELETE FROM user_token WHERE user_token.token_expire_date < NOW()$$
