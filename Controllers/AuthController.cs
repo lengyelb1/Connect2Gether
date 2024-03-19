@@ -144,7 +144,7 @@ namespace Connect2Gether_API.Controllers
                     claims:claims,
                     expires: DateTime.Now.AddDays(expire_day),
                     signingCredentials: creds,
-                    audience: user.Username,
+                    audience: _configuration.GetSection("AuthSettings:JwtOptions:Audience").Value,
                     issuer: _configuration.GetSection("AuthSettings:JwtOptions:Issuer").Value
                     );
 
