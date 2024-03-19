@@ -18,7 +18,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             {
                 try
                 {
-                    var request = context.Users.Include(x => x.Permission).ToList();
+                    var request = context.UserSuspicious.ToList();
                     return Ok(request);
                 }
                 catch (Exception ex)
@@ -35,7 +35,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             {
                 try
                 {
-                    var request = context.Users.Include(x => x.Permission).FirstOrDefault(x => x.Id == id);
+                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
                     return Ok(request);
                 }
                 catch (Exception ex)
@@ -45,7 +45,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("{suspicious}")]
         public IActionResult Post(int id)
         {
             using (var context = new Connect2getherContext())
