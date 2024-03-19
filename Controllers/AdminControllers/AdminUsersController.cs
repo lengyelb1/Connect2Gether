@@ -151,7 +151,14 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                    if (nev.StartsWith("@"))
+                    {
+                        return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                    }
+                    else
+                    {
+                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -167,7 +174,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    return Ok(context.UserPosts.Where(x => x.Title.Contains(nev)).ToList());
+                    return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
                 }
                 catch (Exception ex)
                 {
