@@ -74,7 +74,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var user = context.UserSuspicious.ToList();
+                    var user = context.UserSuspicious.Include(x => x.User).Include(x => x.User.Permission).ToList();
                     return Ok(user);
                 }
                 catch (Exception ex)
@@ -237,6 +237,18 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 User user = new User { Id = id };
                 context.Users.Remove(user);
+                context.SaveChanges();
+                return Ok($"User deleted!");
+            }
+        }
+
+        [HttpDelete("SuspiciousId")]
+        public ActionResult DeleteSuspicious(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                UserSuspiciou userSuspiciou = new UserSuspiciou { Id = id };
+                context.UserSuspicious.Remove(userSuspiciou);
                 context.SaveChanges();
                 return Ok($"User deleted!");
             }

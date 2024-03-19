@@ -47,6 +47,7 @@ public partial class User
     [JsonIgnore]
     public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
 
+    [JsonIgnore]
     public virtual UserSuspiciou? UserSuspiciou { get; set; }
 
     public virtual UserToken? UserToken { get; set; }
