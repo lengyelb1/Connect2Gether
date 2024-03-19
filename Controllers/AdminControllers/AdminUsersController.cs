@@ -67,6 +67,23 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
+        [HttpGet("GetAllSuspicious")]
+        public IActionResult GetAllSuspicious()
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.UserSuspicious.ToList();
+                    return Ok(user);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -84,7 +101,24 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpPost("{suspicious}")]
+        [HttpGet("SuspiciousId")]
+        public IActionResult GetByIdSuspicious(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
+                    return Ok(request);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost("suspicious")]
         public IActionResult Post(int id)
         {
             using (var context = new Connect2getherContext())
