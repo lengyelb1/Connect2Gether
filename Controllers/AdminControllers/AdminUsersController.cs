@@ -145,7 +145,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         }
 
         [HttpGet("KeresoWithNevOrCim")]
-        public IActionResult GetNev(string keresettErtek)
+        public IActionResult SearchWithNameOrTitle(string keresettErtek)
         {
             // Error 4001 nincs @ de van @
             using (var context = new Connect2getherContext())
@@ -195,6 +195,22 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
+        [HttpGet("nev")]
+        public IActionResult GetNev(string nev)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpGet("postnev")]
         public IActionResult GetPostNev(string nev)
         {
@@ -203,6 +219,23 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 try
                 {
                     return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpGet("UserGetPosts")]
+        public IActionResult UserGetPosts(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var request = context.UserPosts.Include(x => x.Comments).Where(x => x.User!.Id == id).ToList();
+                    return Ok(request);
                 }
                 catch (Exception ex)
                 {

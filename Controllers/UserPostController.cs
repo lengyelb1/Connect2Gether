@@ -59,20 +59,11 @@ namespace Connect2Gether_API.Controllers
                 {
                     UserPost userPost = new UserPost
                     {
-
                         UserId = userPostDto.UserId,
                         Description = userPostDto.Description,
                         Title = userPostDto.Title,
                         UploadDate = DateTime.Now
-                };
-
-
-                    /*UserPost userPost = new UserPost();
-                    userPost.UserId = userPostDto.UserId;
-                    userPost.Description = userPostDto.Description;
-                    userPost.Title = userPostDto.Title;
-                    userPost.Like = 0;
-                    userPost.User = context.Users.FirstOrDefault(x => x.Id == userPostDto.UserId);*/
+                    };
 
                     context.UserPosts.Add(userPost);
                     context.SaveChanges();
@@ -85,9 +76,8 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-
-        /*Test*/
         [HttpPost("Like")]
+        [Authorize(Roles = "Default")]
         public IActionResult Like(int postId, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -107,7 +97,6 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-
 
         [HttpPut("id")]
         [Authorize(Roles = "Admin, Default, Moderator")]
