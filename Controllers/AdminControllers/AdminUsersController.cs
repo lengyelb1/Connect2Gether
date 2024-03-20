@@ -144,20 +144,48 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("nev")]
-        public IActionResult GetNev(string nev)
+        [HttpGet("KeresoWithNevOrCim")]
+        public IActionResult GetNev(string keresettErtek)
         {
+            // Error 4001 nincs @ de van @
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    if (nev.StartsWith("@"))
+                    string[] strings = keresettErtek.Split(' ');
+                    bool vankuk = false;
+                    bool nincskuk = false;
+                    string usernev = "";
+                    string cim = "";
+                    foreach (string s in strings)
                     {
-                        return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                        if (s.StartsWith("@"))
+                        {
+                            vankuk = true;
+                            usernev = s.Trim('@');
+                        }
+                        else
+                        {
+                            nincskuk = true;
+                            cim += " " + s;
+
+                        }
+                    }
+                    if (vankuk == true && nincskuk == false)
+                    {
+                        return Ok(context.Users.Where(x => x.Username.Contains(keresettErtek.TrimStart('@'))).ToList());
+                    }
+                    else if (vankuk == false && nincskuk == true)
+                    {
+                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek)).ToList());
+                    }
+                    else if (vankuk == true && nincskuk == true)
+                    {
+                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList());
                     }
                     else
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
+                        return BadRequest("Something went wrong! #4001");
                     }
                 }
                 catch (Exception ex)
