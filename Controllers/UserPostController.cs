@@ -84,12 +84,56 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
+                    var existingLike = context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == postId);
+                    if (existingLike != null) 
+                    {
+                        return BadRequest("Már likeoltad ez a postot!");
+                    }
                     LikedPost like = new LikedPost();
                     like.PostId = postId;
                     like.UserId = userId;
                     context.LikedPosts.Add(like);
+                    var post = context.UserPosts.FirstOrDefault(x => x.Id == postId);
+                    if (post != null) 
+                    {
+                        post.Like++;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        return BadRequest("A post nem található!");
+                    }
+                    return Ok("A post likolása sikeres!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpDelete("LikeKiszedés")]
+        [Authorize(Roles = "Default")]
+        public IActionResult LikeKiszedése(int postId, int userId) 
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var kiszedettLike = context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == postId);
+                    context.LikedPosts.Remove(kiszedettLike!);
+                    var post = context.UserPosts.FirstOrDefault(x => x.Id == postId);
+                    if (post != null)
+                    {
+                        post.Like--;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        return BadRequest("A post nem található!");
+                    }
                     context.SaveChanges();
-                    return Ok("Post liked!");
+                    return Ok("A like kilettszedve!");
                 }
                 catch (Exception ex)
                 {
