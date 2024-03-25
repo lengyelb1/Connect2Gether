@@ -245,7 +245,6 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         }
 
         [HttpPost("register")]
-
         public ActionResult<User> RegisterWithOutCriterion(RegistrationRequestDto registrationRequestDto)
         {
             using (var context = new Connect2getherContext())

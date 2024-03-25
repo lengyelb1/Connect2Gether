@@ -78,62 +78,51 @@ namespace Connect2Gether_API.Controllers
 
         [HttpPost("Like")]
         [Authorize(Roles = "Default")]
-        public IActionResult Like(int postId, int userId)
+        public IActionResult Like(LikedPostDto likedPostDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var existingLike = context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == postId);
-                    if (existingLike != null) 
+                    var existingLike = context.LikedPosts.FirstOrDefault(x => x.UserId == likedPostDto.userId && x.PostId == likedPostDto.postId);
+                    if (existingLike != null && likedPostDto.isLiked == false)
                     {
-                        return BadRequest("Már likeoltad ez a postot!");
+                        context.LikedPosts.Remove(existingLike); 
+                        var post = context.UserPosts.FirstOrDefault(x => x.Id == likedPostDto.postId);
+                        if (post != null && post.Like > 0)
+                        {
+                            post.Like--;
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            return BadRequest("A post nem található vagy a like számláló már nulla!");
+                        }
+                        return Ok("A like eltávolítása sikeres!");
                     }
-                    LikedPost like = new LikedPost();
-                    like.PostId = postId;
-                    like.UserId = userId;
-                    context.LikedPosts.Add(like);
-                    var post = context.UserPosts.FirstOrDefault(x => x.Id == postId);
-                    if (post != null) 
+                    else if (existingLike == null && likedPostDto.isLiked == true)
                     {
-                        post.Like++;
-                        context.SaveChanges();
-                    }
-                    else
-                    {
-                        return BadRequest("A post nem található!");
-                    }
-                    return Ok("A post likolása sikeres!");
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
+                        LikedPost like = new LikedPost();
+                        like.PostId = likedPostDto.postId;
+                        like.UserId = likedPostDto.userId;
+                        context.LikedPosts.Add(like);
 
-        [HttpDelete("LikeKiszedés")]
-        [Authorize(Roles = "Default")]
-        public IActionResult LikeKiszedése(int postId, int userId) 
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var kiszedettLike = context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == postId);
-                    context.LikedPosts.Remove(kiszedettLike!);
-                    var post = context.UserPosts.FirstOrDefault(x => x.Id == postId);
-                    if (post != null)
-                    {
-                        post.Like--;
-                        context.SaveChanges();
+                        var post = context.UserPosts.FirstOrDefault(x => x.Id == likedPostDto.postId);
+                        if (post != null)
+                        {
+                            post.Like++;
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            return BadRequest("A post nem található!");
+                        }
+                        return Ok("A post likolása sikeres!");
                     }
                     else
                     {
-                        return BadRequest("A post nem található!");
+                        return BadRequest("Érvénytelen kérés!");
                     }
-                    context.SaveChanges();
-                    return Ok("A like kilettszedve!");
                 }
                 catch (Exception ex)
                 {
