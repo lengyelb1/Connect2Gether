@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Connect2Gether_API.Controllers.ModeratorControllers
+namespace Connect2Gether_API.Controllers.AdminControllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Moderator")]
-    public class ModeratorController : ControllerBase
+    [Authorize(Roles = "Admin")]
+    public class AdminSuspiciousUsersController : ControllerBase
     {
         [HttpGet("AllSuspiciousUser")]
-        public IActionResult AllSuspiciousUser()
+        public IActionResult AllSuspicious()
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var request = context.UserSuspicious.ToList();
-                    return Ok(request);
+                    var user = context.UserSuspicious.Include(x => x.User).Include(x => x.User.Permission).ToList();
+                    return Ok(user);
                 }
                 catch (Exception ex)
                 {
@@ -28,8 +28,8 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             }
         }
 
-        [HttpGet("SuspiciousUserById")]
-        public IActionResult SuspiciousUserById(int id) 
+        [HttpGet("SuspiciousById")]
+        public IActionResult SuspiciousById(int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -46,7 +46,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
         }
 
         [HttpPost("AddSuspicious")]
-        public IActionResult Post(int id)
+        public IActionResult AddSuspicious(int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -68,6 +68,18 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                 {
                     return BadRequest(ex.Message);
                 }
+            }
+        }
+
+        [HttpDelete("DeleteSuspiciousById")]
+        public ActionResult DeleteSuspiciousById(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                UserSuspiciou userSuspiciou = new UserSuspiciou { Id = id };
+                context.UserSuspicious.Remove(userSuspiciou);
+                context.SaveChanges();
+                return Ok($"User deleted!");
             }
         }
     }

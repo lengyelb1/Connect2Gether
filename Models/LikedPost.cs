@@ -12,6 +12,7 @@ public partial class LikedPost
 
     public int PostId { get; set; }
 
+    [JsonIgnore]
     public virtual UserPost Post { get; set; } = null!;
 
     [JsonIgnore]

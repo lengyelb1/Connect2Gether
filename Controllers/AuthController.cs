@@ -23,7 +23,7 @@ namespace Connect2Gether_API.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
 
         public ActionResult<User> Register(RegistrationRequestDto registrationRequestDto)
         {
@@ -85,7 +85,7 @@ namespace Connect2Gether_API.Controllers
             }
             */
         }
-        [HttpPost("login")]
+        [HttpPost("Login")]
 
         public ActionResult<User> Login(LoginRequestDto loginRequestDto)
         {

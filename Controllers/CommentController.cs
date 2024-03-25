@@ -30,14 +30,16 @@ namespace Connect2Gether_API.Controllers
             var jwtHandler = new JwtSecurityTokenHandler();
             return jwtHandler.ReadJwtToken(token);
         }
+
         public static int JWTokenDecodeID(string jwt)
         {
             JwtSecurityToken token = JWTokenDecoder(jwt);
             return int.Parse(token.Claims.First(claim => claim.Type == "id").Value);
         }
-        [HttpPost]
+
+        [HttpPost("AddComment")]
         [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult Post(Comment comment)
+        public IActionResult AddComment(Comment comment)
         {
             using (var context = new Connect2getherContext())
             {
@@ -62,35 +64,30 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("AllComment")]
+        public IActionResult AllComment()
         {
             try
             {
                 using (var context = new Connect2getherContext())
                 {
                     return Ok(context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToList());
-
                 }
-
-
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
-
             }
-
         }
-        [HttpGet("{id}")]
-        public IActionResult GetByPost(int id)
+        [HttpGet("CommentByPostId")]
+        public IActionResult CommentByPostId(int id)
         {
             try
             {
                 using (var context = new Connect2getherContext())
                 {
 
-                    var post = context.UserPosts.Include(p => p.Comments).FirstOrDefault(p => p.Id == id);
+                    var post = context.UserPosts.Include(p => p.Comments).Include(p => p.User).FirstOrDefault(p => p.Id == id);
 
                     if (post == null)
                     {
@@ -112,7 +109,7 @@ namespace Connect2Gether_API.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpPut("AdminOperation/{id}")]
+        [HttpPut("AdminOperation/ChangeCommentByAdmin")]
         public IActionResult Put(int id, CommentDto updatedCommentDto)
         {
 
@@ -140,8 +137,8 @@ namespace Connect2Gether_API.Controllers
             }
         }
         [Authorize(Roles = "Default,Admin")]
-        [HttpPut]
-        public IActionResult OwnCommentPut(CommentDto commentDto, string token)
+        [HttpPut("ChangeOwnComment")]
+        public IActionResult ChangeOwnComment(CommentDto commentDto, string token)
         {
 
             int JWTUserid = JWTokenDecodeID(token); //itt kiszedi a  tokenből az ID-t
@@ -184,7 +181,7 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpDelete("AdminOperation/{id}")]
+        [HttpDelete("AdminOperation/DeleteCommentByAdmin")]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteByAdmin(int id)
         {
@@ -213,7 +210,7 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteCommentByUserId")]
         [Authorize]
         public IActionResult DeleteByUser(int id)
         {

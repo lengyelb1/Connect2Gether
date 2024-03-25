@@ -15,7 +15,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     {
         public static User user = new User();
 
-        [HttpGet("userdb")]
+        [HttpGet("UserDb")]
         public IActionResult UserDB()
         {
             using (var context = new Connect2getherContext())
@@ -32,24 +32,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("userpostdb")]
-        public IActionResult UserPostDB()
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var db = context.UserPosts.ToList().Count();
-                    return Ok(db);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet]
+        [HttpGet("AllUser")]
         public async Task<IActionResult> GetAll()
         {
             using (var context = new Connect2getherContext())
@@ -67,25 +50,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("GetAllSuspicious")]
-        public IActionResult GetAllSuspicious()
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var user = context.UserSuspicious.Include(x => x.User).Include(x => x.User.Permission).ToList();
-                    return Ok(user);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("UserById")]
+        public IActionResult UserById(int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -101,50 +67,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("SuspiciousId")]
-        public IActionResult GetByIdSuspicious(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpPost("suspicious")]
-        public IActionResult Post(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var user = context.Users.FirstOrDefault(x => x.Id == id);
-                    if (user == null)
-                    {
-                        return BadRequest("Nincs ilyen user!");
-                    }
-                    else
-                    {
-                        context.UserSuspicious.Add(new UserSuspiciou { UserId = user.Id });
-                        context.SaveChanges();
-                        return Ok("Sikeres hozzáadás!");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet("KeresoWithNevOrCim")]
+        [HttpGet("SearchWithNameOrTitle")]
         public IActionResult SearchWithNameOrTitle(string keresettErtek)
         {
             // Error 4001 nincs @ de van @
@@ -195,8 +118,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("nev")]
-        public IActionResult GetNev(string nev)
+        [HttpGet("SearchName")]
+        public IActionResult SearchName(string nev)
         {
             using (var context = new Connect2getherContext())
             {
@@ -211,40 +134,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("postnev")]
-        public IActionResult GetPostNev(string nev)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet("UserGetPosts")]
-        public IActionResult UserGetPosts(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var request = context.UserPosts.Include(x => x.Comments).Where(x => x.User!.Id == id).ToList();
-                    return Ok(request);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpPost("register")]
+        [HttpPost("RegisterWithOutCriterion")]
         public ActionResult<User> RegisterWithOutCriterion(RegistrationRequestDto registrationRequestDto)
         {
             using (var context = new Connect2getherContext())
@@ -272,9 +162,9 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("ChangeRegister")]
 
-        public ActionResult<User> RegisterPut(UserPutDto userPutDto, int id)
+        public ActionResult<User> ChangeRegister(UserPutDto userPutDto, int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -297,25 +187,13 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpDelete("id")]
-        public ActionResult Delete(int id) 
+        [HttpDelete("DeleteUserById")]
+        public ActionResult DeleteUserById(int id) 
         {
             using (var context = new Connect2getherContext())
             {
                 User user = new User { Id = id };
                 context.Users.Remove(user);
-                context.SaveChanges();
-                return Ok($"User deleted!");
-            }
-        }
-
-        [HttpDelete("SuspiciousId")]
-        public ActionResult DeleteSuspicious(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                UserSuspiciou userSuspiciou = new UserSuspiciou { Id = id };
-                context.UserSuspicious.Remove(userSuspiciou);
                 context.SaveChanges();
                 return Ok($"User deleted!");
             }

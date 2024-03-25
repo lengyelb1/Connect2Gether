@@ -17,7 +17,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     [Authorize(Roles = "Default")]
     public class UserController : ControllerBase
     {
-        [HttpGet("KeresoWithNevOrCim")]
+        [HttpGet("SearchWithNameOrTitle")]
         public IActionResult SearchWithNameOrTitle(string keresettErtek)
         {
             // Error 4001 nincs @ de van @
@@ -68,8 +68,8 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        [HttpGet("nev")]
-        public IActionResult GetNev(string nev)
+        [HttpGet("SearchUser")]
+        public IActionResult SearchUser(string nev)
         {
             using (var context = new Connect2getherContext())
             {
@@ -84,8 +84,8 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        [HttpGet("postnev")]
-        public IActionResult GetPostNev(string nev)
+        [HttpGet("SearchPost")]
+        public IActionResult SearchPost(string nev)
         {
             using (var context = new Connect2getherContext())
             {

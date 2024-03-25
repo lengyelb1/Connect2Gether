@@ -24,6 +24,7 @@ public partial class UserPost
 
     [JsonIgnore]
     public virtual ICollection<LikedPost> LikedPosts { get; set; } = new List<LikedPost>();
+
     [JsonIgnore]
     public virtual User? User { get; set; }
 }

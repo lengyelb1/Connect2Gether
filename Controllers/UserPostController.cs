@@ -11,48 +11,33 @@ namespace Connect2Gether_API.Controllers
     [ApiController]
     public class UserPostController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("AllUserPost")]
+        public async Task<IActionResult> AllUserPost()
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
                     var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
-
                     return StatusCode(200, result);
                 }
                 catch (Exception ex)
                 {
                     return StatusCode(400, ex);
                 }
-
-                
             } 
-        
         }
 
-
-
-
-        [HttpGet("WithLike")]
-        public async Task<IActionResult> GetWithLiked(int userId)
+        [HttpGet("UserPostWithLike")]
+        public async Task<IActionResult> UserPostWithLiked(int userId)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    //var isLikedPost = context.LikedPosts.Include();
-
                     List<UserPostDtoToLike> userPostDtoToLikes = new List<UserPostDtoToLike>();
 
-                    var requestUser = context.Users.FirstOrDefault(s => s.Id == 17);
-
-                    var requestUserLickedPosts = context.LikedPosts.Where(s => s.UserId == 17);
-
                     var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
-
-                    requestUser!.LikedPosts = requestUserLickedPosts.ToList();
                     foreach (var item in result)
                     {
                         UserPostDtoToLike userPost = new UserPostDtoToLike();
@@ -79,17 +64,14 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("UserPostById")]
+        public async Task<IActionResult> UserPostById(int id)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-
-                    UserPost result = await context.UserPosts.Include(x => x.Comments).Include(f => f.User).Include(f => f.User!.Permission).FirstOrDefaultAsync(x => x.Id == id);
-                    result!.User = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
-
+                    var result = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
                     return Ok(result);
                 }
                 catch (Exception ex)
@@ -99,9 +81,43 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet("UserPostByIdWithLike")]
+        public async Task<IActionResult> UserPostByIdWithLike(int userId, int postId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    List<UserPostDtoToLike> userPostDtoToLikes = new List<UserPostDtoToLike>();
+                    var result = await context.UserPosts.Where(x => x.Id == postId).Include(x => x.Comments).Include(x => x.User).Include(f => f.User!.Permission).ToListAsync();
+                    foreach (var item in result)
+                    {
+                        UserPostDtoToLike userPost = new UserPostDtoToLike();
+                        userPost.Id = item.Id;
+                        userPost.ImageId = item.ImageId;
+                        userPost.Description = item.Description;
+                        userPost.Title = item.Title;
+                        userPost.Like = item.Like;
+                        userPost.UserId = item.UserId;
+                        userPost.Comments = item.Comments;
+                        userPost.User = item.User;
+                        userPost.UserId = item.UserId;
+                        userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                        userPostDtoToLikes.Add(userPost);
+                    }
+                    context.SaveChanges();
+                    return Ok(userPostDtoToLikes);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost("AddUserPost")]
         [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult Post(UserPostDto userPostDto)
+        public IActionResult AddUserPost(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -181,9 +197,9 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("ChangeUserPostById")]
         [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult Put(UserPostPutDto userPostPutDto, int id)
+        public IActionResult ChangeUserPostById(UserPostPutDto userPostPutDto, int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -203,9 +219,9 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("DeleteUserPostById")]
         [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteUserPostById(int id)
         {
             using (var context = new Connect2getherContext())
             {

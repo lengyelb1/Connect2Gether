@@ -10,8 +10,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     [Authorize(Roles = "Admin")]
     public class AdminPermissionsController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult GetPermission()
+        [HttpGet("AllPermission")]
+        public ActionResult AllPermission()
         {
             using (var context = new Connect2getherContext())
             {
