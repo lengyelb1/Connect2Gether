@@ -19,8 +19,58 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
                     var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
+
+                    return StatusCode(200, result);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(400, ex);
+                }
+
+                
+            } 
+        
+        }
+
+
+
+
+        [HttpGet("WithLike")]
+        public async Task<IActionResult> GetWithLiked(int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    //var isLikedPost = context.LikedPosts.Include();
+
+                    List<UserPostDtoToLike> userPostDtoToLikes = new List<UserPostDtoToLike>();
+
+                    var requestUser = context.Users.FirstOrDefault(s => s.Id == 17);
+
+                    var requestUserLickedPosts = context.LikedPosts.Where(s => s.UserId == 17);
+
+                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
+
+                    requestUser!.LikedPosts = requestUserLickedPosts.ToList();
+                    foreach (var item in result)
+                    {
+                        UserPostDtoToLike userPost = new UserPostDtoToLike();
+                        userPost.Id = item.Id;
+                        userPost.ImageId = item.ImageId;
+                        userPost.Description = item.Description;
+                        userPost.Title = item.Title;
+                        userPost.Like = item.Like;
+                        userPost.UserId = item.UserId;
+                        userPost.Comments = item.Comments;
+                        userPost.User = item.User;
+                        userPost.UserId = item.UserId;
+                        userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                        userPostDtoToLikes.Add(userPost);
+                    }
+
                     context.SaveChanges();
-                    return Ok(result);
+                    return Ok(userPostDtoToLikes);
                 }
                 catch (Exception ex)
                 {

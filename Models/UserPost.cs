@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Connect2Gether_API.Models;
 
@@ -21,7 +22,9 @@ public partial class UserPost
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+    [JsonIgnore]
     public virtual ICollection<LikedPost> LikedPosts { get; set; } = new List<LikedPost>();
 
+    [JsonIgnore]
     public virtual User? User { get; set; }
 }
