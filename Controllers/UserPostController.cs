@@ -29,6 +29,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostWithLike")]
+        [Authorize(Roles = "Default")]
         public async Task<IActionResult> UserPostWithLiked(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -82,6 +83,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostByIdWithLike")]
+        [Authorize(Roles = "Default")]
         public async Task<IActionResult> UserPostByIdWithLike(int userId, int postId)
         {
             using (var context = new Connect2getherContext())
