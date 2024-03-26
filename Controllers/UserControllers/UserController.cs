@@ -110,7 +110,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
-                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).Include(x => x.Permission).ToList());
                 }
                 catch (Exception ex)
                 {
@@ -126,7 +126,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
-                    return Ok(context.UserPosts.Where(x => x.Title.Contains(nev)).ToList());
+                    return Ok(context.UserPosts.Where(x => x.Title.Contains(nev)).Include(x => x.User).Include(x => x.User!.Permission).ToList());
                 }
                 catch (Exception ex)
                 {
@@ -144,6 +144,23 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 {
                     var request = context.UserPosts.Include(x => x.Comments).Where(x => x.User!.Id == id).ToList();
                     return Ok(request);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpGet("UserById")]
+        public IActionResult UserById(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var userById = context.Users.Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    return Ok(userById);
                 }
                 catch (Exception ex)
                 {

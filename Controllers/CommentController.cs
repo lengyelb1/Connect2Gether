@@ -39,7 +39,7 @@ namespace Connect2Gether_API.Controllers
 
         [HttpPost("AddComment")]
         [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult AddComment(Comment comment)
+        public IActionResult AddComment(CommentDto commentDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -47,11 +47,11 @@ namespace Connect2Gether_API.Controllers
                 {
                     Comment comment1 = new Comment();
 
-                    comment1.Id = comment.Id;
-                    comment1.Post = context.UserPosts.FirstOrDefault(p => p.Id == comment.PostId);
-                    comment1.User = context.Users.FirstOrDefault(p => p.Id == comment.UserId);
-                    comment1.Text = comment.Text;
-                    comment1.CommentId = comment.CommentId;
+                    comment1.Id = commentDto.Id;
+                    comment1.Post = context.UserPosts.FirstOrDefault(p => p.Id == commentDto.PostId);
+                    comment1.User = context.Users.FirstOrDefault(p => p.Id == commentDto.UserId);
+                    comment1.Text = commentDto.Text;
+                    comment1.CommentId = commentDto.CommentId;
                     comment1.UploadDate = DateTime.Now;
 
                     context.Comments.Add(comment1);

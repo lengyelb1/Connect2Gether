@@ -72,7 +72,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+                    var result = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).FirstOrDefaultAsync(x => x.Id == id);
                     return Ok(result);
                 }
                 catch (Exception ex)

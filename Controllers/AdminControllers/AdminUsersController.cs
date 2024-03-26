@@ -125,7 +125,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).Include(x => x.Permission).ToList());
                 }
                 catch (Exception ex)
                 {
