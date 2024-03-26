@@ -3,6 +3,7 @@ using Connect2Gether_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Connect2Gether_API.Controllers.AdminControllers
 {
@@ -18,7 +19,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var messages = context.Alertmessages.ToList();
+                    var messages = context.Alertmessages.Include(x => x.User).ToList();
                     return Ok(messages);
                 }
                 catch (Exception ex)
@@ -35,7 +36,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var messageById = context.Alertmessages.FirstOrDefault(x => x.Id == id);
+                    var messageById = context.Alertmessages.Include(x => x.User).FirstOrDefault(x => x.Id == id);
                     return Ok(messageById);
                 }
                 catch (Exception ex)

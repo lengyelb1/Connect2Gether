@@ -218,7 +218,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("DeleteUserPostById")]
-        [Authorize(Roles = "Admin, Default, Moderator")]
+        [Authorize(Roles = "Default, Moderator")]
         public IActionResult DeleteUserPostById(int id)
         {
             using (var context = new Connect2getherContext())

@@ -117,7 +117,7 @@ namespace Connect2Gether_API.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Something went wrong!");   
+                return BadRequest("Something went wrong!"); 
             }
             
         }

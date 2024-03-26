@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Connect2Gether_API.Models;
 
@@ -13,5 +14,5 @@ public partial class Alertmessage
 
     public string Description { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; } = null!;
 }

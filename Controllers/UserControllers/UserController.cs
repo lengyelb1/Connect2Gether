@@ -1,5 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.UserDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     public class UserController : ControllerBase
     {
         [HttpGet("SearchWithNameOrTitle")]
-        public IActionResult SearchWithNameOrTitle(string keresettErtek)
+        public IActionResult SearchWithNameOrTitle(string keresettErtek, int userId)
         {
             // Error 4001 nincs @ de van @
             using (var context = new Connect2getherContext())
@@ -44,17 +45,51 @@ namespace Connect2Gether_API.Controllers.UserControllers
 
                         }
                     }
+                    List<UserPostDtoToLike> userPostDtoToLikes = new List<UserPostDtoToLike>();
                     if (vankuk == true && nincskuk == false)
                     {
                         return Ok(context.Users.Where(x => x.Username.Contains(keresettErtek.TrimStart('@'))).ToList());
                     }
                     else if (vankuk == false && nincskuk == true)
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek)).ToList());
+                        var result = context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek)).ToList();
+                        foreach (var item in result)
+                        {
+                            UserPostDtoToLike userPost = new UserPostDtoToLike();
+                            userPost.Id = item.Id;
+                            userPost.ImageId = item.ImageId;
+                            userPost.Description = item.Description;
+                            userPost.Title = item.Title;
+                            userPost.Like = item.Like;
+                            userPost.UserId = item.UserId;
+                            userPost.Comments = item.Comments;
+                            userPost.User = item.User;
+                            userPost.UserId = item.UserId;
+                            userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPostDtoToLikes.Add(userPost);
+                        }
+
+                        return Ok(userPostDtoToLikes);
                     }
                     else if (vankuk == true && nincskuk == true)
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList());
+                        var result = context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList();
+                        foreach (var item in result)
+                        {
+                            UserPostDtoToLike userPost = new UserPostDtoToLike();
+                            userPost.Id = item.Id;
+                            userPost.ImageId = item.ImageId;
+                            userPost.Description = item.Description;
+                            userPost.Title = item.Title;
+                            userPost.Like = item.Like;
+                            userPost.UserId = item.UserId;
+                            userPost.Comments = item.Comments;
+                            userPost.User = item.User;
+                            userPost.UserId = item.UserId;
+                            userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPostDtoToLikes.Add(userPost);
+                        }
+                        return Ok(userPostDtoToLikes);
                     }
                     else
                     {

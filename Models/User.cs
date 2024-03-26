@@ -35,7 +35,8 @@ public partial class User
 
     public DateTime LastLogin { get; set; }
 
-    public virtual ICollection<Alertmessage> Alertmessages { get; set; } = new List<Alertmessage>();
+    [JsonIgnore]
+    public virtual ICollection<Alertmessage>? Alertmessages { get; set; } = new List<Alertmessage>();
 
     [JsonIgnore]
     public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
