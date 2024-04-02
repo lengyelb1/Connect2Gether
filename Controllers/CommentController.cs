@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
 using Connect2Gether_API.Models.Dtos;
+using MySqlX.XDevAPI.Common;
 
 
 
@@ -71,7 +72,17 @@ namespace Connect2Gether_API.Controllers
             {
                 using (var context = new Connect2getherContext())
                 {
-                    return Ok(context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToList());
+                    var result = context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToList();
+                    var simplifiedResult = result.Select(comment => new
+                    {
+                        comment.Id,
+                        comment.Text,
+                        comment.PostId,
+                        comment.UserId,
+                        comment.UploadDate,
+                        User = new { comment.User.Username, comment.User.Permission },
+                    }).ToList();
+                    return Ok(simplifiedResult);
                 }
             }
             catch (Exception e)

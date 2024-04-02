@@ -2,6 +2,7 @@
 using Connect2Gether_API.Models.Dtos.UserDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Connect2Gether_API.Controllers.UserControllers
 {
@@ -9,31 +10,33 @@ namespace Connect2Gether_API.Controllers.UserControllers
     [ApiController]
     public class UserProfileController : ControllerBase
     {
-        [HttpGet("UserProfile")]
-        public IActionResult UserProfile(int id, UserProfileDto userProfileDto)
+        [HttpGet("UserProfileById")]
+        public IActionResult UserProfile(int id)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
                     var user = context.Users.FirstOrDefault(x => x.Id == id);
-                    var userPostDb = context.UserPosts.Where(x => x.UserId == user!.Id).ToList().Count;
-                    var userCommentDb = context.Comments.Where(x => x.UserId == user!.Id).ToList().Count;
                     if (user == null) 
                     {
                         return StatusCode(404, "Nincs ilyen user");
                     }
-                    else
+
+                    var userPostCount = context.UserPosts.Where(x => x.UserId == user!.Id).ToList().Count;
+                    var userCommentCount = context.Comments.Where(x => x.UserId == user!.Id).ToList().Count;
+                    var userRank = context.Ranks.FirstOrDefault(x => x.Id == user.RankId);
+                    var userProfileDto = new UserProfileDto
                     {
-                        user.Username = userProfileDto.UserName;
-                        user.Email = userProfileDto.Email;
-                        user.Point = userProfileDto.Points;
-                        user.RankId = userProfileDto.RankId;
-                        user.RegistrationDate = userProfileDto.RegistrationDate;
-                        userPostDb = userProfileDto.PostDb;
-                        userCommentDb = userProfileDto.CommentDb;
-                        return Ok(user);
-                    }    
+                        UserName = user.Username,
+                        Email = user.Email,
+                        Points = user.Point,
+                        Rank = userRank,
+                        RegistrationDate = user.RegistrationDate,
+                        PostCount = userPostCount,
+                        CommentCount = userCommentCount,
+                    };
+                    return Ok(userProfileDto);
                 }
                 catch (Exception ex)
                 {

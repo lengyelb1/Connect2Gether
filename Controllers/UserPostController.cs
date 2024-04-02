@@ -25,14 +25,14 @@ namespace Connect2Gether_API.Controllers
                         post.Description,
                         post.Title,
                         post.UploadDate,
-                        User = new { post.User!.Id, post.User.Username }, // Csak az Id és a Name legyen include-olva
+                        User = new { post.User!.Id, post.User.Username, post.User.Permission }, // Csak az Id és a Name legyen include-olva
                         Comments = post.Comments.Select(comment => new
                         {
                             comment.Id,
                             comment.Text,
                             comment.PostId,
                             comment.UserId,
-                            User = new { comment.User.Username },
+                            User = new { comment.User.Username, comment.User.Permission },
                             comment.UploadDate
                         }).ToList()
                     }).ToList();
