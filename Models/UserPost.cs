@@ -22,7 +22,7 @@ public partial class UserPost
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public virtual Image? Image { get; set; } = null;
+    public virtual Image? Image { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();

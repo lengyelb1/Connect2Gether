@@ -84,7 +84,6 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.PostId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("comment_ibfk_2");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
@@ -196,6 +195,10 @@ public partial class Connect2getherContext : DbContext
                 .HasForeignKey(d => d.PermissionId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("user_ibfk_2");
+
+            entity.HasOne(d => d.Rank).WithMany(p => p.Users)
+                .HasForeignKey(d => d.RankId)
+                .HasConstraintName("user_ibfk_3");
         });
 
         modelBuilder.Entity<UserPost>(entity =>

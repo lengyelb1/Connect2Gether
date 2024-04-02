@@ -47,6 +47,9 @@ public partial class User
     public virtual Permission Permission { get; set; } = null!;
 
     [JsonIgnore]
+    public virtual Rank? Rank { get; set; } = null!;
+
+    [JsonIgnore]
     public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
 
     [JsonIgnore]
