@@ -32,6 +32,7 @@ namespace Connect2Gether_API.Controllers
                             comment.Text,
                             comment.PostId,
                             comment.UserId,
+                            User = new { comment.User.Username },
                             comment.UploadDate
                         }).ToList()
                     }).ToList();
