@@ -51,5 +51,5 @@ public partial class User
     [JsonIgnore]
     public virtual UserSuspiciou? UserSuspiciou { get; set; }
 
-    public virtual UserToken? UserToken { get; set; }
+    public virtual ICollection<UserToken> UserTokens { get; set; } = new List<UserToken>();
 }

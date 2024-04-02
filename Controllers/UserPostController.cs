@@ -128,10 +128,20 @@ namespace Connect2Gether_API.Controllers
                         Title = userPostDto.Title,
                         UploadDate = DateTime.Now
                     };
-
-                    context.UserPosts.Add(userPost);
-                    context.SaveChanges();
-                    return Ok(userPost);
+                    if (userPostDto.Image == null)
+                    {
+                        context.UserPosts.Add(userPost);
+                        context.SaveChanges();
+                        return Ok(userPost);
+                    }
+                    else
+                    {
+                        context.Images.Add(userPostDto.Image);
+                        userPost.ImageId = userPostDto.Image.Id;
+                        context.UserPosts.Add(userPost);
+                        context.SaveChanges();
+                        return Ok(userPost);
+                    }
                 }
                 catch (Exception ex)
                 {

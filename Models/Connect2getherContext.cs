@@ -225,6 +225,11 @@ public partial class Connect2getherContext : DbContext
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
 
+            entity.HasOne(d => d.Image).WithMany(p => p.UserPosts)
+                .HasForeignKey(d => d.ImageId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("user_post_ibfk_4");
+
             entity.HasOne(d => d.User).WithMany(p => p.UserPosts)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Restrict)
@@ -249,20 +254,21 @@ public partial class Connect2getherContext : DbContext
 
         modelBuilder.Entity<UserToken>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("user_token");
 
-            entity.Property(e => e.UserId)
-                .ValueGeneratedOnAdd()
-                .HasColumnType("int(11)");
+            entity.HasIndex(e => e.UserId, "UserId");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Token).HasColumnType("text");
             entity.Property(e => e.TokenExpireDate)
                 .HasColumnType("datetime")
-                .HasColumnName("token_expire_date");
+                .HasColumnName("Token_expire_date");
+            entity.Property(e => e.UserId).HasColumnType("int(11)");
 
-            entity.HasOne(d => d.User).WithOne(p => p.UserToken)
-                .HasForeignKey<UserToken>(d => d.UserId)
+            entity.HasOne(d => d.User).WithMany(p => p.UserTokens)
+                .HasForeignKey(d => d.UserId)
                 .HasConstraintName("user_token_ibfk_1");
         });
 

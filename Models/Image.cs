@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Connect2Gether_API.Models;
 
@@ -14,4 +15,7 @@ public partial class Image
     public byte[] Image3 { get; set; } = null!;
 
     public byte[] Image4 { get; set; } = null!;
+
+    [JsonIgnore]
+    public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
 }
