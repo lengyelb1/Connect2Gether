@@ -41,7 +41,8 @@ public partial class User
     [JsonIgnore]
     public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<LikedPost> LikedPosts { get; set; } = new List<LikedPost>();
+    [JsonIgnore]
+    public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();
 
     public virtual Permission Permission { get; set; } = null!;
 
@@ -51,5 +52,6 @@ public partial class User
     [JsonIgnore]
     public virtual UserSuspiciou? UserSuspiciou { get; set; }
 
-    public virtual ICollection<UserToken> UserTokens { get; set; } = new List<UserToken>();
+    [JsonIgnore]
+    public virtual ICollection<UserToken>? UserTokens { get; set; } = new List<UserToken>();
 }

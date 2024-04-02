@@ -19,7 +19,23 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
                     var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
-                    return StatusCode(200, result);
+                    var simplifiedResult = result.Select(post => new
+                    {
+                        post.Id,
+                        post.Description,
+                        post.Title,
+                        post.UploadDate,
+                        User = new { post.User!.Id, post.User.Username }, // Csak az Id és a Name legyen include-olva
+                        Comments = post.Comments.Select(comment => new
+                        {
+                            comment.Id,
+                            comment.Text,
+                            comment.PostId,
+                            comment.UserId,
+                            comment.UploadDate
+                        }).ToList()
+                    }).ToList();
+                    return StatusCode(200, simplifiedResult);
                 }
                 catch (Exception ex)
                 {
@@ -137,6 +153,7 @@ namespace Connect2Gether_API.Controllers
                     else
                     {
                         context.Images.Add(userPostDto.Image);
+                        context.SaveChanges();
                         userPost.ImageId = userPostDto.Image.Id;
                         context.UserPosts.Add(userPost);
                         context.SaveChanges();

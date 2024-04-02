@@ -15,7 +15,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     {
         public static User user = new User();
 
-        [HttpGet("UserDb")]
+        [HttpGet("UserCount")]
         public IActionResult UserDB()
         {
             using (var context = new Connect2getherContext())

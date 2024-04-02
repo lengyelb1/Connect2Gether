@@ -12,7 +12,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     [Authorize(Roles = "Admin")]
     public class AdminUserPostController : ControllerBase
     {
-        [HttpGet("UserPostDb")]
+        [HttpGet("UserPostCount")]
         public IActionResult UserPostDB()
         {
             using (var context = new Connect2getherContext())

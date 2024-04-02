@@ -9,7 +9,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     [ApiController]
     public class UserProfileController : ControllerBase
     {
-        /*[HttpGet("UserProfile")]
+        [HttpGet("UserProfile")]
         public IActionResult UserProfile(int id, UserProfileDto userProfileDto)
         {
             using (var context = new Connect2getherContext())
@@ -17,6 +17,8 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     var user = context.Users.FirstOrDefault(x => x.Id == id);
+                    var userPostDb = context.UserPosts.Where(x => x.UserId == user!.Id).ToList().Count;
+                    var userCommentDb = context.Comments.Where(x => x.UserId == user!.Id).ToList().Count;
                     if (user == null) 
                     {
                         return StatusCode(404, "Nincs ilyen user");
@@ -28,7 +30,9 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         user.Point = userProfileDto.Points;
                         user.RankId = userProfileDto.RankId;
                         user.RegistrationDate = userProfileDto.RegistrationDate;
-                        context.UserPosts.Where(x => x.UserId == user.Id).Count();
+                        userPostDb = userProfileDto.PostDb;
+                        userCommentDb = userProfileDto.CommentDb;
+                        return Ok(user);
                     }    
                 }
                 catch (Exception ex)
@@ -36,6 +40,6 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     return BadRequest(ex.Message);
                 }
             }
-        }*/
+        }
     }
 }
