@@ -54,6 +54,8 @@ namespace Connect2Gether_API.Controllers
                     user.Username = registrationRequestDto.UserName;
                     user.Hash = passwordHash;
                     user.Email = registrationRequestDto.Email;
+                    user.ActiveUser = registrationRequestDto.ActiveUser;
+                    user.RankId = registrationRequestDto.RankId;
                     user.RegistrationDate = DateTime.Today;
                     user.PermissionId = defaultPermission.Id;
                     user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
@@ -105,12 +107,19 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("Wrong password or Username!");
                     }
 
-                    context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName).LastLogin = DateTime.Now;
-                    string token = CreateToken(user);
-                    context.UserTokens.Add(new UserToken { UserId = user.Id, Token = token, TokenExpireDate = DateTime.Now.AddDays(expire_day) });
-                    context.SaveChanges();
+                    if (user.ActiveUser == true)
+                    {
+                        context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName).LastLogin = DateTime.Now;
+                        string token = CreateToken(user);
+                        context.UserTokens.Add(new UserToken { UserId = user.Id, Token = token, TokenExpireDate = DateTime.Now.AddDays(expire_day) });
+                        context.SaveChanges();
 
-                    return Ok(token);
+                        return Ok(token);
+                    }
+                    else
+                    {
+                        return BadRequest("Ezzel a userrel nem tudsz bejelentkezni!");
+                    }
                 }
                 
 
