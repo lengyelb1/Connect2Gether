@@ -81,12 +81,12 @@ namespace Connect2Gether_API.Controllers
 
                     var email = new MimeMessage();
                     email.From.Add(MailboxAddress.Parse("shanon.stokes@ethereal.email"));
-                    email.To.Add(MailboxAddress.Parse("shanon.stokes@ethereal.email"));
+                    email.To.Add(MailboxAddress.Parse(registrationRequestDto.Email));
                     email.Subject = "Regisztráció";
                     email.Body = new TextPart(TextFormat.Text) { Text = "Sikeres regisztráció!" };
 
                     using var smtp = new SmtpClient();
-                    smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+                    smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
                     smtp.Authenticate("shanon.stokes@ethereal.email", "mZfwxTFq9szvKQ6AB2");
                     smtp.Send(email);
                     smtp.Disconnect(true);

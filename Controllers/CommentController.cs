@@ -121,25 +121,28 @@ namespace Connect2Gether_API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("AdminOperation/ChangeCommentByAdmin")]
-        public IActionResult Put(int id, CommentDto updatedCommentDto)
+        public IActionResult ChangeCommentByAdmin(int id, CommentDto updatedCommentDto, int userId)
         {
-
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var existingComment = context.Comments.FirstOrDefault(c => c.Id == id);
-
-                    if (existingComment == null)
+                    var changedComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (changedComment == null)
                     {
-                        return NotFound("A megadott komment nem található.");
+                        return BadRequest("Nics ilyen comment!");
                     }
-
-                    existingComment.Text = updatedCommentDto.Text;
-
-                    context.SaveChanges();
-
-                    return Ok("Sikeres frissítés!");
+                    if (changedComment!.UserId == userId)
+                    {
+                        changedComment.Text = updatedCommentDto.Text!;
+                        context.Comments.Update(changedComment);
+                        context.SaveChanges();
+                        return Ok("Sikeres módosítás!");
+                    }
+                    else
+                    {
+                        return BadRequest("Ez a user nem változtathat!");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -149,36 +152,27 @@ namespace Connect2Gether_API.Controllers
         }
         [Authorize(Roles = "Default,Admin")]
         [HttpPut("ChangeOwnComment")]
-        public IActionResult ChangeOwnComment(CommentDto commentDto, string token)
+        public IActionResult ChangeOwnComment(CommentDto commentDto, int id, int userId)
         {
-
-            int JWTUserid = JWTokenDecodeID(token); //itt kiszedi a  tokenből az ID-t
-
-            if (JWTUserid == commentDto.UserId) //ellenőrzi a useré a komment?
+            using (var context = new Connect2getherContext())
             {
-
                 try
                 {
-
-
-
-                    using (var context = new Connect2getherContext())
+                    var changedComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (changedComment == null)
                     {
-                        var existingComment = context.Comments.FirstOrDefault(c => c.Id == commentDto.Id);
-
-                        if (existingComment == null)
-                        {
-                            return NotFound("A megadott komment nem található.");
-                        }
-
-
-
-
-                        existingComment.Text = commentDto.Text;
-
+                        return BadRequest("Nics ilyen comment!");
+                    }
+                    if (changedComment!.UserId == userId)
+                    {
+                        changedComment.Text = commentDto.Text!;
+                        context.Comments.Update(changedComment);
                         context.SaveChanges();
-
-                        return Ok("Sikeres frissítés!");
+                        return Ok("Sikeres módosítás!");
+                    }
+                    else
+                    {
+                        return BadRequest("Ez a user nem változtathat!");
                     }
                 }
                 catch (Exception ex)
@@ -186,74 +180,99 @@ namespace Connect2Gether_API.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-            else 
-            {
-                return StatusCode(404, "Nincs komment vagy kommenthez tartozó felhazsnáló");
-            }
         }
 
         [HttpDelete("AdminOperation/DeleteCommentByAdmin")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteByAdmin(int id)
+        public IActionResult DeleteByAdmin(int id, int userId)
         {
-            try
+            using (var context = new Connect2getherContext())
             {
-                int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-                using (var context = new Connect2getherContext())
+                try
                 {
-                    var existingComment = context.Comments.FirstOrDefault(c => c.Id == id);
-
-                    if (existingComment == null)
+                    var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (deleteComment == null)
                     {
-                        return NotFound("A megadott komment nem található.");
+                        return BadRequest("Nincs ilyen comment!");
                     }
-
-                    context.Comments.Remove(existingComment);
-                    context.SaveChanges();
-
-                    return Ok("A komment sikeresen törölve lett.");
+                    if (deleteComment!.UserId == userId)
+                    {
+                        context.Comments.Remove(deleteComment);
+                        context.SaveChanges();
+                        return Ok("Sikeres törlés!");
+                    }
+                    else
+                    {
+                        return BadRequest("Ez a user nem törölhet!");
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
 
         [HttpDelete("DeleteCommentByUserId")]
         [Authorize]
-        public IActionResult DeleteByUser(int id)
+        public IActionResult DeleteByUser(int id, int userId)
         {
-            try
+            using (var context = new Connect2getherContext())
             {
-
-                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-                using (var context = new Connect2getherContext())
+                try
                 {
-                    var existingComment = context.Comments.FirstOrDefault(c => c.Id == id);
-
-                    if (existingComment == null)
+                    var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (deleteComment == null)
                     {
-                        return NotFound("A megadott komment nem található.");
+                        return BadRequest("Nincs ilyen comment!");
                     }
-
-
-                    if (existingComment.UserId != userId)
+                    if (deleteComment!.UserId == userId)
                     {
-                        return Forbid();
+                        context.Comments.Remove(deleteComment);
+                        context.SaveChanges();
+                        return Ok("Sikeres törlés!");
                     }
-
-                    context.Comments.Remove(existingComment);
-                    context.SaveChanges();
-
-                    return Ok("A komment sikeresen törölve lett.");
+                    else
+                    {
+                        return BadRequest("Ez a user nem törölhet!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
                 }
             }
-            catch (Exception ex)
+        }
+
+        [HttpDelete("DeleteCommentByPostUserId")]
+        [Authorize]
+        public IActionResult DeleteByPostUserId(int id, int userId)
+        {
+            using (var context = new Connect2getherContext())
             {
-                return BadRequest(ex.Message);
+                try
+                {
+                    var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (deleteComment == null)
+                    {
+                        return BadRequest("Nincs ilyen comment!");
+                    }
+                    var deletedCommentPost = context.UserPosts.FirstOrDefault(x => x.Id == deleteComment.PostId);
+                    if (deletedCommentPost!.UserId == userId)
+                    {
+                        context.Comments.Remove(deleteComment);
+                        context.SaveChanges();
+                        return Ok("Sikeres törlés!");
+                    }
+                    else
+                    {
+                        return BadRequest("Ez a user nem törölhet!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
     }

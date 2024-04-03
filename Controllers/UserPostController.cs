@@ -148,7 +148,7 @@ namespace Connect2Gether_API.Controllers
                         Title = userPostDto.Title,
                         UploadDate = DateTime.Now
                     };
-                    if (userPostDto.Image == null)
+                    /*if (userPostDto.Image == null)
                     {
                         context.UserPosts.Add(userPost);
                         context.SaveChanges();
@@ -162,7 +162,10 @@ namespace Connect2Gether_API.Controllers
                         context.UserPosts.Add(userPost);
                         context.SaveChanges();
                         return Ok(userPost);
-                    }
+                    }*/
+                    context.UserPosts.Add(userPost);
+                    context.SaveChanges();
+                    return Ok(userPost);
                 }
                 catch (Exception ex)
                 {
@@ -227,19 +230,30 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPut("ChangeUserPostById")]
-        [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult ChangeUserPostById(UserPostPutDto userPostPutDto, int id)
+        [Authorize(Roles = "Default, Moderator")]
+        public IActionResult ChangeUserPostById(UserPostPutDto userPostPutDto, int id, int userId)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    UserPost changedPost = new UserPost { Id = id };
-                    changedPost.Description = userPostPutDto.Description;
-                    changedPost.Title = userPostPutDto.Title;
-                    context.UserPosts.Update(changedPost);
-                    context.SaveChanges();
-                    return Ok("Sikeres módosítás!");
+                    var changedPost = context.UserPosts.FirstOrDefault(x => x.Id == id);
+                    if (changedPost == null)
+                    {
+                        return BadRequest("Nics ilyen post!");
+                    }
+                    if (changedPost!.UserId == userId)
+                    {
+                        changedPost!.Description = userPostPutDto.Description;
+                        changedPost.Title = userPostPutDto.Title;
+                        context.UserPosts.Update(changedPost);
+                        context.SaveChanges();
+                        return Ok("Sikeres módosítás!");
+                    }
+                    else
+                    {
+                        return BadRequest("Ez a user nem változtathat!");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -250,16 +264,27 @@ namespace Connect2Gether_API.Controllers
 
         [HttpDelete("DeleteUserPostById")]
         [Authorize(Roles = "Default, Moderator")]
-        public IActionResult DeleteUserPostById(int id)
+        public IActionResult DeleteUserPostById(int id, int userId)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    UserPost deletePost = new UserPost { Id = id };
-                    context.UserPosts.Remove(deletePost);
-                    context.SaveChanges();
-                    return Ok("Sikeres törlés!");
+                    var deletePost = context.UserPosts.FirstOrDefault(x => x.Id == id);
+                    if (deletePost == null)
+                    {
+                        return BadRequest("Nincs ilyen post!");
+                    }
+                    if (deletePost!.UserId == userId)
+                    {
+                        context.UserPosts.Remove(deletePost!);
+                        context.SaveChanges();
+                        return Ok("Sikeres törlés!");
+                    }
+                    else
+                    {
+                        return BadRequest("Ez a user nem törölhet!");
+                    }
                 }
                 catch (Exception ex)
                 {
