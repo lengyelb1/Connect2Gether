@@ -1,9 +1,11 @@
 ﻿using Connect2Gether_API.Models;
+using Connect2Gether_API.Models.Dtos;
 using Connect2Gether_API.Models.Dtos.UserDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -69,6 +71,7 @@ namespace Connect2Gether_API.Controllers
                         userPost.User = item.User;
                         userPost.UserId = item.UserId;
                         userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+
                         userPostDtoToLikes.Add(userPost);
                     }
 

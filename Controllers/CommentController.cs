@@ -80,7 +80,7 @@ namespace Connect2Gether_API.Controllers
                         comment.PostId,
                         comment.UserId,
                         comment.UploadDate,
-                        User = new { comment.User.Username, comment.User.Permission },
+                        User = new { comment.User!.Username, comment.User.Permission },
                     }).ToList();
                     return Ok(simplifiedResult);
                 }
@@ -198,7 +198,7 @@ namespace Connect2Gether_API.Controllers
         {
             try
             {
-                int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
                 using (var context = new Connect2getherContext())
                 {
@@ -228,7 +228,7 @@ namespace Connect2Gether_API.Controllers
             try
             {
 
-                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
                 using (var context = new Connect2getherContext())
                 {

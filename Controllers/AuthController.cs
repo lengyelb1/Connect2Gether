@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Data;
+using MailKit.Net.Smtp;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Security;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -24,11 +28,10 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("Register")]
-
         public ActionResult<User> Register(RegistrationRequestDto registrationRequestDto)
         {
-            //try
-            //{
+            try
+            {
                 using (var context = new Connect2getherContext())
                 {
                     Permission defaultPermission = new Permission();
@@ -49,7 +52,7 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("The password need to contain special character!");
                     }
 
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
+                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
                     User user = new User();
                     user.Username = registrationRequestDto.UserName;
                     user.Hash = passwordHash;
@@ -76,19 +79,30 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("User existing!");
                     }
 
+                    var email = new MimeMessage();
+                    email.From.Add(MailboxAddress.Parse("shanon.stokes@ethereal.email"));
+                    email.To.Add(MailboxAddress.Parse("shanon.stokes@ethereal.email"));
+                    email.Subject = "Regisztráció";
+                    email.Body = new TextPart(TextFormat.Text) { Text = "Sikeres regisztráció!" };
+
+                    using var smtp = new SmtpClient();
+                    smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+                    smtp.Authenticate("shanon.stokes@ethereal.email", "mZfwxTFq9szvKQ6AB2");
+                    smtp.Send(email);
+                    smtp.Disconnect(true);
+
                     context.Users.Add(user);
                     context.SaveChanges();
                     return Ok("User added!");
                 }
-            /*}
+            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            */
         }
-        [HttpPost("Login")]
 
+        [HttpPost("Login")]
         public ActionResult<User> Login(LoginRequestDto loginRequestDto)
         {
             try
