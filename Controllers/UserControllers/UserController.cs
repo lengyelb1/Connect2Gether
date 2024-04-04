@@ -168,5 +168,22 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 }
             }
         }
+
+        [HttpGet("UserAllAlertMessage")]
+        public IActionResult UserAllAlertMessage(int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var userAllAlertMessage = context.Alertmessages.Where(x => x.UserId == userId).ToList();
+                    return Ok(userAllAlertMessage);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
     }
 }
