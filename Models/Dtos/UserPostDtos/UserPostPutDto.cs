@@ -1,4 +1,4 @@
-﻿namespace Connect2Gether_API.Models.Dtos.UserDtos
+﻿namespace Connect2Gether_API.Models.Dtos.UserPostDtos
 {
     public class UserPostPutDto
     {

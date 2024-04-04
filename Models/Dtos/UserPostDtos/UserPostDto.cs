@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Text.Json.Serialization;
 
-namespace Connect2Gether_API.Models.Dtos.UserDtos
+namespace Connect2Gether_API.Models.Dtos.UserPostDtos
 {
     public class UserPostDto
     {

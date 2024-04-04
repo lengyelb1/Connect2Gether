@@ -1,11 +1,12 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
-using Connect2Gether_API.Models.Dtos.UserDtos;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -47,6 +48,42 @@ namespace Connect2Gether_API.Controllers
             } 
         }
 
+        [HttpGet("AllUserPostByOwner")]
+        [Authorize(Roles = "Default")]
+        public async Task<IActionResult> AllUserPostByOwner(int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    List<AllUserPostByOwnerDto> listAllUserPostByOwners = new List<AllUserPostByOwnerDto>();
+                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
+                    foreach (var item in result) 
+                    {
+                        AllUserPostByOwnerDto allUserPostByOwner = new AllUserPostByOwnerDto();
+                        allUserPostByOwner.Id = item.Id;
+                        allUserPostByOwner.ImageId = item.ImageId;
+                        allUserPostByOwner.Description = item.Description;
+                        allUserPostByOwner.Title = item.Title;
+                        allUserPostByOwner.Like = item.Like;
+                        allUserPostByOwner.UserId = item.UserId;
+                        allUserPostByOwner.Comments = item.Comments;
+                        allUserPostByOwner.User = item.User;
+                        allUserPostByOwner.OwnPost = item.UserId == userId;
+
+                        listAllUserPostByOwners.Add(allUserPostByOwner);
+                    }
+
+                    context.SaveChanges();
+                    return Ok(listAllUserPostByOwners);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpGet("UserPostWithLike")]
         [Authorize(Roles = "Default")]
         public async Task<IActionResult> UserPostWithLiked(int userId)
@@ -69,7 +106,6 @@ namespace Connect2Gether_API.Controllers
                         userPost.UserId = item.UserId;
                         userPost.Comments = item.Comments;
                         userPost.User = item.User;
-                        userPost.UserId = item.UserId;
                         userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
 
                         userPostDtoToLikes.Add(userPost);

@@ -12,8 +12,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
-using Connect2Gether_API.Models.Dtos;
 using MySqlX.XDevAPI.Common;
+using Connect2Gether_API.Models.Dtos.CommentDtos;
+using System.Collections.Generic;
 
 
 
@@ -65,6 +66,7 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
+
         [HttpGet("AllComment")]
         public IActionResult AllComment()
         {
@@ -90,6 +92,42 @@ namespace Connect2Gether_API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("AllCommentByOwner")]
+        [Authorize(Roles = "Default")]
+        public async Task<IActionResult> AllCommentByOwner(int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    List<AllCommentByOwnerDto> listAllCommentByOwners = new List<AllCommentByOwnerDto>();
+                    var result = await context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToListAsync();
+                    foreach (var item in result)
+                    {
+                        AllCommentByOwnerDto allCommentByOwner = new AllCommentByOwnerDto();
+                        allCommentByOwner.Id = item.Id;
+                        allCommentByOwner.Text = item.Text;
+                        allCommentByOwner.PostId = item.PostId;
+                        allCommentByOwner.UserId = item.UserId;
+                        allCommentByOwner.CommentId = item.CommentId;
+                        allCommentByOwner.Post = item.Post;
+                        allCommentByOwner.User = item.User;
+                        allCommentByOwner.OwnComment = item.UserId == userId;
+
+                        listAllCommentByOwners.Add(allCommentByOwner);
+                    }
+
+                    context.SaveChanges();
+                    return Ok(listAllCommentByOwners);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpGet("CommentByPostId")]
         public IActionResult CommentByPostId(int id)
         {

@@ -1,6 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
-using Connect2Gether_API.Models.Dtos.UserDtos;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
