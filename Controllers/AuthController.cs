@@ -12,6 +12,8 @@ using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
 using MailKit.Security;
+using Connect2Gether_API.Controllers.Utilities;
+
 
 namespace Connect2Gether_API.Controllers
 {
@@ -19,6 +21,8 @@ namespace Connect2Gether_API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+
+
         private readonly IConfiguration _configuration;
 
         private readonly int expire_day = 1;
@@ -38,20 +42,8 @@ namespace Connect2Gether_API.Controllers
                     defaultPermission.Id = 1;
                     defaultPermission.Name = "Default";
 
-                    if (registrationRequestDto.Password.Length <8)
-                    {
-                        return BadRequest("The password need to be 8 character lenght!");
-                    }else if (!(registrationRequestDto.Password.Any(char.IsUpper) && registrationRequestDto.Password.Any(char.IsLower)))
-                    {
-                        return BadRequest("The password need to contain upper and lower character!");
-                    }else if (!registrationRequestDto.Password.Any(char.IsDigit))
-                    {
-                        return BadRequest("The password need to contain number!");
-                    }else if (!registrationRequestDto.Password.Any(char.IsSymbol))
-                    {
-                        return BadRequest("The password need to contain special character!");
-                    }
-
+                    if(PasswordChecker.CheckPassword(registrationRequestDto.Password))
+                    { 
                     string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
                     User user = new User();
                     user.Username = registrationRequestDto.UserName;
@@ -62,7 +54,7 @@ namespace Connect2Gether_API.Controllers
                     user.RegistrationDate = DateTime.Today;
                     user.PermissionId = defaultPermission.Id;
                     user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
-
+                    
                     /*
                     if (context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name) != null)
                     {
@@ -94,6 +86,11 @@ namespace Connect2Gether_API.Controllers
                     context.Users.Add(user);
                     context.SaveChanges();
                     return Ok("User added!");
+                    }else 
+                    {
+                        return BadRequest("A jelszó nem felel meg a kritériumoknak!");
+                    
+                    }
                 }
             }
             catch (Exception e)
