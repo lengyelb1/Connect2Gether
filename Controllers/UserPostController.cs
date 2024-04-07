@@ -28,6 +28,7 @@ namespace Connect2Gether_API.Controllers
                         post.Description,
                         post.Title,
                         post.UploadDate,
+                        post.Like,
                         User = post.User != null ? new { post.User.Id, post.User.Username, Permission = post.User.Permission?.Name } : null,
                         Comments = post.Comments.Select(comment => new
                         {
