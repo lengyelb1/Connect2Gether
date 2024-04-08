@@ -49,6 +49,46 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 }
             }
         }
+
+        [HttpPut("ChangeUserProfile")]
+        [Authorize(Roles = "Default")]
+        public IActionResult ChangeUserProfile(UserProfilePutDto userProfilePutDto ,int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var userProfile = context.Users.FirstOrDefault(x => x.Id == userId);
+                    if (userProfile == null) 
+                    {
+                        return StatusCode(404, "Nincs ilyen user!");
+                    }
+
+                    var userPostCount = context.UserPosts.Where(x => x.UserId == userProfile!.Id).ToList().Count;
+                    var userCommentCount = context.Comments.Where(x => x.UserId == userProfile!.Id).ToList().Count;
+                    var userRank = context.Ranks.FirstOrDefault(x => x.Id == userProfile.RankId);
+
+                    var userProfileDto = new UserProfileDto
+                    {
+                        UserName = userProfilePutDto.UserName!,
+                        Email = userProfilePutDto.Email!,
+                        Points = userProfile.Point,
+                        Rank = userRank,
+                        RegistrationDate = userProfile.RegistrationDate,
+                        PostCount = userPostCount,
+                        CommentCount = userCommentCount,
+                    };
+
+                    context.SaveChanges();
+                    return Ok(userProfileDto);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpPut("UserId")]
         public async Task<IActionResult>UserChangePassword(int UserId,ChangePasswordDto changedUser)
         {
@@ -57,7 +97,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 using (var context = new Connect2getherContext())
                 {
                     var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId);
-                    var oldHash = BCrypt.Net.BCrypt.Verify(changedUser.OldPassword, requestUser.Hash);
+                    var oldHash = BCrypt.Net.BCrypt.Verify(changedUser.OldPassword, requestUser!.Hash);
                     if (!oldHash)
                     {
                         return BadRequest("A régi jelszó helytelen!");

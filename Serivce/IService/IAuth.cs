@@ -6,6 +6,6 @@ namespace Connect2Gether_API.Serivce.IService
     {
         Task<string> Register(RegistrationRequestDto registrationRequestDto);
         Task<bool> AssignPermision(string email, string permisionName);
-        Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
+        //Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.UserDtos;
 using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -178,6 +179,30 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 {
                     var userAllAlertMessage = context.Alertmessages.Where(x => x.UserId == userId).ToList();
                     return Ok(userAllAlertMessage);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPut("ChangeUser")]
+        [Authorize(Roles = "Default")]
+        public IActionResult ChangeUser(UserPutDto userPutDto,int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.Id == userId);
+                    User changedUser = new User();
+                    user!.Id = userId;
+                    user.Username = userPutDto.UserName;
+                    user.Email = userPutDto.Email;
+                    context.Users.Update(user);
+                    context.SaveChanges();
+                    return Ok("Sikeres módosítás!");
                 }
                 catch (Exception ex)
                 {

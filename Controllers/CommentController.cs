@@ -40,7 +40,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("AddComment")]
-        [Authorize(Roles = "Admin, Default, Moderator")]
+        [Authorize(Roles = "Default")]
         public IActionResult AddComment(CommentDto commentDto)
         {
             using (var context = new Connect2getherContext())
@@ -129,6 +129,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("CommentByPostId")]
+        [Authorize(Roles = "Default")]
         public IActionResult CommentByPostId(int id)
         {
             try
@@ -155,10 +156,8 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-
-
-        [Authorize(Roles = "Admin")]
         [HttpPut("AdminOperation/ChangeCommentByAdmin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult ChangeCommentByAdmin(int id, CommentDto updatedCommentDto, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -188,8 +187,9 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-        [Authorize(Roles = "Default,Admin")]
+
         [HttpPut("ChangeOwnComment")]
+        [Authorize(Roles = "Default,Admin")]
         public IActionResult ChangeOwnComment(CommentDto commentDto, int id, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -252,7 +252,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("DeleteCommentByUserId")]
-        [Authorize]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult DeleteByUser(int id, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -283,7 +283,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("DeleteCommentByPostUserId")]
-        [Authorize]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult DeleteByPostUserId(int id, int userId)
         {
             using (var context = new Connect2getherContext())

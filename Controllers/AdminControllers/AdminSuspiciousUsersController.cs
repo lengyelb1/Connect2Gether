@@ -76,8 +76,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         {
             using (var context = new Connect2getherContext())
             {
-                UserSuspiciou userSuspiciou = new UserSuspiciou { Id = id };
-                context.UserSuspicious.Remove(userSuspiciou);
+                var suspiciousUser = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
+                context.UserSuspicious.Remove(suspiciousUser!);
                 context.SaveChanges();
                 return Ok($"User deleted!");
             }

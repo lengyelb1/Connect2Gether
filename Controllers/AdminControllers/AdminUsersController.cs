@@ -173,8 +173,6 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 user.Username = userPutDto.UserName;
                 user.Email = userPutDto.Email;
                 user.RegistrationDate = DateTime.Today;
-                user.PermissionId = userPutDto.PermissionId;
-                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == id);
 
                 if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
                 {
@@ -192,8 +190,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         {
             using (var context = new Connect2getherContext())
             {
-                User user = new User { Id = id };
-                context.Users.Remove(user);
+                var deleteUser = context.Users.FirstOrDefault((x) => x.Id == id);
+                context.Users.Remove(deleteUser!);
                 context.SaveChanges();
                 return Ok($"User deleted!");
             }

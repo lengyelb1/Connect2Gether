@@ -137,6 +137,7 @@ namespace Connect2Gether_API.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return BadRequest("Something went wrong!"); 
             }
             
