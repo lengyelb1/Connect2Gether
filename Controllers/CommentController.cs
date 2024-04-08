@@ -15,6 +15,7 @@ using System.IO;
 using MySqlX.XDevAPI.Common;
 using Connect2Gether_API.Models.Dtos.CommentDtos;
 using System.Collections.Generic;
+using Connect2Gether_API.Models.Dtos;
 
 
 
@@ -156,9 +157,9 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpPut("AdminOperation/ChangeCommentByAdmin")]
+        /*[HttpPut("AdminOperation/ChangeCommentByAdmin")]
         [Authorize(Roles = "Admin")]
-        public IActionResult ChangeCommentByAdmin(int id, CommentDto updatedCommentDto, int userId)
+        public IActionResult ChangeCommentByAdmin(int id, CommentPutDto commentPutDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -169,28 +170,21 @@ namespace Connect2Gether_API.Controllers
                     {
                         return BadRequest("Nics ilyen comment!");
                     }
-                    if (changedComment!.UserId == userId)
-                    {
-                        changedComment.Text = updatedCommentDto.Text!;
-                        context.Comments.Update(changedComment);
-                        context.SaveChanges();
-                        return Ok("Sikeres módosítás!");
-                    }
-                    else
-                    {
-                        return BadRequest("Ez a user nem változtathat!");
-                    }
+                    changedComment.Text = commentPutDto.Text!;
+                    context.Comments.Update(changedComment);
+                    context.SaveChanges();
+                    return Ok("Sikeres módosítás!");
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
             }
-        }
+        }*/
 
         [HttpPut("ChangeOwnComment")]
         [Authorize(Roles = "Default,Admin")]
-        public IActionResult ChangeOwnComment(CommentDto commentDto, int id, int userId)
+        public IActionResult ChangeOwnComment(CommentPutDto commentPutDto, int id, int userId)
         {
             using (var context = new Connect2getherContext())
             {
@@ -203,7 +197,7 @@ namespace Connect2Gether_API.Controllers
                     }
                     if (changedComment!.UserId == userId)
                     {
-                        changedComment.Text = commentDto.Text!;
+                        changedComment.Text = commentPutDto.Text!;
                         context.Comments.Update(changedComment);
                         context.SaveChanges();
                         return Ok("Sikeres módosítás!");
@@ -222,7 +216,7 @@ namespace Connect2Gether_API.Controllers
 
         [HttpDelete("AdminOperation/DeleteCommentByAdmin")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteByAdmin(int id, int userId)
+        public IActionResult DeleteByAdmin(int id, AlertMessageDto alertMessageDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -233,16 +227,15 @@ namespace Connect2Gether_API.Controllers
                     {
                         return BadRequest("Nincs ilyen comment!");
                     }
-                    if (deleteComment!.UserId == userId)
-                    {
-                        context.Comments.Remove(deleteComment);
-                        context.SaveChanges();
-                        return Ok("Sikeres törlés!");
-                    }
-                    else
-                    {
-                        return BadRequest("Ez a user nem törölhet!");
-                    }
+                    context.Comments.Remove(deleteComment);
+                    context.SaveChanges();
+                    Alertmessage alertmessage = new Alertmessage();
+                    alertmessage.Title = alertMessageDto.title;
+                    alertmessage.Description = alertMessageDto.description;
+                    alertmessage.UserId = deleteComment.UserId;
+                    context.Alertmessages.Add(alertmessage);
+                    context.SaveChanges();
+                    return Ok("Sikeres törlés!");
                 }
                 catch (Exception ex)
                 {
@@ -260,11 +253,12 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
                     var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    var deletedCommentPost = context.UserPosts.FirstOrDefault(x => x.Id == deleteComment!.PostId);
                     if (deleteComment == null)
                     {
                         return BadRequest("Nincs ilyen comment!");
                     }
-                    if (deleteComment!.UserId == userId)
+                    if (deleteComment!.UserId == userId || deletedCommentPost!.UserId == userId)
                     {
                         context.Comments.Remove(deleteComment);
                         context.SaveChanges();
@@ -282,7 +276,7 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpDelete("DeleteCommentByPostUserId")]
+        /*[HttpDelete("DeleteCommentByPostUserId")]
         [Authorize(Roles = "Default, Admin")]
         public IActionResult DeleteByPostUserId(int id, int userId)
         {
@@ -312,6 +306,6 @@ namespace Connect2Gether_API.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-        }
+        }*/
     }
 }

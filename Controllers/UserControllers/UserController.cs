@@ -196,7 +196,6 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     var user = context.Users.FirstOrDefault(x => x.Id == userId);
-                    User changedUser = new User();
                     user!.Id = userId;
                     user.Username = userPutDto.UserName;
                     user.Email = userPutDto.Email;

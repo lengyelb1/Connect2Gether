@@ -307,21 +307,34 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var deletePost = context.UserPosts.FirstOrDefault(x => x.Id == id);
-                    if (deletePost == null)
+                    var deletedPost = context.UserPosts.FirstOrDefault(x => x.Id == id);
+                    var deletedLike = context.LikedPosts.FirstOrDefault(x => x.PostId == deletedPost!.Id);
+                    if (deletedPost == null)
                     {
-                        return BadRequest("Nincs ilyen post!");
+                        return BadRequest("Ez a post nem létezik!");
                     }
-                    if (deletePost!.UserId == userId)
+
+                    if (deletedPost.UserId == userId)
                     {
-                        context.UserPosts.Remove(deletePost!);
-                        context.SaveChanges();
-                        return Ok("Sikeres törlés!");
+                        if (deletedPost != null && deletedLike == null)
+                        {
+                            context.UserPosts.Remove(deletedPost);
+                            context.SaveChanges();
+                        }
+                        else if (deletedPost != null && deletedLike != null)
+                        {
+                            context.LikedPosts.Remove(deletedLike!);
+                            context.SaveChanges();
+                            context.UserPosts.Remove(deletedPost);
+                            context.SaveChanges();
+                        }
                     }
                     else
                     {
                         return BadRequest("Ez a user nem törölhet!");
                     }
+                    
+                    return Ok("Sikeres törlés!");
                 }
                 catch (Exception ex)
                 {
