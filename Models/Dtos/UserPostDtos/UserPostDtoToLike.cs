@@ -1,4 +1,6 @@
-﻿namespace Connect2Gether_API.Models.Dtos.UserPostDtos
+﻿using System.Text.Json.Serialization;
+
+namespace Connect2Gether_API.Models.Dtos.UserPostDtos
 {
     public class UserPostDtoToLike
     {
@@ -20,7 +22,8 @@
 
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-        public virtual ICollection<LikedPost> LikedPosts { get; set; } = new List<LikedPost>();
+        [JsonIgnore]
+        public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();
 
         public virtual User? User { get; set; }
     }
