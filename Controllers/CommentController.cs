@@ -41,7 +41,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("AddComment")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult AddComment(CommentDto commentDto)
         {
             using (var context = new Connect2getherContext())
@@ -69,6 +69,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("AllComment")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult AllComment()
         {
             try
@@ -95,7 +96,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("AllCommentByOwner")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> AllCommentByOwner(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -130,7 +131,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("CommentByPostId")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult CommentByPostId(int id)
         {
             try

@@ -16,7 +16,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     /* Jelszó / azonosítóval való lekérés*/
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Default")]
+    [Authorize(Roles = "Default, Admin")]
     public class UserController : ControllerBase
     {
         [HttpGet("SearchWithNameOrTitle")]
@@ -196,6 +196,10 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     var user = context.Users.FirstOrDefault(x => x.Id == userId);
+                    if (user == null)
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
                     user!.Id = userId;
                     user.Username = userPutDto.UserName;
                     user.Email = userPutDto.Email;

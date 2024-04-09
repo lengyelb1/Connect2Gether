@@ -15,6 +15,7 @@ namespace Connect2Gether_API.Controllers
     public class UserPostController : ControllerBase
     {
         [HttpGet("AllUserPost")]
+        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> AllUserPost()
         {
             using (var context = new Connect2getherContext())
@@ -50,7 +51,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("AllUserPostByOwner")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> AllUserPostByOwner(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -86,7 +87,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostWithLike")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> UserPostWithLiked(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -123,6 +124,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostById")]
+        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> UserPostById(int id)
         {
             using (var context = new Connect2getherContext())
@@ -140,7 +142,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostByIdWithLike")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> UserPostByIdWithLike(int userId, int postId)
         {
             using (var context = new Connect2getherContext())
@@ -171,7 +173,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("AddUserPost")]
-        [Authorize(Roles = "Admin, Default, Moderator")]
+        [Authorize(Roles = "Admin, Default")]
         public IActionResult AddUserPost(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
@@ -212,7 +214,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("Like")]
-        [Authorize(Roles = "Default")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult Like(LikedPostDto likedPostDto)
         {
             using (var context = new Connect2getherContext())
@@ -267,7 +269,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPut("ChangeUserPostById")]
-        [Authorize(Roles = "Default, Moderator")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult ChangeUserPostById(UserPostPutDto userPostPutDto, int id, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -300,7 +302,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("DeleteUserPostById")]
-        [Authorize(Roles = "Default, Moderator")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult DeleteUserPostById(int id, int userId)
         {
             using (var context = new Connect2getherContext())
