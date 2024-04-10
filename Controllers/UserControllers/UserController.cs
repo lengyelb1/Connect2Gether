@@ -16,10 +16,10 @@ namespace Connect2Gether_API.Controllers.UserControllers
     /* Jelszó / azonosítóval való lekérés*/
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Default, Admin")]
     public class UserController : ControllerBase
     {
         [HttpGet("SearchWithNameOrTitle")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult SearchWithNameOrTitle(string keresettErtek, int userId)
         {
             // Error 4001 nincs @ de van @
@@ -104,7 +104,8 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        [HttpGet("SearchUser")]
+        /*[HttpGet("SearchUser")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult SearchUser(string nev)
         {
             using (var context = new Connect2getherContext())
@@ -118,9 +119,9 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     return BadRequest(ex.Message);
                 }
             }
-        }
+        }*/
 
-        [HttpGet("SearchPost")]
+        /*[HttpGet("SearchPost")]
         public IActionResult SearchPost(string nev)
         {
             using (var context = new Connect2getherContext())
@@ -134,16 +135,16 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     return BadRequest(ex.Message);
                 }
             }
-        }
+        }*/
 
-        [HttpGet("UserGetPosts")]
-        public IActionResult UserGetPosts(int id)
+        [HttpGet("UserGetPost")]
+        public IActionResult UserGetPost(int id)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var request = context.UserPosts.Include(x => x.Comments).Where(x => x.User!.Id == id).ToList();
+                    var request = context.UserPosts.Include(x => x.Comments).Where(x => x.Id == id).ToList();
                     return Ok(request);
                 }
                 catch (Exception ex)
@@ -171,6 +172,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpGet("UserAllAlertMessage")]
+        [Authorize(Roles = "Default, Admin")]
         public IActionResult UserAllAlertMessage(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -179,33 +181,6 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 {
                     var userAllAlertMessage = context.Alertmessages.Where(x => x.UserId == userId).ToList();
                     return Ok(userAllAlertMessage);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpPut("ChangeUser")]
-        [Authorize(Roles = "Default")]
-        public IActionResult ChangeUser(UserPutDto userPutDto,int userId)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var user = context.Users.FirstOrDefault(x => x.Id == userId);
-                    if (user == null)
-                    {
-                        return BadRequest("Nincs ilyen user!");
-                    }
-                    user!.Id = userId;
-                    user.Username = userPutDto.UserName;
-                    user.Email = userPutDto.Email;
-                    context.Users.Update(user);
-                    context.SaveChanges();
-                    return Ok("Sikeres módosítás!");
                 }
                 catch (Exception ex)
                 {

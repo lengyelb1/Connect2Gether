@@ -9,6 +9,7 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Data;
 using Connect2Gether_API.Controllers.Utilities;
+using System.Net.Mail;
 
 
 namespace Connect2Gether_API.Controllers
@@ -38,31 +39,43 @@ namespace Connect2Gether_API.Controllers
                     defaultPermission.Id = 1;
                     defaultPermission.Name = "Default";
 
-                    if(PasswordChecker.CheckPassword(registrationRequestDto.Password))
+                    if(PasswordChecker.CheckPassword(registrationRequestDto.Password!))
                     { 
-                    string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
-                    User user = new User();
-                    user.Username = registrationRequestDto.UserName;
-                    user.Hash = passwordHash;
-                    user.Email = registrationRequestDto.Email;
-                    user.ActiveUser = true;
-                    user.RankId = 1;
-                    user.RegistrationDate = DateTime.Today;
-                    user.PermissionId = defaultPermission.Id;
-                    user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+                        string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
+                        User user = new User();
+                        user.Username = registrationRequestDto.UserName!;
+                        user.Hash = passwordHash;
+                        user.Email = registrationRequestDto.Email!;
+                        user.ActiveUser = true;
+                        user.RankId = 1;
+                        user.RegistrationDate = DateTime.Today;
+                        user.PermissionId = defaultPermission.Id;
+                        user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
 
-                    if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
-                    {
-                        return BadRequest("User existing!");
+                        if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
+                        {
+                            return BadRequest("User existing!");
+                        }
+
+                        context.Users.Add(user);
+                        context.SaveChanges();
+
+                        MailMessage mail = new MailMessage();
+                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("connectgether@gmail.com");
+                        mail.To.Add(registrationRequestDto.Email!);
+                        mail.Subject = "Regisztráció";
+                        mail.Body = "Sikeres regisztráció!";
+                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "Connect2Gether123#");
+                        smtpServer.Port = 587;
+                        smtpServer.EnableSsl = true;
+                        smtpServer.Send(mail);
+
+                        return Ok("User added!");
                     }
-
-                    context.Users.Add(user);
-                    context.SaveChanges();
-                    return Ok("User added!");
-                    }else 
+                    else 
                     {
                         return BadRequest("A jelszó nem felel meg a kritériumoknak!");
-                    
                     }
                 }
             }
@@ -79,7 +92,7 @@ namespace Connect2Gether_API.Controllers
             {
                 using (var context = new Connect2getherContext())
                 {
-                    User user = context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName);
+                    User user = context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName)!;
 
                     if (user == null)
                     {
@@ -93,7 +106,7 @@ namespace Connect2Gether_API.Controllers
 
                     if (user.ActiveUser == true)
                     {
-                        context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName).LastLogin = DateTime.Now;
+                        context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName)!.LastLogin = DateTime.Now;
                         string token = CreateToken(user);
                         context.UserTokens.Add(new UserToken { UserId = user.Id, Token = token, TokenExpireDate = DateTime.Now.AddDays(expire_day) });
                         context.SaveChanges();
@@ -120,7 +133,7 @@ namespace Connect2Gether_API.Controllers
         {
             using (var context = new Connect2getherContext())
             {
-                string permission = context.Permissions.FirstOrDefault((x)=> x.Id == context.Users.FirstOrDefault((x) => x.Username == user.Username).PermissionId).Name;
+                string permission = context.Permissions.FirstOrDefault((x) => x.Id == context.Users.FirstOrDefault((x) => x.Username == user.Username)!.PermissionId)!.Name;
 
                 List<Claim> claims = new List<Claim>()
                 {

@@ -29,8 +29,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpDelete("DeleteAlertMessage")]
-        public IActionResult DeleteAlertMessage(int id)
+        [HttpDelete("DeleteAlertMessageById")]
+        public IActionResult DeleteAlertMessageById(int id)
         {
             using (var context = new Connect2getherContext())
             {

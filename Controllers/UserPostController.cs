@@ -15,7 +15,6 @@ namespace Connect2Gether_API.Controllers
     public class UserPostController : ControllerBase
     {
         [HttpGet("AllUserPost")]
-        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> AllUserPost()
         {
             using (var context = new Connect2getherContext())
@@ -124,7 +123,6 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostById")]
-        [Authorize(Roles = "Default, Admin")]
         public async Task<IActionResult> UserPostById(int id)
         {
             using (var context = new Connect2getherContext())

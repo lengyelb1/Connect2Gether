@@ -46,7 +46,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
         }
 
         [HttpPost("AddSuspicious")]
-        public IActionResult Post(int id)
+        public IActionResult AddSuspicious(int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -68,6 +68,18 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                 {
                     return BadRequest(ex.Message);
                 }
+            }
+        }
+
+        [HttpDelete("DeleteSuspiciousById")]
+        public ActionResult DeleteSuspiciousById(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                var suspiciousUser = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
+                context.UserSuspicious.Remove(suspiciousUser!);
+                context.SaveChanges();
+                return Ok($"User deleted!");
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     public class AdminUserPostController : ControllerBase
     {
         [HttpGet("UserPostCount")]
-        public IActionResult UserPostDB()
+        public IActionResult UserPostCount()
         {
             using (var context = new Connect2getherContext())
             {
@@ -30,7 +30,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("SearchPost")]
+        /*[HttpGet("SearchPost")]
         public IActionResult SearchPost(string nev)
         {
             using (var context = new Connect2getherContext())
@@ -44,16 +44,16 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     return BadRequest(ex.Message);
                 }
             }
-        }
+        }*/
 
-        [HttpGet("UserGetPosts")]
-        public IActionResult UserGetPosts(int id)
+        [HttpGet("UserGetPostById")]
+        public IActionResult UserGetPostById(int id)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var request = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.User!.Id == id).ToList();
+                    var request = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Id == id).ToList();
                     return Ok(request);
                 }
                 catch (Exception ex)

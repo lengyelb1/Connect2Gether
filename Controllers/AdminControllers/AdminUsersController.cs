@@ -16,7 +16,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         public static User user = new User();
 
         [HttpGet("UserCount")]
-        public IActionResult UserDB()
+        public IActionResult UserCount()
         {
             using (var context = new Connect2getherContext())
             {
@@ -33,7 +33,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         }
 
         [HttpGet("AllUser")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> AllUser()
         {
             using (var context = new Connect2getherContext())
             {
@@ -118,7 +118,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("SearchName")]
+        /*[HttpGet("SearchName")]
         public IActionResult SearchName(string nev)
         {
             using (var context = new Connect2getherContext())
@@ -132,7 +132,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     return BadRequest(ex.Message);
                 }
             }
-        }
+        }*/
 
         [HttpPost("RegisterWithOutCriterion")]
         public ActionResult<User> RegisterWithOutCriterion(RegistrationRequestDto registrationRequestDto)
@@ -144,12 +144,12 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 defaultPermission.Name = "Default";
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password, 4);
                 User user = new User();
-                user.Username = registrationRequestDto.UserName;
+                user.Username = registrationRequestDto.UserName!;
                 user.Hash = passwordHash;
-                user.Email = registrationRequestDto.Email;
+                user.Email = registrationRequestDto.Email!;
                 user.RegistrationDate = DateTime.Today;
                 user.PermissionId = defaultPermission.Id;
-                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
 
                 if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
                 {
@@ -162,9 +162,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpPut("ChangeRegister")]
-
-        public ActionResult<User> ChangeRegister(UserPutDto userPutDto, int id)
+        [HttpPut("ChangeRegisterById")]
+        public ActionResult<User> ChangeRegisterById(UserPutDto userPutDto, int id)
         {
             using (var context = new Connect2getherContext())
             {

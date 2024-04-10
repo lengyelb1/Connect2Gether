@@ -16,7 +16,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     public class UserProfileController : ControllerBase
     {
         [HttpGet("UserProfileById")]
-        public IActionResult UserProfile(int id)
+        public IActionResult UserProfileById(int id)
         {
             using (var context = new Connect2getherContext())
             {
@@ -89,13 +89,33 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 return BadRequest(ex.Message);
                 
             }
-
-           
         }
-       
 
-
-
-
+        [HttpPut("ChangeUser")]
+        [Authorize(Roles = "Default, Admin")]
+        public IActionResult ChangeUser(UserPutDto userPutDto, int userId)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.Id == userId);
+                    if (user == null)
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
+                    user!.Id = userId;
+                    user.Username = userPutDto.UserName;
+                    user.Email = userPutDto.Email;
+                    context.Users.Update(user);
+                    context.SaveChanges();
+                    return Ok("Sikeres módosítás!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
     }
 }

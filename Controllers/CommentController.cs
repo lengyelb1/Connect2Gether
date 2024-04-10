@@ -69,7 +69,6 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("AllComment")]
-        [Authorize(Roles = "Default, Admin")]
         public IActionResult AllComment()
         {
             try
@@ -131,7 +130,6 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("CommentByPostId")]
-        [Authorize(Roles = "Default, Admin")]
         public IActionResult CommentByPostId(int id)
         {
             try

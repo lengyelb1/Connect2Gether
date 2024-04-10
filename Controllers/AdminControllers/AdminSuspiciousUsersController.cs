@@ -45,7 +45,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        /*[HttpPost("AddSuspicious")]
+        [HttpPost("AddSuspicious")]
         public IActionResult AddSuspicious(int id)
         {
             using (var context = new Connect2getherContext())
@@ -69,7 +69,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     return BadRequest(ex.Message);
                 }
             }
-        }*/
+        }
 
         [HttpDelete("DeleteSuspiciousById")]
         public ActionResult DeleteSuspiciousById(int id)
