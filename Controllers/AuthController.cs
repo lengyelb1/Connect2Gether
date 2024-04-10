@@ -8,10 +8,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Data;
-using MailKit.Net.Smtp;
-using MimeKit;
-using MimeKit.Text;
-using MailKit.Security;
 using Connect2Gether_API.Controllers.Utilities;
 
 
@@ -49,39 +45,16 @@ namespace Connect2Gether_API.Controllers
                     user.Username = registrationRequestDto.UserName;
                     user.Hash = passwordHash;
                     user.Email = registrationRequestDto.Email;
-                    user.ActiveUser = registrationRequestDto.ActiveUser;
-                    user.RankId = registrationRequestDto.RankId;
+                    user.ActiveUser = true;
+                    user.RankId = 1;
                     user.RegistrationDate = DateTime.Today;
                     user.PermissionId = defaultPermission.Id;
                     user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
-                    
-                    /*
-                    if (context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name) != null)
-                    {
-                        //user.PermissionId = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name).Id;
-                        //user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
-                    }
-                    else
-                    {
-                    }
-                    */
 
                     if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
                     {
                         return BadRequest("User existing!");
                     }
-
-                    var email = new MimeMessage();
-                    email.From.Add(MailboxAddress.Parse("shanon.stokes@ethereal.email"));
-                    email.To.Add(MailboxAddress.Parse(registrationRequestDto.Email));
-                    email.Subject = "Regisztráció";
-                    email.Body = new TextPart(TextFormat.Text) { Text = "Sikeres regisztráció!" };
-
-                    using var smtp = new SmtpClient();
-                    smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                    smtp.Authenticate("shanon.stokes@ethereal.email", "mZfwxTFq9szvKQ6AB2");
-                    smtp.Send(email);
-                    smtp.Disconnect(true);
 
                     context.Users.Add(user);
                     context.SaveChanges();
