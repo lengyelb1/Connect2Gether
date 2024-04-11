@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Connect2Gether_API.Models.Dtos.CommentDtos;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -28,4 +30,5 @@ public partial class UserPost
     public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();
 
     public virtual User? User { get; set; }
+
 }

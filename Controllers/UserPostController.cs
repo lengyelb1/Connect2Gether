@@ -1,5 +1,6 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.CommentDtos;
 using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -29,14 +31,14 @@ namespace Connect2Gether_API.Controllers
                         post.Title,
                         post.UploadDate,
                         post.Like,
-                        User = post.User != null ? new { post.User.Id, post.User.Username, Permission = post.User.Permission?.Name } : null,
+                        User = post.User != null ? new { post.User.Id, post.User.Username } : null,
                         Comments = post.Comments.Select(comment => new
                         {
                             comment.Id,
                             comment.Text,
                             comment.PostId,
                             comment.UserId,
-                            User = comment.User != null ? new { comment.User.Username, Permission = comment.User.Permission?.Name } : null,
+                            User = comment.User != null ? new { comment.User.Username } : null,
                             comment.UploadDate
                         }).ToList()
                     }).ToList();
@@ -93,20 +95,37 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    List<UserPostDtoToLike> userPostDtoToLikes = new List<UserPostDtoToLike>();
+                    List<UserPostResponseDto> userPostDtoToLikes = new List<UserPostResponseDto>();
 
                     var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
                     foreach (var item in result)
                     {
-                        UserPostDtoToLike userPost = new UserPostDtoToLike();
+                        UserPostResponseDto userPost = new UserPostResponseDto();
                         userPost.Id = item.Id;
                         userPost.ImageId = item.ImageId;
                         userPost.Description = item.Description;
                         userPost.Title = item.Title;
                         userPost.Like = item.Like;
                         userPost.UserId = item.UserId;
-                        userPost.Comments = item.Comments;
                         userPost.User = item.User;
+                        ICollection<Comment> comments = item.Comments;
+
+                        foreach (var cmnt in comments)
+                        {
+                            cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId);
+
+                            userPost.Comments.Add(new CommentResponseDto
+                            {
+                                Id = cmnt.Id,
+                                Text = cmnt.Text,
+                                PostId = cmnt.PostId,
+                                UserId = cmnt.UserId,
+                                UserName = cmnt.User!.Username,
+                                CommentId = cmnt.CommentId,
+                                UploadDate = cmnt.UploadDate
+                            });
+                        }
+                        userPost.UserName = item.User!.Username;
                         userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
 
                         userPostDtoToLikes.Add(userPost);
@@ -149,16 +168,32 @@ namespace Connect2Gether_API.Controllers
                 {
                     var item = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(f => f.User!.Permission).FirstOrDefaultAsync(x => x.Id == postId);
                     
-                    UserPostDtoToLike userPost = new UserPostDtoToLike();
+                    UserPostResponseDto userPost = new UserPostResponseDto();
                     userPost.Id = item!.Id;
                     userPost.ImageId = item.ImageId;
                     userPost.Description = item.Description;
                     userPost.Title = item.Title;
                     userPost.Like = item.Like;
                     userPost.UserId = item.UserId;
-                    userPost.Comments = item.Comments;
+                    userPost.UserName = item.User!.Username;
                     userPost.User = item.User;
-                    userPost.UserId = item.UserId;
+                    ICollection<Comment> comments = item.Comments;
+
+                    foreach (var cmnt in comments)
+                    {
+                        cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId);
+
+                        userPost.Comments.Add(new CommentResponseDto
+                        {
+                            Id = cmnt.Id,
+                            Text = cmnt.Text,
+                            PostId = cmnt.PostId,
+                            UserId = cmnt.UserId,
+                            UserName = cmnt.User!.Username,
+                            CommentId = cmnt.CommentId,
+                            UploadDate = cmnt.UploadDate
+                        });
+                    }
                     userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
                     context.SaveChanges();
                     return Ok(userPost);
