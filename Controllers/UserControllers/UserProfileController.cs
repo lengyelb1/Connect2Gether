@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.UserControllers
 {
@@ -75,6 +76,18 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         requestUser.Hash = newHashedPassword;
                         context.Update(requestUser);
                         context.SaveChanges();
+
+                        MailMessage mail = new MailMessage();
+                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("connectgether@gmail.com");
+                        mail.To.Add(requestUser.Email);
+                        mail.Subject = "Jelszó változtatás";
+                        mail.Body = "Sikeresen megváltoztattad a jelszavadat!";
+                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                        smtpServer.Port = 587;
+                        smtpServer.EnableSsl = true;
+                        smtpServer.Send(mail);
+
                         return Ok("A jelszavad sikeresen megváltozott");
                     }
                     else 

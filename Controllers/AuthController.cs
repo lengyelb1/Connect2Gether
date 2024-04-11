@@ -66,7 +66,7 @@ namespace Connect2Gether_API.Controllers
                         mail.To.Add(registrationRequestDto.Email!);
                         mail.Subject = "Regisztráció";
                         mail.Body = "Sikeres regisztráció!";
-                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "Connect2Gether123#");
+                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
                         smtpServer.Port = 587;
                         smtpServer.EnableSsl = true;
                         smtpServer.Send(mail);
