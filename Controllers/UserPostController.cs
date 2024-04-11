@@ -23,7 +23,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
+                    var result = await context.UserPosts.Include(f => f.Comments).ThenInclude(f => f.User).Include(f => f.User).ToListAsync();
                     var simplifiedResult = result.Select(post => new
                     {
                         post.Id,
@@ -60,7 +60,7 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
                     List<AllUserPostByOwnerDto> listAllUserPostByOwners = new List<AllUserPostByOwnerDto>();
-                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
+                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).ToListAsync();
                     foreach (var item in result) 
                     {
                         AllUserPostByOwnerDto allUserPostByOwner = new AllUserPostByOwnerDto();
@@ -69,9 +69,25 @@ namespace Connect2Gether_API.Controllers
                         allUserPostByOwner.Description = item.Description;
                         allUserPostByOwner.Title = item.Title;
                         allUserPostByOwner.Like = item.Like;
-                        allUserPostByOwner.UserId = item.UserId;
-                        allUserPostByOwner.Comments = item.Comments;
                         allUserPostByOwner.User = item.User;
+                        allUserPostByOwner.UploadDate = item.UploadDate;
+                        ICollection<Comment> comments = item.Comments;
+                        foreach (var cmnt in comments)
+                        {
+                            cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId);
+
+                            allUserPostByOwner.Comments.Add(new CommentResponseDto
+                            {
+                                Id = cmnt.Id,
+                                Text = cmnt.Text,
+                                PostId = cmnt.PostId,
+                                UserId = cmnt.UserId,
+                                UserName = cmnt.User!.Username,
+                                CommentId = cmnt.CommentId,
+                                UploadDate = cmnt.UploadDate
+                            });
+                        }
+                        allUserPostByOwner.UserName = item.User!.Username;
                         allUserPostByOwner.OwnPost = item.UserId == userId;
 
                         listAllUserPostByOwners.Add(allUserPostByOwner);
@@ -97,7 +113,7 @@ namespace Connect2Gether_API.Controllers
                 {
                     List<UserPostResponseDto> userPostDtoToLikes = new List<UserPostResponseDto>();
 
-                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).Include(f => f.User!.Permission).ToListAsync();
+                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).ToListAsync();
                     foreach (var item in result)
                     {
                         UserPostResponseDto userPost = new UserPostResponseDto();
@@ -126,6 +142,7 @@ namespace Connect2Gether_API.Controllers
                             });
                         }
                         userPost.UserName = item.User!.Username;
+                        userPost.UploadDate = item.UploadDate;
                         userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
 
                         userPostDtoToLikes.Add(userPost);
@@ -148,7 +165,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).FirstOrDefaultAsync(x => x.Id == id);
+                    var result = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
                     return Ok(result);
                 }
                 catch (Exception ex)
@@ -166,7 +183,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var item = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(f => f.User!.Permission).FirstOrDefaultAsync(x => x.Id == postId);
+                    var item = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == postId);
                     
                     UserPostResponseDto userPost = new UserPostResponseDto();
                     userPost.Id = item!.Id;
@@ -176,6 +193,7 @@ namespace Connect2Gether_API.Controllers
                     userPost.Like = item.Like;
                     userPost.UserId = item.UserId;
                     userPost.UserName = item.User!.Username;
+                    userPost.UploadDate = item.UploadDate;
                     userPost.User = item.User;
                     ICollection<Comment> comments = item.Comments;
 

@@ -53,7 +53,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var request = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Id == id).ToList();
+                    var request = context.UserPosts.Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User).Where(x => x.Id == id).ToList();
                     return Ok(request);
                 }
                 catch (Exception ex)

@@ -18,7 +18,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var user = context.UserSuspicious.Include(x => x.User).Include(x => x.User.Permission).ToList();
+                    var user = context.UserSuspicious.Include(x => x.User).ToList();
                     return Ok(user);
                 }
                 catch (Exception ex)

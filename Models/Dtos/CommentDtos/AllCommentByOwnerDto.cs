@@ -16,10 +16,14 @@ namespace Connect2Gether_API.Models.Dtos.CommentDtos
 
         public bool OwnComment { get; set; }
 
+        public string? UserName { get; set; }
+
         public DateTime? UploadDate { get; set; }
 
+        [JsonIgnore]
         public virtual UserPost? Post { get; set; } = null!;
 
+        [JsonIgnore]
         public virtual User? User { get; set; } = null!;
     }
 }

@@ -144,8 +144,26 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
-                    var request = context.UserPosts.Include(x => x.Comments).Where(x => x.Id == id).ToList();
-                    return Ok(request);
+                    var request = context.UserPosts.Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User).Where(x => x.Id == id).ToList();
+                    var simplifiedRequest = request.Select(post => new
+                    {
+                        post.Id,
+                        post.Description,
+                        post.Title,
+                        post.UploadDate,
+                        post.Like,
+                        User = post.User != null ? new { post.User.Id, post.User.Username } : null,
+                        Comments = post.Comments.Select(comment => new
+                        {
+                            comment.Id,
+                            comment.Text,
+                            comment.PostId,
+                            comment.UserId,
+                            User = comment.User != null ? new { comment.User.Username } : null,
+                            comment.UploadDate
+                        }).ToList()
+                    }).ToList();
+                    return Ok(simplifiedRequest);
                 }
                 catch (Exception ex)
                 {

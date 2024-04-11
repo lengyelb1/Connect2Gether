@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Connect2Gether_API.Controllers.AdminControllers
 {
@@ -20,7 +21,15 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 try
                 {
                     var messages = context.Alertmessages.Include(x => x.User).ToList();
-                    return Ok(messages);
+                    var simplifiedMessage = messages.Select(message => new
+                    {
+                        message.Id,
+                        message.Title,
+                        message.Description,
+                        message.UserId,
+                        User = message.User != null ? new { message.User.Username } : null
+                    }).ToList();
+                    return Ok(simplifiedMessage);
                 }
                 catch (Exception ex)
                 {

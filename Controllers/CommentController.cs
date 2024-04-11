@@ -83,7 +83,7 @@ namespace Connect2Gether_API.Controllers
                         comment.PostId,
                         comment.UserId,
                         comment.UploadDate,
-                        User = new { comment.User!.Username, comment.User.Permission },
+                        User = new { comment.User!.Username },
                     }).ToList();
                     return Ok(simplifiedResult);
                 }
@@ -112,8 +112,8 @@ namespace Connect2Gether_API.Controllers
                         allCommentByOwner.PostId = item.PostId;
                         allCommentByOwner.UserId = item.UserId;
                         allCommentByOwner.CommentId = item.CommentId;
-                        allCommentByOwner.Post = item.Post;
-                        allCommentByOwner.User = item.User;
+                        allCommentByOwner.UploadDate = item.UploadDate;
+                        allCommentByOwner.UserName = item.User!.Username;
                         allCommentByOwner.OwnComment = item.UserId == userId;
 
                         listAllCommentByOwners.Add(allCommentByOwner);
