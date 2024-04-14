@@ -165,8 +165,29 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.Include(x => x.Comments).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
-                    return Ok(result);
+                    List<UserPost> userPostsList = new List<UserPost>();
+                    var result = await context.UserPosts.Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+                    userPostsList.Add(result!);
+                    var simplifiedResult = userPostsList.Select(item => new
+                    {
+                        item.Id,
+                        item.Description,
+                        item.Title,
+                        item.UploadDate,
+                        item.Like,
+                        User = item.User != null ? new { item.User.Id, item.User.Username } : null,
+                        Comments = item.Comments.Select(comment => new
+                        {
+                            comment.Id,
+                            comment.Text,
+                            comment.PostId,
+                            comment.UserId,
+                            User = comment.User != null ? new { comment.User.Username } : null,
+                            comment.UploadDate
+                        }).ToList()
+
+                    }).ToList();
+                    return Ok(simplifiedResult);
                 }
                 catch (Exception ex)
                 {

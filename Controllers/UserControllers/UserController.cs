@@ -218,8 +218,23 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
+                    List<User> usersList = new List<User>();
                     var userById = context.Users.Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
-                    return Ok(userById);
+                    usersList.Add(userById!);
+                    if (userById == null) 
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
+                    else
+                    {
+                        var simplifiedUser = usersList.Select(user => new
+                        {
+                            user.Id,
+                            user.Username,
+
+                        }).ToList();
+                        return Ok(simplifiedUser);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -236,8 +251,17 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
-                    var userAllAlertMessage = context.Alertmessages.Where(x => x.UserId == userId).ToList();
-                    return Ok(userAllAlertMessage);
+                    var userAllAlertMessage = context.Alertmessages.Include(x => x.User).Where(x => x.UserId == userId).ToList();
+                    var simplifiedUserAlertMessage = userAllAlertMessage.Select(item => new
+                    {
+                        item.Id,
+                        item.Title,
+                        item.UserId,
+                        item.Description,
+                        User = item.User != null ? new { item.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedUserAlertMessage);
                 }
                 catch (Exception ex)
                 {

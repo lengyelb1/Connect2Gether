@@ -16,6 +16,7 @@ using MySqlX.XDevAPI.Common;
 using Connect2Gether_API.Models.Dtos.CommentDtos;
 using System.Collections.Generic;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 
 
 
@@ -129,24 +130,35 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        [HttpGet("CommentByPostId")]
+        [HttpGet("CommentById")]
         public IActionResult CommentByPostId(int id)
         {
             try
             {
                 using (var context = new Connect2getherContext())
                 {
+                    List<Comment> comments = new List<Comment>();
+                    var comment = context.Comments.Include(p => p.User).FirstOrDefault(p => p.Id == id);
+                    comments.Add(comment!);
 
-                    var post = context.UserPosts.Include(p => p.Comments).Include(p => p.User).FirstOrDefault(p => p.Id == id);
-
-                    if (post == null)
+                    if (comment == null)
                     {
-                        return NotFound("Nincs ilyen Post");
+                        return NotFound("Nincs ilyen comment!");
                     }
                     else
                     {
+                        var simplifiedComment = comments.Select(item => new
+                        {
+                            item.Id,
+                            item.Text,
+                            item.PostId,
+                            item.UserId,
+                            item.CommentId,
+                            item.UploadDate,
+                            User = item.User != null ? new { item.User.Username } : null,
 
-                        return Ok(post.Comments.ToList());
+                        }).ToList();
+                        return Ok(simplifiedComment);
                     }
                 }
             }
