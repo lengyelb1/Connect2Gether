@@ -1,8 +1,10 @@
 ﻿using Connect2Gether_API.Models;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Connect2Gether_API.Controllers.AdminControllers
 {
@@ -19,7 +21,14 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 try
                 {
                     var user = context.UserSuspicious.Include(x => x.User).ToList();
-                    return Ok(user);
+                    var simplifiedUser = user.Select(userSuspicious => new
+                    {
+                        userSuspicious.Id,
+                        userSuspicious.UserId,
+                        User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedUser);
                 }
                 catch (Exception ex)
                 {
@@ -35,8 +44,17 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
+                    List<UserSuspiciou> userSuspicious = new List<UserSuspiciou>();
+                    var request = context.UserSuspicious.Include(x => x.User).FirstOrDefault(x => x.Id == id);
+                    userSuspicious.Add(request!);
+                    var simplifiedUser = userSuspicious.Select(userSuspicious => new
+                    {
+                        userSuspicious.Id,
+                        userSuspicious.UserId,
+                        User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedUser);
                 }
                 catch (Exception ex)
                 {

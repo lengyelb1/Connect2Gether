@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Connect2Gether_API.Controllers.ModeratorControllers
 {
@@ -18,8 +19,15 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             {
                 try
                 {
-                    var request = context.UserSuspicious.ToList();
-                    return Ok(request);
+                    var request = context.UserSuspicious.Include(x => x.User).ToList();
+                    var simplifiedRequest = request.Select(userSuspicious => new
+                    {
+                        userSuspicious.Id,
+                        userSuspicious.UserId,
+                        User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedRequest);
                 }
                 catch (Exception ex)
                 {
