@@ -75,7 +75,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             ICollection<Comment> comments = item.Comments;
                             foreach (var cmnt in comments)
                             {
-                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId);
+                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
 
                                 userPost.Comments.Add(new CommentResponseDto
                                 {
@@ -112,7 +112,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             ICollection<Comment> comments = item.Comments;
                             foreach (var cmnt in comments)
                             {
-                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId);
+                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
 
                                 userPost.Comments.Add(new CommentResponseDto
                                 {

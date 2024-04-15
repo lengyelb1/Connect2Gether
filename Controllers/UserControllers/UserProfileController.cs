@@ -65,7 +65,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         return BadRequest("A régi jelszó helytelen!");
 
                     }
-                    if (!changedUser.NewPassword.Equals(changedUser.NewPasswordAgain))
+                    if (!changedUser.NewPassword!.Equals(changedUser.NewPasswordAgain))
                     {
                         return BadRequest("A két jelszó nem egyezik!");
                     
@@ -104,8 +104,55 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
+        [HttpPut("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword(int userId, ForgetPasswordDto forgetPasswordDto)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+                    if (requestUser == null) 
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
+                    if (forgetPasswordDto.NewPassword != forgetPasswordDto.NewPasswordAgain)
+                    {
+                        return BadRequest("A két jelszó nem egyezik!");
+                    }
+                    if (PasswordChecker.CheckPassword(forgetPasswordDto.NewPassword!))
+                    {
+                        var newPassword = BCrypt.Net.BCrypt.HashPassword(forgetPasswordDto.NewPassword);
+                        requestUser.Hash = newPassword;
+                        context.Update(requestUser);
+                        context.SaveChanges();
+
+                        MailMessage mail = new MailMessage();
+                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("connectgether@gmail.com");
+                        mail.To.Add(requestUser.Email);
+                        mail.Subject = "Jelszó változtatás";
+                        mail.Body = "Sikeresen megváltoztattad a jelszavadat!";
+                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                        smtpServer.Port = 587;
+                        smtpServer.EnableSsl = true;
+                        smtpServer.Send(mail);
+
+                        return Ok("A jelszavad sikeresen megváltozott");
+                    }
+                    else
+                    {
+                        return BadRequest("A jelszó nem felel meg a kritériumoknak!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpPut("ChangeUser")]
-        [Authorize(Roles = "Default, Admin")]
         public IActionResult ChangeUser(UserPutDto userPutDto, int userId)
         {
             using (var context = new Connect2getherContext())
