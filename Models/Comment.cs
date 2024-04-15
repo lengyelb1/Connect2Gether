@@ -21,5 +21,5 @@ public partial class Comment
     [JsonIgnore]
     public virtual UserPost? Post { get; set; } = null!;
 
-    public virtual User? User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

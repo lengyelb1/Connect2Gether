@@ -43,8 +43,17 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             {
                 try
                 {
-                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
+                    List<UserSuspiciou> userSuspiciousList = new List<UserSuspiciou>();
+                    var request = context.UserSuspicious.Include(x => x.User).FirstOrDefault(x => x.Id == id);
+                    userSuspiciousList.Add(request!);
+                    var simplifiedRequest = userSuspiciousList.Select(userSuspicious => new
+                    {
+                        userSuspicious.Id,
+                        userSuspicious.UserId,
+                        User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedRequest);
                 }
                 catch (Exception ex)
                 {

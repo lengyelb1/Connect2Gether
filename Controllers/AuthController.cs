@@ -10,7 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Data;
 using Connect2Gether_API.Controllers.Utilities;
 using System.Net.Mail;
-
+using System.Collections;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -18,13 +18,12 @@ namespace Connect2Gether_API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
-
         private readonly IConfiguration _configuration;
 
         private readonly int expire_day = 1;
 
-        public AuthController(IConfiguration configuration) { 
+        public AuthController(IConfiguration configuration)
+        {
             _configuration = configuration;
         }
 
@@ -39,20 +38,23 @@ namespace Connect2Gether_API.Controllers
                     defaultPermission.Id = 1;
                     defaultPermission.Name = "Default";
 
-                    if(PasswordChecker.CheckPassword(registrationRequestDto.Password!))
-                    { 
-                        string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
+
+                    if (PasswordChecker.CheckPassword(registrationRequestDto.Password!))
+                    {
+                        string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password, 4);
                         User user = new User();
+                        user.Id = 0;
                         user.Username = registrationRequestDto.UserName!;
                         user.Hash = passwordHash;
                         user.Email = registrationRequestDto.Email!;
-                        user.ActiveUser = true;
+                        user.ActiveUser = false;
                         user.RankId = 1;
                         user.RegistrationDate = DateTime.Today;
                         user.PermissionId = defaultPermission.Id;
                         user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
+                        user.ValidatedKey = RandomToken(16);
 
-                        if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
+                        if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
                         {
                             return BadRequest("User existing!");
                         }
@@ -60,12 +62,13 @@ namespace Connect2Gether_API.Controllers
                         context.Users.Add(user);
                         context.SaveChanges();
 
+
                         MailMessage mail = new MailMessage();
                         SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
                         mail.From = new MailAddress("connectgether@gmail.com");
                         mail.To.Add(registrationRequestDto.Email!);
-                        mail.Subject = "Regisztráció";
-                        mail.Body = "Sikeres regisztráció!";
+                        mail.Subject = "Sikeres regisztráció";
+                        mail.Body = $"Sikeresen regisztráltál az oldalunkra üdvözlünk!\nMásold be a visszaigazoló kódotat: {user.ValidatedKey}";
                         smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
                         smtpServer.Port = 587;
                         smtpServer.EnableSsl = true;
@@ -73,7 +76,7 @@ namespace Connect2Gether_API.Controllers
 
                         return Ok("User added!");
                     }
-                    else 
+                    else
                     {
                         return BadRequest("A jelszó nem felel meg a kritériumoknak!");
                     }
@@ -118,15 +121,15 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("Ezzel a userrel nem tudsz bejelentkezni!");
                     }
                 }
-                
+
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return BadRequest("Something went wrong!"); 
+                return BadRequest("Something went wrong!");
             }
-            
+
         }
 
         private string CreateToken(User user)
@@ -145,10 +148,10 @@ namespace Connect2Gether_API.Controllers
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AuthSettings:JwtOptions:Token").Value!));
 
-                var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
                 var token = new JwtSecurityToken(
-                    claims:claims,
+                    claims: claims,
                     expires: DateTime.Now.AddDays(expire_day),
                     signingCredentials: creds,
                     audience: _configuration.GetSection("AuthSettings:JwtOptions:Audience").Value,
@@ -159,7 +162,57 @@ namespace Connect2Gether_API.Controllers
 
                 return jwt;
             }
+        }
 
+        private string RandomToken(int length)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Random r = new Random();
+
+            string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string alpha_lower = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLower();
+            string nums = "0123456789";
+
+            List<string> list = new List<string>()
+            {
+                alpha, nums, alpha_lower
+            };
+            
+            for (int i = 0; i < length; i++)
+            {
+                string randomChar = list[r.Next(list.Count)];
+                stringBuilder.Append(randomChar[r.Next(randomChar.Length)]);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        [HttpPut("ValidatedUser")]
+        public IActionResult ValidatedUser(string key)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.ValidatedKey == key);
+                    if (user == null) 
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
+                    else
+                    {
+                        user!.ActiveUser = true;
+                        user.ValidatedKey = "";
+                        context.Update(user);
+                        context.SaveChanges();
+                        return Ok("Sikeres megerősítés!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
         }
     }
 }

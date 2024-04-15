@@ -190,6 +190,7 @@ public partial class Connect2getherContext : DbContext
                 .HasColumnType("int(11)");
             entity.Property(e => e.RegistrationDate).HasColumnType("date");
             entity.Property(e => e.Username).HasMaxLength(128);
+            entity.Property(e => e.ValidatedKey).HasColumnType("text");
 
             entity.HasOne(d => d.Permission).WithMany(p => p.Users)
                 .HasForeignKey(d => d.PermissionId)
