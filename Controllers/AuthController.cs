@@ -54,7 +54,7 @@ namespace Connect2Gether_API.Controllers
                         user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
                         user.ValidatedKey = RandomToken(16);
 
-                        if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
+                        if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null || context.Users.FirstOrDefault((x) => x.Email == user.Email) != null)
                         {
                             return BadRequest("User existing!");
                         }
@@ -68,7 +68,7 @@ namespace Connect2Gether_API.Controllers
                         mail.From = new MailAddress("connectgether@gmail.com");
                         mail.To.Add(registrationRequestDto.Email!);
                         mail.Subject = "Sikeres regisztráció";
-                        mail.Body = $"Sikeresen regisztráltál az oldalunkra üdvözlünk!\nMásold be a visszaigazoló kódotat: {user.ValidatedKey}";
+                        mail.Body = $"Kedves Felhasználó!\n\nTájékoztatunk téged, hogy a regisztráció sikeres volt!\nItt találod a visszaigazoló kódodat: {user.ValidatedKey}";
                         smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
                         smtpServer.Port = 587;
                         smtpServer.EnableSsl = true;

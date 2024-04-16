@@ -39,6 +39,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         Points = user.Point,
                         Rank = userRank,
                         RegistrationDate = user.RegistrationDate,
+                        LastLogin = user.LastLogin,
                         PostCount = userPostCount,
                         CommentCount = userCommentCount,
                     };

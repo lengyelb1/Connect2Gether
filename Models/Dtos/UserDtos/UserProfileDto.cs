@@ -7,6 +7,7 @@
         public int Points { get; set; }
         public Rank? Rank { get; set; }
         public DateTime RegistrationDate { get; set; }
+        public DateTime LastLogin { get; set; }
         public int PostCount { get; set; }
         public int CommentCount { get; set; }
     }
