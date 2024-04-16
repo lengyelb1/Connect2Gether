@@ -173,9 +173,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         {
             using (var context = new Connect2getherContext())
             {
-                User user = new User();
-                user.Id = id;
-                user.Username = userPutDto.UserName;
+                var user = context.Users.FirstOrDefault((x) => x.Id == id);
+                user!.Username = userPutDto.UserName;
                 user.Email = userPutDto.Email;
                 user.RegistrationDate = DateTime.Today;
 
