@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
@@ -212,6 +213,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpGet("UserById")]
+        [Authorize]
         public IActionResult UserById(int id)
         {
             using (var context = new Connect2getherContext())
@@ -219,7 +221,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     List<User> usersList = new List<User>();
-                    var userById = context.Users.Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    var userById = context.Users.Include(x => x.UserPosts).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
                     usersList.Add(userById!);
                     if (userById == null) 
                     {
@@ -231,6 +233,16 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         {
                             user.Id,
                             user.Username,
+                            UserPosts = user.UserPosts!.Select(item => new
+                            {
+                                item.Id,
+                                item.Description,
+                                item.Title,
+                                item.UploadDate,
+                                item.Like
+                            }),
+                            user.LastLogin,
+                            user.RegistrationDate
 
                         }).ToList();
                         return Ok(simplifiedUser);

@@ -62,7 +62,6 @@ namespace Connect2Gether_API.Controllers
                         context.Users.Add(user);
                         context.SaveChanges();
 
-
                         MailMessage mail = new MailMessage();
                         SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
                         mail.From = new MailAddress("connectgether@gmail.com");
