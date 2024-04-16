@@ -28,7 +28,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("Register")]
-        public ActionResult<User> Register(RegistrationRequestDto registrationRequestDto)
+        public ActionResult<User> Register(RegistrationRequestDto registrationRequestDto,string validationUrl)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Connect2Gether_API.Controllers
                         mail.From = new MailAddress("connectgether@gmail.com");
                         mail.To.Add(registrationRequestDto.Email!);
                         mail.Subject = "Sikeres regisztráció";
-                        mail.Body = $"Kedves Felhasználó!\n\nTájékoztatunk téged, hogy a regisztráció sikeres volt!\nItt találod a visszaigazoló kódodat: {user.ValidatedKey}";
+                        mail.Body = $"Kedves Felhasználó!\n\nTájékoztatunk téged, hogy a regisztráció sikeres volt!\nItt találod a visszaigazoló url: {validationUrl}\n\nReméljük meg lesz elégetve oldalunkkal!";
                         smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
                         smtpServer.Port = 587;
                         smtpServer.EnableSsl = true;
