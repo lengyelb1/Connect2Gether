@@ -221,7 +221,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     List<User> usersList = new List<User>();
-                    var userById = context.Users.Include(x => x.UserPosts).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
                     usersList.Add(userById!);
                     if (userById == null) 
                     {
@@ -239,7 +239,16 @@ namespace Connect2Gether_API.Controllers.UserControllers
                                 item.Description,
                                 item.Title,
                                 item.UploadDate,
-                                item.Like
+                                item.Like,
+                                Comments = item.Comments.Select(cmnt => new
+                                {
+                                    cmnt.Id,
+                                    cmnt.Text,
+                                    cmnt.PostId,
+                                    cmnt.UserId,
+                                    User = cmnt.User != null ? new { cmnt.User.Username } : null,
+                                    cmnt.UploadDate
+                                })
                             }),
                             user.LastLogin,
                             user.RegistrationDate

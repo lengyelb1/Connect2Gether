@@ -176,6 +176,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 var user = context.Users.FirstOrDefault((x) => x.Id == id);
                 user!.Username = userPutDto.UserName;
                 user.Email = userPutDto.Email;
+                user.PermissionId = userPutDto.PermissionId;
                 user.RegistrationDate = DateTime.Today;
 
                 if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
