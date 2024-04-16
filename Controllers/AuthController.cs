@@ -38,7 +38,6 @@ namespace Connect2Gether_API.Controllers
                     defaultPermission.Id = 1;
                     defaultPermission.Name = "Default";
 
-
                     if (PasswordChecker.CheckPassword(registrationRequestDto.Password!))
                     {
                         string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password, 4);
