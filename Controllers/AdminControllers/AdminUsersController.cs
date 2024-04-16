@@ -67,15 +67,15 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("SearchWithNameOrTitle")]
-        public IActionResult SearchWithNameOrTitle(string keresettErtek)
+        [HttpPost("SearchWithNameOrTitle")]
+        public IActionResult SearchWithNameOrTitle([FromBody] SearchDto keresettErtek)
         {
             // Error 4001 nincs @ de van @
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    string[] strings = keresettErtek.Split(' ');
+                    string[] strings = keresettErtek.searchValue!.Split(' ');
                     bool vankuk = false;
                     bool nincskuk = false;
                     string usernev = "";
@@ -94,17 +94,23 @@ namespace Connect2Gether_API.Controllers.AdminControllers
 
                         }
                     }
+
+
                     if (vankuk == true && nincskuk == false)
                     {
-                        return Ok(context.Users.Where(x => x.Username.Contains(keresettErtek.TrimStart('@'))).ToList());
+                        var outp = context.Users.Where(x => x.Username.Contains(keresettErtek.searchValue.TrimStart('@'))).ToList();
+
+                        return Ok(outp.Count != 0 ? outp : null);
                     }
                     else if (vankuk == false && nincskuk == true)
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek)).ToList());
+                        var outp2 = context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek.searchValue)).ToList();
+                        return Ok(outp2.Count != 0 ? outp2 : null);
                     }
                     else if (vankuk == true && nincskuk == true)
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList());
+                        var outp3 = context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList();
+                        return Ok(outp3.Count != 0 ? outp3 : null);
                     }
                     else
                     {
