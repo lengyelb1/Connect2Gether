@@ -21,7 +21,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
     public class UserController : ControllerBase
     {
         [HttpGet("SearchWithNameOrTitle")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult SearchWithNameOrTitle(string keresettErtek, int userId)
         {
             // Error 4001 nincs @ de van @
@@ -256,7 +256,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpGet("UserAllAlertMessage")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult UserAllAlertMessage(int userId)
         {
             using (var context = new Connect2getherContext())

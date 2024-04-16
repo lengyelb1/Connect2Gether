@@ -42,7 +42,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("AddComment")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult AddComment(CommentDto commentDto)
         {
             using (var context = new Connect2getherContext())
@@ -96,7 +96,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("AllCommentByOwner")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public async Task<IActionResult> AllCommentByOwner(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -194,7 +194,7 @@ namespace Connect2Gether_API.Controllers
         }*/
 
         [HttpPut("ChangeOwnComment")]
-        [Authorize(Roles = "Default,Admin")]
+        [Authorize(Roles = "Default,Admin,Moderator")]
         public IActionResult ChangeOwnComment(CommentPutDto commentPutDto, int id, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -256,7 +256,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("DeleteCommentByUserId")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult DeleteByUser(int id, int userId)
         {
             using (var context = new Connect2getherContext())

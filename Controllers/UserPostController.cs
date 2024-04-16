@@ -52,7 +52,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("AllUserPostByOwner")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public async Task<IActionResult> AllUserPostByOwner(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -104,7 +104,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostWithLike")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, ")]
         public async Task<IActionResult> UserPostWithLiked(int userId)
         {
             using (var context = new Connect2getherContext())
@@ -197,7 +197,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("UserPostByIdWithLike")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public async Task<IActionResult> UserPostByIdWithLike(int userId, int postId)
         {
             using (var context = new Connect2getherContext())
@@ -245,7 +245,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("AddUserPost")]
-        [Authorize(Roles = "Admin, Default")]
+        [Authorize(Roles = "Admin, Default, Moderator")]
         public IActionResult AddUserPost(UserPostDto userPostDto)
         {
             using (var context = new Connect2getherContext())
@@ -286,7 +286,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPost("Like")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult Like(LikedPostDto likedPostDto)
         {
             using (var context = new Connect2getherContext())
@@ -341,7 +341,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpPut("ChangeUserPostById")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, ")]
         public IActionResult ChangeUserPostById(UserPostPutDto userPostPutDto, int id, int userId)
         {
             using (var context = new Connect2getherContext())
@@ -374,7 +374,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpDelete("DeleteUserPostById")]
-        [Authorize(Roles = "Default, Admin")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult DeleteUserPostById(int id, int userId)
         {
             using (var context = new Connect2getherContext())

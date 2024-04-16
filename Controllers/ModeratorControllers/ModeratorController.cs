@@ -9,7 +9,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Moderator")]
+    [Authorize(Roles = "Moderator, Admin")]
     public class ModeratorController : ControllerBase
     {
         [HttpGet("AllSuspiciousUser")]

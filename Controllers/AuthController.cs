@@ -131,6 +131,34 @@ namespace Connect2Gether_API.Controllers
 
         }
 
+        [HttpPut("ValidatedUser")]
+        public IActionResult ValidatedUser(string key)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.ValidatedKey == key);
+                    if (user == null)
+                    {
+                        return BadRequest("Nincs ilyen user!");
+                    }
+                    else
+                    {
+                        user!.ActiveUser = true;
+                        user.ValidatedKey = "";
+                        context.Update(user);
+                        context.SaveChanges();
+                        return Ok("Sikeres megerősítés!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         private string CreateToken(User user)
         {
             using (var context = new Connect2getherContext())
@@ -184,34 +212,6 @@ namespace Connect2Gether_API.Controllers
             }
 
             return stringBuilder.ToString();
-        }
-
-        [HttpPut("ValidatedUser")]
-        public IActionResult ValidatedUser(string key)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var user = context.Users.FirstOrDefault(x => x.ValidatedKey == key);
-                    if (user == null) 
-                    {
-                        return BadRequest("Nincs ilyen user!");
-                    }
-                    else
-                    {
-                        user!.ActiveUser = true;
-                        user.ValidatedKey = "";
-                        context.Update(user);
-                        context.SaveChanges();
-                        return Ok("Sikeres megerősítés!");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
         }
     }
 }

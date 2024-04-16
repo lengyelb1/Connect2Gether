@@ -13,7 +13,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Default, Admin")]
+    [Authorize(Roles = "Default, Admin, Moderator")]
     public class UserProfileController : ControllerBase
     {
         [HttpGet("UserProfileById")]
