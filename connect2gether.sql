@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Ápr 17. 09:13
+-- Létrehozás ideje: 2024. Ápr 17. 09:59
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -169,7 +169,7 @@ CREATE TABLE `user` (
   `Point` int(11) NOT NULL COMMENT 'Pontszám',
   `PermissionId` int(11) NOT NULL COMMENT 'Felhasználói szint',
   `LastLogin` datetime NOT NULL,
-  `ValidatedKey` text NOT NULL
+  `ValidatedKey` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 --
