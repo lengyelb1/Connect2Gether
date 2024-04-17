@@ -145,7 +145,7 @@ namespace Connect2Gether_API.Controllers
                     else
                     {
                         user!.ActiveUser = true;
-                        user.ValidatedKey = "";
+                        user.ValidatedKey = null!;
                         context.Update(user);
                         context.SaveChanges();
                         return Ok("Sikeres megerősítés!");
