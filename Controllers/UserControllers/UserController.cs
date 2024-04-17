@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Crypto.Prng;
 using System.Security.Claims;
 
 namespace Connect2Gether_API.Controllers.UserControllers
@@ -223,39 +224,42 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     List<User> usersList = new List<User>();
                     var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
                     usersList.Add(userById!);
+                    List<UserByIdDto> userByIdDtoList = new List<UserByIdDto>();
                     if (userById == null) 
                     {
                         return BadRequest("Nincs ilyen user!");
                     }
-                    else
-                    {
-                        var simplifiedUser = usersList.Select(user => new
-                        {
-                            user.Id,
-                            user.Username,
-                            UserPosts = user.UserPosts!.Select(item => new
-                            {
-                                item.Id,
-                                item.Description,
-                                item.Title,
-                                item.UploadDate,
-                                item.Like,
-                                Comments = item.Comments.Select(cmnt => new
-                                {
-                                    cmnt.Id,
-                                    cmnt.Text,
-                                    cmnt.PostId,
-                                    cmnt.UserId,
-                                    User = cmnt.User != null ? new { cmnt.User.Username } : null,
-                                    cmnt.UploadDate
-                                })
-                            }),
-                            user.LastLogin,
-                            user.RegistrationDate
 
-                        }).ToList();
-                        return Ok(simplifiedUser);
+                    foreach (var item in usersList)
+                    {
+                        UserByIdDto userByIdDto = new UserByIdDto();
+                        userByIdDto.Id = item.Id;
+                        userByIdDto.Username = item.Username;
+                        userByIdDto.RegistrationDate = item.RegistrationDate;
+                        userByIdDto.LastLogin = item.LastLogin;
+                        ICollection<UserPost> posts = item.UserPosts!;
+                        ICollection<Comment> comments = item.Comments!;
+                        foreach (var pts in posts)
+                        {
+                            pts.User = context.Users.FirstOrDefault(x => x.Id == pts.UserId);
+
+                            userByIdDto.UserPosts!.Add(new UserPostResponseDto
+                            {
+                                Id = pts.Id,
+                                ImageId = pts.ImageId,
+                                Description = pts.Description,
+                                Title = pts.Title,
+                                Like = pts.Like,
+                                UserId = pts.UserId,
+                                UserName = pts.User!.Username,
+                                UploadDate = pts.UploadDate,
+                                Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null)
+                            });
+                        }
+                        userByIdDtoList.Add(userByIdDto);
                     }
+
+                    return Ok(userByIdDtoList);
                 }
                 catch (Exception ex)
                 {
