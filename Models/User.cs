@@ -35,7 +35,7 @@ public partial class User
 
     public DateTime LastLogin { get; set; }
 
-    public string ValidatedKey { get; set; } = null!;
+    public string? ValidatedKey { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Alertmessage>? Alertmessages { get; set; } = new List<Alertmessage>();

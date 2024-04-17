@@ -88,8 +88,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("comment_ibfk_1");
+                .HasConstraintName("comment_ibfk_3");
         });
 
         modelBuilder.Entity<Image>(entity =>
@@ -130,8 +129,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("liked_posts_ibfk_1");
+                .HasConstraintName("liked_posts_ibfk_3");
         });
 
         modelBuilder.Entity<Permission>(entity =>
@@ -190,7 +188,9 @@ public partial class Connect2getherContext : DbContext
                 .HasColumnType("int(11)");
             entity.Property(e => e.RegistrationDate).HasColumnType("date");
             entity.Property(e => e.Username).HasMaxLength(128);
-            entity.Property(e => e.ValidatedKey).HasColumnType("text");
+            entity.Property(e => e.ValidatedKey)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("text");
 
             entity.HasOne(d => d.Permission).WithMany(p => p.Users)
                 .HasForeignKey(d => d.PermissionId)
