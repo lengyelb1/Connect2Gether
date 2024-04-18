@@ -13,7 +13,7 @@ namespace Connect2Gether_API.Models.Dtos.UserDtos
         public DateTime RegistrationDate { get; set; }
 
         public DateTime LastLogin { get; set; }
-
+       
         public virtual ICollection<UserPostResponseDto>? UserPosts { get; set; } = new List<UserPostResponseDto>();
     }
 }

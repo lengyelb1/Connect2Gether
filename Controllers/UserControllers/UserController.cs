@@ -253,7 +253,21 @@ namespace Connect2Gether_API.Controllers.UserControllers
                                 UserId = pts.UserId,
                                 UserName = pts.User!.Username,
                                 UploadDate = pts.UploadDate,
+                                Comments = convertComments(pts.Comments.ToList()),
                                 Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null)
+                            });
+                        }
+                        foreach (var cmnt in comments)
+                        {
+                            cmnt.User = context.Users.FirstOrDefault(x => x.Id == cmnt.UserId)!;
+
+                            userById.Comments!.Add(new Comment
+                            {
+                                Id = cmnt.Id,
+                                Text = cmnt.Text,
+                                PostId = cmnt.PostId,
+                                UserId = cmnt.UserId,
+                                UploadDate = cmnt.UploadDate,
                             });
                         }
                         userByIdDtoList.Add(userByIdDto);
@@ -266,6 +280,28 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     return BadRequest(ex.Message);
                 }
             }
+        }
+
+        private ICollection<CommentResponseDto> convertComments(List<Comment> comments)
+        {
+            int x = 0;
+
+            List<CommentResponseDto> response = new List<CommentResponseDto>();
+
+            while (comments.Count != x)
+            {
+                response.Add(new CommentResponseDto
+                {
+                    Id = comments[x].Id,
+                    Text = comments[x].Text,
+                    PostId = comments[x].PostId,
+                    UserId = comments[x].UserId,
+                    UploadDate = comments[x].UploadDate,
+                    UserName = comments[x].User.Username
+                });
+                x++;
+            }
+            return response;
         }
 
         [HttpGet("UserAllAlertMessage")]
