@@ -328,7 +328,7 @@ namespace Connect2Gether_API.Controllers
                                 context.SaveChanges();
                                 return Ok("A post likolása sikeres! +1 pont");
                             }
-
+                            context.SaveChanges();
                             return Ok("A post likolása sikeres!");
                         }
                         else
