@@ -329,8 +329,7 @@ namespace Connect2Gether_API.Controllers
                                 return Ok("A post likolása sikeres! +1 pont");
                             }
 
-                                return Ok("A post likolása sikeres!");
-
+                            return Ok("A post likolása sikeres!");
                         }
                         else
                         {
