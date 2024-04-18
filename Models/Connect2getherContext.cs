@@ -19,6 +19,8 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<Comment> Comments { get; set; }
 
+    public virtual DbSet<Deletedlike> Deletedlikes { get; set; }
+
     public virtual DbSet<Image> Images { get; set; }
 
     public virtual DbSet<LikedPost> LikedPosts { get; set; }
@@ -89,6 +91,33 @@ public partial class Connect2getherContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("comment_ibfk_3");
+        });
+
+        modelBuilder.Entity<Deletedlike>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("deletedlikes");
+
+            entity.HasIndex(e => e.UserId, "UserId");
+
+            entity.HasIndex(e => e.PostId, "postId");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.PostId)
+                .HasColumnType("int(11)")
+                .HasColumnName("postId");
+            entity.Property(e => e.UserId).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.Deletedlikes)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("deletedlikes_ibfk_1");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Deletedlikes)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("deletedlikes_ibfk_2");
         });
 
         modelBuilder.Entity<Image>(entity =>

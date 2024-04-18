@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -317,16 +318,19 @@ namespace Connect2Gether_API.Controllers
                         context.LikedPosts.Add(like);
 
                         var post = context.UserPosts.FirstOrDefault(x => x.Id == likedPostDto.postId);
+                        var user = context.Users.FirstOrDefault(x => x.Id == post!.UserId);
                         if (post != null)
                         {
                             post.Like++;
+                            user!.Point++;
+
                             context.SaveChanges();
+                            return Ok("A post likolása sikeres! +1 pont");
                         }
                         else
                         {
                             return BadRequest("A post nem található!");
                         }
-                        return Ok("A post likolása sikeres!");
                     }
                     else
                     {

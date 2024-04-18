@@ -19,6 +19,8 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
 
         public bool Liked { get; set; }
 
+        public bool rewardClaimed { get; set; }
+
         public DateTime? UploadDate { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

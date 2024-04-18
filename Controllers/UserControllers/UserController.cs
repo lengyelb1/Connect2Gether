@@ -222,7 +222,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     List<User> usersList = new List<User>();
-                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Rank).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
                     usersList.Add(userById!);
                     List<UserByIdDto> userByIdDtoList = new List<UserByIdDto>();
                     if (userById == null) 
@@ -235,10 +235,11 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         UserByIdDto userByIdDto = new UserByIdDto();
                         userByIdDto.Id = item.Id;
                         userByIdDto.Username = item.Username;
+                        userByIdDto.Rank = item.Rank;
+                        userByIdDto.Points = item.Point;
                         userByIdDto.RegistrationDate = item.RegistrationDate;
                         userByIdDto.LastLogin = item.LastLogin;
                         ICollection<UserPost> posts = item.UserPosts!;
-                        ICollection<Comment> comments = item.Comments!;
                         foreach (var pts in posts)
                         {
                             pts.User = context.Users.FirstOrDefault(x => x.Id == pts.UserId);
@@ -255,19 +256,6 @@ namespace Connect2Gether_API.Controllers.UserControllers
                                 UploadDate = pts.UploadDate,
                                 Comments = convertComments(pts.Comments.ToList()),
                                 Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null)
-                            });
-                        }
-                        foreach (var cmnt in comments)
-                        {
-                            cmnt.User = context.Users.FirstOrDefault(x => x.Id == cmnt.UserId)!;
-
-                            userById.Comments!.Add(new Comment
-                            {
-                                Id = cmnt.Id,
-                                Text = cmnt.Text,
-                                PostId = cmnt.PostId,
-                                UserId = cmnt.UserId,
-                                UploadDate = cmnt.UploadDate,
                             });
                         }
                         userByIdDtoList.Add(userByIdDto);

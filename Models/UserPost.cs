@@ -22,6 +22,8 @@ public partial class UserPost
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+    public virtual ICollection<Deletedlike> Deletedlikes { get; set; } = new List<Deletedlike>();
+
     public virtual Image? Image { get; set; }
 
     [JsonIgnore]
