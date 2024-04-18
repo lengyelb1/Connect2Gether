@@ -322,10 +322,15 @@ namespace Connect2Gether_API.Controllers
                         if (post != null)
                         {
                             post.Like++;
-                            user!.Point++;
+                            if (context.Deletedlikes.Select(x=> x.UserId == user!.Id && x.PostId == post.Id).IsNullOrEmpty())
+                            {
+                                user!.Point++;
+                                context.SaveChanges();
+                                return Ok("A post likolása sikeres! +1 pont");
+                            }
 
-                            context.SaveChanges();
-                            return Ok("A post likolása sikeres! +1 pont");
+                                return Ok("A post likolása sikeres!");
+
                         }
                         else
                         {
