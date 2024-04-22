@@ -106,13 +106,13 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpPut("ForgetPassword")]
-        public async Task<IActionResult> ForgetPassword(int userId, ForgetPasswordDto forgetPasswordDto)
+        public async Task<IActionResult> ForgetPassword(string userName, ForgetPasswordDto forgetPasswordDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+                    var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Username == userName);
                     if (requestUser == null) 
                     {
                         return BadRequest("Nincs ilyen user!");
