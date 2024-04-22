@@ -21,6 +21,8 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<Deletedlike> Deletedlikes { get; set; }
 
+    public virtual DbSet<DislikedPost> DislikedPosts { get; set; }
+
     public virtual DbSet<Image> Images { get; set; }
 
     public virtual DbSet<LikedPost> LikedPosts { get; set; }
@@ -118,6 +120,35 @@ public partial class Connect2getherContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Deletedlikes)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("deletedlikes_ibfk_2");
+        });
+
+        modelBuilder.Entity<DislikedPost>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("disliked_posts");
+
+            entity.HasIndex(e => e.Postid, "postid");
+
+            entity.HasIndex(e => new { e.Userid, e.Postid }, "userid");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.Postid)
+                .HasColumnType("int(11)")
+                .HasColumnName("postid");
+            entity.Property(e => e.Userid)
+                .HasColumnType("int(11)")
+                .HasColumnName("userid");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.DislikedPosts)
+                .HasForeignKey(d => d.Postid)
+                .HasConstraintName("disliked_posts_ibfk_2");
+
+            entity.HasOne(d => d.User).WithMany(p => p.DislikedPosts)
+                .HasForeignKey(d => d.Userid)
+                .HasConstraintName("disliked_posts_ibfk_1");
         });
 
         modelBuilder.Entity<Image>(entity =>
@@ -245,6 +276,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Dislike).HasColumnType("int(11)");
             entity.Property(e => e.ImageId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");

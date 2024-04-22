@@ -16,18 +16,27 @@ public partial class UserPost
 
     public long Like { get; set; }
 
+    public int Dislike { get; set; }
+
     public int? UserId { get; set; }
 
     public DateTime? UploadDate { get; set; }
 
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    [JsonIgnore]
+    public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<Deletedlike> Deletedlikes { get; set; } = new List<Deletedlike>();
+    [JsonIgnore]
+    public virtual ICollection<Deletedlike>? Deletedlikes { get; set; } = new List<Deletedlike>();
 
+    [JsonIgnore]
+    public virtual ICollection<DislikedPost>? DislikedPosts { get; set; } = new List<DislikedPost>();
+
+    [JsonIgnore]
     public virtual Image? Image { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();
 
+    [JsonIgnore]
     public virtual User? User { get; set; }
 }

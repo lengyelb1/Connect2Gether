@@ -43,7 +43,11 @@ public partial class User
     [JsonIgnore]
     public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<Deletedlike> Deletedlikes { get; set; } = new List<Deletedlike>();
+    [JsonIgnore]
+    public virtual ICollection<Deletedlike>? Deletedlikes { get; set; } = new List<Deletedlike>();
+
+    [JsonIgnore]
+    public virtual ICollection<DislikedPost>? DislikedPosts { get; set; } = new List<DislikedPost>();
 
     [JsonIgnore]
     public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();

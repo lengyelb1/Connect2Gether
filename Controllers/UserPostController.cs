@@ -295,9 +295,10 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
                     var existingLike = context.LikedPosts.FirstOrDefault(x => x.UserId == likedPostDto.userId && x.PostId == likedPostDto.postId);
+                    var existingDislike = context.DislikedPosts.FirstOrDefault(x => x.Userid == likedPostDto.userId && x.Postid == likedPostDto.postId);
                     if (existingLike != null && likedPostDto.isLiked == false)
                     {
-                        context.LikedPosts.Remove(existingLike); 
+                        context.LikedPosts.Remove(existingLike!);
                         var post = context.UserPosts.FirstOrDefault(x => x.Id == likedPostDto.postId);
                         if (post != null && post.Like > 0)
                         {
@@ -318,10 +319,20 @@ namespace Connect2Gether_API.Controllers
                         context.LikedPosts.Add(like);
 
                         var post = context.UserPosts.FirstOrDefault(x => x.Id == likedPostDto.postId);
+                        if (existingDislike != null)
+                        {
+                            context.DislikedPosts.Remove(existingDislike);
+                            if (post != null && post.Dislike > 0)
+                            {
+                                post.Dislike--;
+                            }
+                        }
+
                         var user = context.Users.FirstOrDefault(x => x.Id == post!.UserId);
                         if (post != null)
                         {
                             post.Like++;
+                            context.SaveChanges();
                             if (context.Deletedlikes.Select(x=> x.UserId == user!.Id && x.PostId == post.Id).IsNullOrEmpty())
                             {
                                 user!.Point++;
@@ -330,6 +341,72 @@ namespace Connect2Gether_API.Controllers
                             }
                             context.SaveChanges();
                             return Ok("The post has been liked successfully!");
+                        }
+                        else
+                        {
+                            return BadRequest("The post not found!");
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest("Invalid request!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost("Dislike")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
+        public IActionResult Dislike(DislikedPostDto dislikedPostDto)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var existingDislike = context.DislikedPosts.FirstOrDefault(x => x.Userid == dislikedPostDto.userId && x.Postid == dislikedPostDto.postId);
+                    var existingLike = context.LikedPosts.FirstOrDefault(x => x.UserId == dislikedPostDto.userId && x.PostId == dislikedPostDto.postId);
+                    if (existingDislike != null && dislikedPostDto.isDisliked == false)
+                    {
+                        context.DislikedPosts.Remove(existingDislike!);
+                        var post = context.UserPosts.FirstOrDefault(x => x.Id == dislikedPostDto.postId);
+                        if (post != null && post.Dislike > 0)
+                        {
+                            post.Dislike--;
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            return BadRequest("The post cannot be found or the dislike counter is already zero!");
+                        }
+                        return Ok("Dislike removed successfully!");
+                    }
+                    else if (existingDislike == null && dislikedPostDto.isDisliked == true)
+                    {
+                        DislikedPost dislike = new DislikedPost();
+                        dislike.Postid = dislikedPostDto.postId;
+                        dislike.Userid = dislikedPostDto.userId;
+                        context.DislikedPosts.Add(dislike);
+
+                        var post = context.UserPosts.FirstOrDefault(x => x.Id == dislikedPostDto.postId);
+                        if (existingLike != null)
+                        {
+                            context.LikedPosts.Remove(existingLike);
+                            if (post != null && post.Like > 0)
+                            {
+                                post.Like--;
+                            }
+                        }
+
+                        var user = context.Users.FirstOrDefault(x => x.Id == post!.UserId);
+                        if (post != null)
+                        {
+                            post.Dislike++;
+                            context.SaveChanges();
+                            return Ok("The post has been disliked successfully!");
                         }
                         else
                         {

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Connect2Gether_API.Models;
 
-public partial class LikedPost
+public partial class DislikedPost
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int Userid { get; set; }
 
-    public int PostId { get; set; }
+    public int Postid { get; set; }
 
     public virtual UserPost Post { get; set; } = null!;
 
