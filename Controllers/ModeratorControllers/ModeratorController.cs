@@ -72,13 +72,13 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                     var user = context.Users.FirstOrDefault(x => x.Id == id);
                     if (user == null)
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
                     else
                     {
                         context.UserSuspicious.Add(new UserSuspiciou { UserId = user.Id });
                         context.SaveChanges();
-                        return Ok("Sikeres hozzáadás!");
+                        return Ok("Added successfully!");
                     }
                 }
                 catch (Exception ex)

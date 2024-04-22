@@ -76,7 +76,7 @@ namespace Connect2Gether_API.Controllers
                     }
                     else
                     {
-                        return BadRequest("A jelszó nem felel meg a kritériumoknak!");
+                        return BadRequest("The password does not meet the criteria!");
                     }
                 }
             }
@@ -116,7 +116,7 @@ namespace Connect2Gether_API.Controllers
                     }
                     else
                     {
-                        return BadRequest("Ezzel a userrel nem tudsz bejelentkezni!");
+                        return BadRequest("You cannot log in with this user!");
                     }
                 }
 
@@ -140,7 +140,7 @@ namespace Connect2Gether_API.Controllers
                     var user = context.Users.FirstOrDefault(x => x.ValidatedKey == key);
                     if (user == null)
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
                     else
                     {
@@ -148,7 +148,7 @@ namespace Connect2Gether_API.Controllers
                         user.ValidatedKey = null!;
                         context.Update(user);
                         context.SaveChanges();
-                        return Ok("Sikeres megerősítés!");
+                        return Ok("Confirmation successfully!");
                     }
                 }
                 catch (Exception ex)

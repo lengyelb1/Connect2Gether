@@ -74,7 +74,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     var deletedLike = context.LikedPosts.FirstOrDefault(x => x.PostId == deletedPost!.Id);
                     if (deletedPost == null)
                     {
-                        return BadRequest("Ez a post nem létezik!");
+                        return BadRequest("This post does not exist!");
                     }
                     else if (deletedPost != null && deletedLike == null)
                     {
@@ -100,7 +100,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                         context.Alertmessages.Add(alertMessage);
                         context.SaveChanges();
                     }
-                    return Ok("Sikeres törlés!");
+                    return Ok("Deleted successfully!");
                 }
                 catch (Exception ex)
                 {

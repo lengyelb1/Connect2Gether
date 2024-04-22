@@ -60,7 +60,7 @@ namespace Connect2Gether_API.Controllers
 
                     context.Comments.Add(comment1);
                     context.SaveChanges();
-                    return Ok("Sikeres feltöltés!");
+                    return Ok("Upload successfully!");
                 }
                 catch (Exception ex)
                 {
@@ -143,7 +143,7 @@ namespace Connect2Gether_API.Controllers
 
                     if (comment == null)
                     {
-                        return NotFound("Nincs ilyen comment!");
+                        return NotFound("This comment does not exist!");
                     }
                     else
                     {
@@ -204,18 +204,18 @@ namespace Connect2Gether_API.Controllers
                     var changedComment = context.Comments.FirstOrDefault(x => x.Id == id);
                     if (changedComment == null)
                     {
-                        return BadRequest("Nics ilyen comment!");
+                        return BadRequest("This comment does not exist!");
                     }
                     if (changedComment!.UserId == userId)
                     {
                         changedComment.Text = commentPutDto.Text!;
                         context.Comments.Update(changedComment);
                         context.SaveChanges();
-                        return Ok("Sikeres módosítás!");
+                        return Ok("Changes successfully!");
                     }
                     else
                     {
-                        return BadRequest("Ez a user nem változtathat!");
+                        return BadRequest("This user cannot make changes!");
                     }
                 }
                 catch (Exception ex)
@@ -236,7 +236,7 @@ namespace Connect2Gether_API.Controllers
                     var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
                     if (deleteComment == null)
                     {
-                        return BadRequest("Nincs ilyen comment!");
+                        return BadRequest("This comment does not exist!");
                     }
                     context.Comments.Remove(deleteComment);
                     context.SaveChanges();
@@ -246,7 +246,7 @@ namespace Connect2Gether_API.Controllers
                     alertmessage.UserId = deleteComment.UserId;
                     context.Alertmessages.Add(alertmessage);
                     context.SaveChanges();
-                    return Ok("Sikeres törlés!");
+                    return Ok("Deleted successfully!");
                 }
                 catch (Exception ex)
                 {
@@ -267,17 +267,17 @@ namespace Connect2Gether_API.Controllers
                     var deletedCommentPost = context.UserPosts.FirstOrDefault(x => x.Id == deleteComment!.PostId);
                     if (deleteComment == null)
                     {
-                        return BadRequest("Nincs ilyen comment!");
+                        return BadRequest("This comment does not exist!");
                     }
                     if (deleteComment!.UserId == userId || deletedCommentPost!.UserId == userId)
                     {
                         context.Comments.Remove(deleteComment);
                         context.SaveChanges();
-                        return Ok("Sikeres törlés!");
+                        return Ok("Deleted successfully!");
                     }
                     else
                     {
-                        return BadRequest("Ez a user nem törölhet!");
+                        return BadRequest("This user cannot make deleted!");
                     }
                 }
                 catch (Exception ex)

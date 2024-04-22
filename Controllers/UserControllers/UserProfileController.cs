@@ -26,7 +26,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     var user = context.Users.FirstOrDefault(x => x.Id == id);
                     if (user == null) 
                     {
-                        return StatusCode(404, "Nincs ilyen user");
+                        return StatusCode(404, "This user does not exist!");
                     }
 
                     var userPostCount = context.UserPosts.Where(x => x.UserId == user!.Id).ToList().Count;
@@ -63,12 +63,12 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     var oldHash = BCrypt.Net.BCrypt.Verify(changedUser.OldPassword, requestUser!.Hash);
                     if (!oldHash)
                     {
-                        return BadRequest("A régi jelszó helytelen!");
+                        return BadRequest("The old password incorrect!");
 
                     }
                     if (!changedUser.NewPassword!.Equals(changedUser.NewPasswordAgain))
                     {
-                        return BadRequest("A két jelszó nem egyezik!");
+                        return BadRequest("The two passwords not match!");
                     
                     }
                     if (PasswordChecker.CheckPassword(changedUser.NewPassword))
@@ -89,11 +89,11 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         smtpServer.EnableSsl = true;
                         smtpServer.Send(mail);
 
-                        return Ok("A jelszavad sikeresen megváltozott");
+                        return Ok("Your password changed!");
                     }
                     else 
                     {
-                        return BadRequest("A jelszó nem felel meg a kritériumoknak!");
+                        return BadRequest("The password does not meet the criteria!");
                     }
 
                 }
@@ -115,15 +115,15 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
                     if (requestUser == null) 
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
                     if (requestUser.Username != forgetPasswordDto.UserName)
                     {
-                        return BadRequest("Ez a felhasználónév nem létezik!");
+                        return BadRequest("This username does not exist!");
                     }
                     if (forgetPasswordDto.NewPassword != forgetPasswordDto.NewPasswordAgain)
                     {
-                        return BadRequest("A két jelszó nem egyezik!");
+                        return BadRequest("The two passwords not match!");
                     }
                     if (PasswordChecker.CheckPassword(forgetPasswordDto.NewPassword!))
                     {
@@ -143,11 +143,11 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         smtpServer.EnableSsl = true;
                         smtpServer.Send(mail);
 
-                        return Ok("A jelszavad sikeresen megváltozott");
+                        return Ok("Your password changed!");
                     }
                     else
                     {
-                        return BadRequest("A jelszó nem felel meg a kritériumoknak!");
+                        return BadRequest("The password does not meet the criteria!");
                     }
                 }
                 catch (Exception ex)
@@ -167,14 +167,14 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     var user = context.Users.FirstOrDefault(x => x.Id == userId);
                     if (user == null)
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
                     user!.Id = userId;
                     user.Username = userPutDto.UserName;
                     user.Email = userPutDto.Email;
                     context.Users.Update(user);
                     context.SaveChanges();
-                    return Ok("Sikeres módosítás!");
+                    return Ok("Changes successfully!");
                 }
                 catch (Exception ex)
                 {

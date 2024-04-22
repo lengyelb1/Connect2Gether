@@ -227,7 +227,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     List<UserByIdDto> userByIdDtoList = new List<UserByIdDto>();
                     if (userById == null) 
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
 
                     foreach (var item in usersList)

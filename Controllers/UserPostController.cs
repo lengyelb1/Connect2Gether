@@ -306,9 +306,9 @@ namespace Connect2Gether_API.Controllers
                         }
                         else
                         {
-                            return BadRequest("A post nem található vagy a like számláló már nulla!");
+                            return BadRequest("The post cannot be found or the like counter is already zero!");
                         }
-                        return Ok("A like eltávolítása sikeres!");
+                        return Ok("Like removed successfully!");
                     }
                     else if (existingLike == null && likedPostDto.isLiked == true)
                     {
@@ -326,19 +326,19 @@ namespace Connect2Gether_API.Controllers
                             {
                                 user!.Point++;
                                 context.SaveChanges();
-                                return Ok("A post likolása sikeres! +1 pont");
+                                return Ok("The post has been liked successfully! +1 point");
                             }
                             context.SaveChanges();
-                            return Ok("A post likolása sikeres!");
+                            return Ok("The post has been liked successfully!");
                         }
                         else
                         {
-                            return BadRequest("A post nem található!");
+                            return BadRequest("The post not found!");
                         }
                     }
                     else
                     {
-                        return BadRequest("Érvénytelen kérés!");
+                        return BadRequest("Invalid request!");
                     }
                 }
                 catch (Exception ex)
@@ -359,7 +359,7 @@ namespace Connect2Gether_API.Controllers
                     var changedPost = context.UserPosts.FirstOrDefault(x => x.Id == id);
                     if (changedPost == null)
                     {
-                        return BadRequest("Nics ilyen post!");
+                        return BadRequest("This post does not exist!");
                     }
                     if (changedPost!.UserId == userId)
                     {
@@ -367,11 +367,11 @@ namespace Connect2Gether_API.Controllers
                         changedPost.Title = userPostPutDto.Title;
                         context.UserPosts.Update(changedPost);
                         context.SaveChanges();
-                        return Ok("Sikeres módosítás!");
+                        return Ok("Changes successfully!");
                     }
                     else
                     {
-                        return BadRequest("Ez a user nem változtathat!");
+                        return BadRequest("This user cannot make changes!");
                     }
                 }
                 catch (Exception ex)
@@ -393,7 +393,7 @@ namespace Connect2Gether_API.Controllers
                     var deletedLike = context.LikedPosts.FirstOrDefault(x => x.PostId == deletedPost!.Id);
                     if (deletedPost == null)
                     {
-                        return BadRequest("Ez a post nem létezik!");
+                        return BadRequest("This post does not exist!");
                     }
 
                     if (deletedPost.UserId == userId)
@@ -413,10 +413,10 @@ namespace Connect2Gether_API.Controllers
                     }
                     else
                     {
-                        return BadRequest("Ez a user nem törölhet!");
+                        return BadRequest("This user cannot make deleted!");
                     }
                     
-                    return Ok("Sikeres törlés!");
+                    return Ok("Deleted successfully!");
                 }
                 catch (Exception ex)
                 {

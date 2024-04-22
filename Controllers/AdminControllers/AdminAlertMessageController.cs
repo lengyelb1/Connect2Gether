@@ -48,7 +48,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     var deletedMessage = context.Alertmessages.FirstOrDefault(x => x.Id == id);
                     context.Alertmessages.Remove(deletedMessage!);
                     context.SaveChanges();
-                    return Ok("AlertMessage törlése sikeres!");
+                    return Ok("AlertMessage deleted sucessfully!");
                 }
                 catch (Exception ex)
                 {
