@@ -54,14 +54,14 @@ namespace Connect2Gether_API.Controllers
 
         [HttpGet("AllUserPostByOwner")]
         [Authorize(Roles = "Default, Admin, Moderator")]
-        public async Task<IActionResult> AllUserPostByOwner(int userId)
+        public IActionResult AllUserPostByOwner(int userId)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
                     List<AllUserPostByOwnerDto> listAllUserPostByOwners = new List<AllUserPostByOwnerDto>();
-                    var result = await context.UserPosts.Include(f => f.Comments).Include(f => f.User).ToListAsync();
+                    var result = context.UserPosts.Include(f => f.Comments).Include(f => f.User).Where(x => x.UserId == userId).ToList();
                     foreach (var item in result) 
                     {
                         AllUserPostByOwnerDto allUserPostByOwner = new AllUserPostByOwnerDto();
