@@ -35,6 +35,8 @@ public partial class User
 
     public DateTime LastLogin { get; set; }
 
+    public byte[]? ProfileImage { get; set; }
+
     public string? ValidatedKey { get; set; }
 
     [JsonIgnore]
@@ -54,8 +56,7 @@ public partial class User
 
     public virtual Permission Permission { get; set; } = null!;
 
-    [JsonIgnore]
-    public virtual Rank? Rank { get; set; } = null!;
+    public virtual Rank Rank { get; set; } = null!;
 
     [JsonIgnore]
     public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();

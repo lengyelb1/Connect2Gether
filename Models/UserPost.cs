@@ -8,7 +8,7 @@ public partial class UserPost
 {
     public int Id { get; set; }
 
-    public int? ImageId { get; set; }
+    public byte[]? Image { get; set; }
 
     public string Description { get; set; } = null!;
 
@@ -30,9 +30,6 @@ public partial class UserPost
 
     [JsonIgnore]
     public virtual ICollection<DislikedPost>? DislikedPosts { get; set; } = new List<DislikedPost>();
-
-    [JsonIgnore]
-    public virtual Image? Image { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();

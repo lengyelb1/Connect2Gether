@@ -7,7 +7,7 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
     {
         public int Id { get; set; }
 
-        public int? ImageId { get; set; }
+        public byte[]? Image { get; set; }
 
         public string Description { get; set; } = null!;
 
@@ -25,9 +25,6 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
         public DateTime? UploadDate { get; set; }
 
         public virtual ICollection<CommentResponseDto> Comments { get; set; } = new List<CommentResponseDto>();
-
-        [JsonIgnore]
-        public virtual Image? Image { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();

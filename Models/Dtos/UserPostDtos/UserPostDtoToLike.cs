@@ -6,7 +6,7 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
     {
         public int Id { get; set; }
 
-        public int? ImageId { get; set; }
+        public byte[]? Image { get; set; }
 
         public string Description { get; set; } = null!;
 
@@ -18,8 +18,6 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
         public int? UserId { get; set; }
 
         public bool Liked { get; set; }
-
-        public bool rewardClaimed { get; set; }
 
         public DateTime? UploadDate { get; set; }
 

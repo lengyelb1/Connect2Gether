@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -30,6 +31,7 @@ namespace Connect2Gether_API.Controllers
                         post.Id,
                         post.Description,
                         post.Title,
+                        post.Image,
                         post.UploadDate,
                         post.Like,
                         User = post.User != null ? new { post.User.Id, post.User.Username } : null,
@@ -66,7 +68,7 @@ namespace Connect2Gether_API.Controllers
                     {
                         AllUserPostByOwnerDto allUserPostByOwner = new AllUserPostByOwnerDto();
                         allUserPostByOwner.Id = item.Id;
-                        allUserPostByOwner.ImageId = item.ImageId;
+                        allUserPostByOwner.Image = item.Image;
                         allUserPostByOwner.Description = item.Description;
                         allUserPostByOwner.Title = item.Title;
                         allUserPostByOwner.Like = item.Like;
@@ -119,7 +121,7 @@ namespace Connect2Gether_API.Controllers
                     {
                         UserPostResponseDto userPost = new UserPostResponseDto();
                         userPost.Id = item.Id;
-                        userPost.ImageId = item.ImageId;
+                        userPost.Image = item.Image;
                         userPost.Description = item.Description;
                         userPost.Title = item.Title;
                         userPost.Like = item.Like;
@@ -174,6 +176,7 @@ namespace Connect2Gether_API.Controllers
                         item.Id,
                         item.Description,
                         item.Title,
+                        item.Image,
                         item.UploadDate,
                         item.Like,
                         User = item.User != null ? new { item.User.Id, item.User.Username } : null,
@@ -209,7 +212,7 @@ namespace Connect2Gether_API.Controllers
                     
                     UserPostResponseDto userPost = new UserPostResponseDto();
                     userPost.Id = item!.Id;
-                    userPost.ImageId = item.ImageId;
+                    userPost.Image = item.Image;
                     userPost.Description = item.Description;
                     userPost.Title = item.Title;
                     userPost.Like = item.Like;
@@ -258,23 +261,10 @@ namespace Connect2Gether_API.Controllers
                         UserId = userPostDto.UserId,
                         Description = userPostDto.Description,
                         Title = userPostDto.Title,
+                        Image = userPostDto.Image,
                         UploadDate = DateTime.Now
                     };
-                    /*if (userPostDto.Image == null)
-                    {
-                        context.UserPosts.Add(userPost);
-                        context.SaveChanges();
-                        return Ok(userPost);
-                    }
-                    else
-                    {
-                        context.Images.Add(userPostDto.Image);
-                        context.SaveChanges();
-                        userPost.ImageId = userPostDto.Image.Id;
-                        context.UserPosts.Add(userPost);
-                        context.SaveChanges();
-                        return Ok(userPost);
-                    }*/
+                    
                     context.UserPosts.Add(userPost);
                     context.SaveChanges();
                     return Ok(userPost);
@@ -284,6 +274,13 @@ namespace Connect2Gether_API.Controllers
                     return BadRequest(ex.Message);
                 }
             }
+        }
+
+        private string BlobConverter(string file)
+        {
+            byte[] outputpuc = Convert.FromBase64String(file);
+
+            return Convert.ToBase64String(outputpuc);
         }
 
         [HttpPost("Like")]

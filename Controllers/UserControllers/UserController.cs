@@ -67,7 +67,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         {
                             UserPostResponseDto userPost = new UserPostResponseDto();
                             userPost.Id = item.Id;
-                            userPost.ImageId = item.ImageId;
+                            userPost.Image = item.Image;
                             userPost.Description = item.Description;
                             userPost.Title = item.Title;
                             userPost.Like = item.Like;
@@ -104,7 +104,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         {
                             UserPostResponseDto userPost = new UserPostResponseDto();
                             userPost.Id = item.Id;
-                            userPost.ImageId = item.ImageId;
+                            userPost.Image = item.Image;
                             userPost.Description = item.Description;
                             userPost.Title = item.Title;
                             userPost.Like = item.Like;
@@ -247,7 +247,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             userByIdDto.UserPosts!.Add(new UserPostResponseDto
                             {
                                 Id = pts.Id,
-                                ImageId = pts.ImageId,
+                                Image = pts.Image,
                                 Description = pts.Description,
                                 Title = pts.Title,
                                 Like = pts.Like,

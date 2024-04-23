@@ -23,8 +23,6 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<DislikedPost> DislikedPosts { get; set; }
 
-    public virtual DbSet<Image> Images { get; set; }
-
     public virtual DbSet<LikedPost> LikedPosts { get; set; }
 
     public virtual DbSet<Permission> Permissions { get; set; }
@@ -88,7 +86,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.PostId)
-                .HasConstraintName("comment_ibfk_2");
+                .HasConstraintName("comment_ibfk_4");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
@@ -115,7 +113,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.Deletedlikes)
                 .HasForeignKey(d => d.PostId)
-                .HasConstraintName("deletedlikes_ibfk_1");
+                .HasConstraintName("deletedlikes_ibfk_3");
 
             entity.HasOne(d => d.User).WithMany(p => p.Deletedlikes)
                 .HasForeignKey(d => d.UserId)
@@ -151,19 +149,6 @@ public partial class Connect2getherContext : DbContext
                 .HasConstraintName("disliked_posts_ibfk_1");
         });
 
-        modelBuilder.Entity<Image>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("images");
-
-            entity.Property(e => e.Id).HasColumnType("int(11)");
-            entity.Property(e => e.Image1).HasColumnType("mediumblob");
-            entity.Property(e => e.Image2).HasColumnType("mediumblob");
-            entity.Property(e => e.Image3).HasColumnType("mediumblob");
-            entity.Property(e => e.Image4).HasColumnType("mediumblob");
-        });
-
         modelBuilder.Entity<LikedPost>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -184,8 +169,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.PostId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("liked_posts_ibfk_2");
+                .HasConstraintName("liked_posts_ibfk_4");
 
             entity.HasOne(d => d.User).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.UserId)
@@ -243,6 +227,9 @@ public partial class Connect2getherContext : DbContext
             entity.Property(e => e.Point)
                 .HasComment("Pontszám")
                 .HasColumnType("int(11)");
+            entity.Property(e => e.ProfileImage)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("mediumblob");
             entity.Property(e => e.RankId)
                 .HasComment("Pontszámhoz kötött rangok")
                 .HasColumnType("int(11)");
@@ -268,18 +255,14 @@ public partial class Connect2getherContext : DbContext
 
             entity.ToTable("user_post");
 
-            entity.HasIndex(e => e.ImageId, "ImageId");
-
-            entity.HasIndex(e => new { e.ImageId, e.UserId }, "ImageId_2").IsUnique();
-
             entity.HasIndex(e => e.UserId, "UserId");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Description).HasColumnType("text");
             entity.Property(e => e.Dislike).HasColumnType("int(11)");
-            entity.Property(e => e.ImageId)
+            entity.Property(e => e.Image)
                 .HasDefaultValueSql("'NULL'")
-                .HasColumnType("int(11)");
+                .HasColumnType("mediumblob");
             entity.Property(e => e.Like).HasColumnType("bigint(20)");
             entity.Property(e => e.Title).HasMaxLength(128);
             entity.Property(e => e.UploadDate)
@@ -289,11 +272,6 @@ public partial class Connect2getherContext : DbContext
             entity.Property(e => e.UserId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
-
-            entity.HasOne(d => d.Image).WithMany(p => p.UserPosts)
-                .HasForeignKey(d => d.ImageId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("user_post_ibfk_4");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserPosts)
                 .HasForeignKey(d => d.UserId)

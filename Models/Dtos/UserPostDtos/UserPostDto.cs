@@ -9,6 +9,6 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
         public string Description { get; set; }
         public string Title { get; set; }
         public int UserId { get; set; }
-        //public Image? Image { get; set; } = null;
+        public byte[]? Image { get; set; }
     }
 }
