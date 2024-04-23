@@ -86,7 +86,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.PostId)
-                .HasConstraintName("comment_ibfk_4");
+                .HasConstraintName("comment_ibfk_2");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
@@ -113,7 +113,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.Deletedlikes)
                 .HasForeignKey(d => d.PostId)
-                .HasConstraintName("deletedlikes_ibfk_3");
+                .HasConstraintName("deletedlikes_ibfk_1");
 
             entity.HasOne(d => d.User).WithMany(p => p.Deletedlikes)
                 .HasForeignKey(d => d.UserId)
@@ -169,7 +169,8 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.PostId)
-                .HasConstraintName("liked_posts_ibfk_4");
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("liked_posts_ibfk_2");
 
             entity.HasOne(d => d.User).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.UserId)

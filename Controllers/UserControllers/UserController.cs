@@ -92,6 +92,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             }
                             userPost.UploadDate = item.UploadDate;
                             userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
                             userPostDtoToLikes.Add(userPost);
                         }
 
@@ -129,6 +130,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             }
                             userPost.UploadDate = item.UploadDate;
                             userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
                             userPostDtoToLikes.Add(userPost);
                         }
                         return Ok(userPostDtoToLikes);
@@ -255,8 +257,9 @@ namespace Connect2Gether_API.Controllers.UserControllers
                                 UserName = pts.User!.Username,
                                 UploadDate = pts.UploadDate,
                                 Comments = convertComments(pts.Comments.ToList()),
-                                Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null)
-                            });
+                                Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null),
+                                Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Postid == pts.Id) != null)
+                        });
                         }
                         userByIdDtoList.Add(userByIdDto);
                     }

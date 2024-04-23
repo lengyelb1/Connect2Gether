@@ -11,6 +11,7 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
         public string Title { get; set; } = null!;
         public long Like { get; set; }
         public bool Liked { get; set; }
+        public bool Disliked { get; set; }
         public int? UserId { get; set; }
         public string? UserName { get; set; }
         public DateTime? UploadDate { get; set; }

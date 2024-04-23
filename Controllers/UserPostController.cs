@@ -147,6 +147,7 @@ namespace Connect2Gether_API.Controllers
                         userPost.UserName = item.User!.Username;
                         userPost.UploadDate = item.UploadDate;
                         userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                        userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
 
                         userPostDtoToLikes.Add(userPost);
                     }
@@ -238,6 +239,7 @@ namespace Connect2Gether_API.Controllers
                         });
                     }
                     userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                    userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
                     context.SaveChanges();
                     return Ok(userPost);
                 }
@@ -264,7 +266,7 @@ namespace Connect2Gether_API.Controllers
                         Image = userPostDto.Image,
                         UploadDate = DateTime.Now
                     };
-                    
+
                     context.UserPosts.Add(userPost);
                     context.SaveChanges();
                     return Ok(userPost);
@@ -274,13 +276,6 @@ namespace Connect2Gether_API.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-        }
-
-        private string BlobConverter(string file)
-        {
-            byte[] outputpuc = Convert.FromBase64String(file);
-
-            return Convert.ToBase64String(outputpuc);
         }
 
         [HttpPost("Like")]
@@ -465,6 +460,7 @@ namespace Connect2Gether_API.Controllers
                 {
                     var deletedPost = context.UserPosts.FirstOrDefault(x => x.Id == id);
                     var deletedLike = context.LikedPosts.FirstOrDefault(x => x.PostId == deletedPost!.Id);
+                    var deletedDisLike = context.DislikedPosts.FirstOrDefault(x => x.Postid == deletedPost!.Id);
                     if (deletedPost == null)
                     {
                         return BadRequest("This post does not exist!");
@@ -480,6 +476,8 @@ namespace Connect2Gether_API.Controllers
                         else if (deletedPost != null && deletedLike != null)
                         {
                             context.LikedPosts.Remove(deletedLike!);
+                            context.SaveChanges();
+                            context.DislikedPosts.Remove(deletedDisLike!);
                             context.SaveChanges();
                             context.UserPosts.Remove(deletedPost);
                             context.SaveChanges();

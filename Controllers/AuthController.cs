@@ -51,6 +51,7 @@ namespace Connect2Gether_API.Controllers
                         user.RegistrationDate = DateTime.Today;
                         user.PermissionId = defaultPermission.Id;
                         user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
+                        user.ProfileImage = null;
                         user.ValidatedKey = RandomToken(16);
 
                         if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null || context.Users.FirstOrDefault((x) => x.Email == user.Email) != null)
