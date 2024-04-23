@@ -74,7 +74,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             userPost.UserId = item.UserId;
                             userPost.UserName = item.User!.Username;
                             userPost.User = item.User;
-                            ICollection<Comment> comments = item.Comments;
+                            ICollection<Comment> comments = item.Comments!;
                             foreach (var cmnt in comments)
                             {
                                 cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
@@ -112,7 +112,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             userPost.UserId = item.UserId;
                             userPost.UserName = item.User!.Username;
                             userPost.User = item.User;
-                            ICollection<Comment> comments = item.Comments;
+                            ICollection<Comment> comments = item.Comments!;
                             foreach (var cmnt in comments)
                             {
                                 cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
@@ -187,7 +187,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
-                    var request = context.UserPosts.Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User).Where(x => x.Id == id).ToList();
+                    var request = context.UserPosts.Include(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.User).Where(x => x.Id == id).ToList();
                     var simplifiedRequest = request.Select(post => new
                     {
                         post.Id,
@@ -196,7 +196,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         post.UploadDate,
                         post.Like,
                         User = post.User != null ? new { post.User.Id, post.User.Username } : null,
-                        Comments = post.Comments.Select(comment => new
+                        Comments = post.Comments!.Select(comment => new
                         {
                             comment.Id,
                             comment.Text,
@@ -224,7 +224,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                 try
                 {
                     List<User> usersList = new List<User>();
-                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments).ThenInclude(x => x.User).Include(x => x.Rank).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.Rank).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
                     usersList.Add(userById!);
                     List<UserByIdDto> userByIdDtoList = new List<UserByIdDto>();
                     if (userById == null) 
@@ -256,7 +256,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                                 UserId = pts.UserId,
                                 UserName = pts.User!.Username,
                                 UploadDate = pts.UploadDate,
-                                Comments = convertComments(pts.Comments.ToList()),
+                                Comments = convertComments(pts.Comments!.ToList()),
                                 Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null),
                                 Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Postid == pts.Id) != null)
                         });

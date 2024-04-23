@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: localhost
--- Létrehozás ideje: 2024. Ápr 22. 17:56
+-- Létrehozás ideje: 2024. Ápr 23. 19:55
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -105,20 +105,6 @@ CREATE TABLE `disliked_posts` (
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `images`
---
-
-CREATE TABLE `images` (
-  `Id` int(11) NOT NULL,
-  `Image1` mediumblob NOT NULL,
-  `Image2` mediumblob NOT NULL,
-  `Image3` mediumblob NOT NULL,
-  `Image4` mediumblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
-
--- --------------------------------------------------------
-
---
 -- Tábla szerkezet ehhez a táblához `liked_posts`
 --
 
@@ -197,6 +183,7 @@ CREATE TABLE `user` (
   `Point` int(11) NOT NULL COMMENT 'Pontszám',
   `PermissionId` int(11) NOT NULL COMMENT 'Felhasználói szint',
   `LastLogin` datetime NOT NULL,
+  `ProfileImage` mediumblob DEFAULT NULL,
   `ValidatedKey` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
@@ -204,14 +191,14 @@ CREATE TABLE `user` (
 -- A tábla adatainak kiíratása `user`
 --
 
-INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`, `ValidatedKey`) VALUES
-(16, 'bazsi', '$2a$04$Q0C3ffL38mWpwMz1okBehOJxe53Lr8r2dWjyKDJm71av6Ems.43iC', 'jb@gmail.com', 1, 1, '2024-03-18', 0, 3, '2024-04-22 13:04:58', ''),
-(17, 'balint', '$2a$04$/quw9t7VqhWaO.tks5Q2L.q3JIFmehNUj5TAbZ6He/aOBoDTfNBeW', 'string', 1, 1, '2024-03-18', 0, 3, '0001-01-01 00:00:00', ''),
-(18, 'balintUser', '$2a$04$echo9khsZ8hNJWAITgbcpuUQSxGHdP50U16x1IobDHB2kAi8h6C9O', 'string@gmail.com', 1, 1, '2024-03-18', 0, 1, '2024-04-18 11:22:01', ''),
-(19, 'bazsiUser', '$2a$11$CjA9IpkMvxYs9hgjHr4Mk.O.TuW6CvXQXwAlMIBWBFVSfXK3DWqBq', 'juhaszbazsi13@gmail.com', 1, 1, '2024-03-18', 1, 1, '2024-04-09 08:06:45', ''),
-(21, 'stringasd', '$2a$04$I5xhS9IIXDeLgWqUXKTxhuObH1PA7rW453bFqik75FYyIXGESU0he', 'stringasd@gmail.com', 1, 1, '2024-04-16', 0, 1, '2024-04-03 11:31:30', ''),
-(27, 'viktor', '$2a$04$or979DyWbZAUeiC2T9lRW.r1XU.TRmBJd9BdIvyevvMq9MHK5z89u', 'tviktor20000717@gmail.com', 1, 1, '2024-04-11', 0, 2, '2024-04-15 08:13:43', ''),
-(40, 'jacko', '$2a$04$1Z/ohdz6DvuQRWfCpW1tme.rJFbayDPPIO.rNc1nFfyTVRNhGTePS', 'juhaszb@kkszki.hu', 1, 1, '2024-04-17', 0, 1, '2024-04-17 09:05:46', '');
+INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`, `ProfileImage`, `ValidatedKey`) VALUES
+(16, 'bazsi', '$2a$04$Q0C3ffL38mWpwMz1okBehOJxe53Lr8r2dWjyKDJm71av6Ems.43iC', 'jb@gmail.com', 1, 1, '2024-03-18', 0, 3, '2024-04-23 17:37:09', NULL, ''),
+(17, 'balint', '$2a$04$/quw9t7VqhWaO.tks5Q2L.q3JIFmehNUj5TAbZ6He/aOBoDTfNBeW', 'string', 1, 1, '2024-03-18', 0, 3, '0001-01-01 00:00:00', NULL, ''),
+(18, 'balintUser', '$2a$04$echo9khsZ8hNJWAITgbcpuUQSxGHdP50U16x1IobDHB2kAi8h6C9O', 'string@gmail.com', 1, 1, '2024-03-18', 0, 1, '2024-04-18 11:22:01', NULL, ''),
+(19, 'bazsiUser', '$2a$11$CjA9IpkMvxYs9hgjHr4Mk.O.TuW6CvXQXwAlMIBWBFVSfXK3DWqBq', 'juhaszbazsi13@gmail.com', 1, 1, '2024-03-18', 1, 1, '2024-04-09 08:06:45', NULL, ''),
+(21, 'stringasd', '$2a$04$I5xhS9IIXDeLgWqUXKTxhuObH1PA7rW453bFqik75FYyIXGESU0he', 'stringasd@gmail.com', 1, 1, '2024-04-16', 0, 1, '2024-04-03 11:31:30', NULL, ''),
+(27, 'viktor', '$2a$04$or979DyWbZAUeiC2T9lRW.r1XU.TRmBJd9BdIvyevvMq9MHK5z89u', 'tviktor20000717@gmail.com', 1, 1, '2024-04-11', 0, 2, '2024-04-15 08:13:43', NULL, ''),
+(41, 'Jacko', '$2a$04$WUWUL.nR8KGHlcckixEMLetVglE9Kyr1x0BtXRpX9U4o0upj61mCu', 'jacko@gmail.com', 1, 1, '2024-04-23', 0, 1, '0001-01-01 00:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -221,7 +208,7 @@ INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `
 
 CREATE TABLE `user_post` (
   `Id` int(11) NOT NULL,
-  `ImageId` int(11) DEFAULT NULL,
+  `Image` mediumblob DEFAULT NULL,
   `Description` text NOT NULL,
   `Title` varchar(128) NOT NULL,
   `Like` bigint(20) NOT NULL DEFAULT 0,
@@ -234,10 +221,11 @@ CREATE TABLE `user_post` (
 -- A tábla adatainak kiíratása `user_post`
 --
 
-INSERT INTO `user_post` (`Id`, `ImageId`, `Description`, `Title`, `Like`, `Dislike`, `UserId`, `uploadDate`) VALUES
+INSERT INTO `user_post` (`Id`, `Image`, `Description`, `Title`, `Like`, `Dislike`, `UserId`, `uploadDate`) VALUES
 (31, NULL, 'Ez egy post!', 'Post címe', 0, 0, 19, '2024-03-25'),
 (42, NULL, 'string', 'string', 0, 0, 18, '2024-04-21'),
-(43, NULL, 'string', 'string', 0, 0, 18, '2024-04-21');
+(43, NULL, 'string', 'string', 0, 0, 18, '2024-04-21'),
+(44, NULL, 'string', 'string', 0, 0, 19, '2024-04-23');
 
 -- --------------------------------------------------------
 
@@ -293,10 +281,10 @@ INSERT INTO `user_token` (`Id`, `UserId`, `Token`, `Token_expire_date`) VALUES
 (16, 27, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoidmlrdG9yIiwicm9sZSI6Ik1vZGVyYXRvciIsImlkIjoiMjciLCJleHAiOjE3MTMyNDgwMjMsImlzcyI6ImF1dGgtYXBpIiwiYXVkIjoiYXV0aC1jbGllbnQifQ.mFoVsPRmgVoJqZQkuZMM4AuGA2T29kQTWGMFsBvqb9r9IAHSkjp7TJKVsVj5E02LfKO9YmtabYPTDvZmOTdznA', '2024-04-16 08:13:43'),
 (18, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzEzMzM3MDAyLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.9z_KlDOj12aMPjG-xmkdryVH7T4lvVeUwEFigS9t-Moi7gY2XX4ty_Zh8x3KKMo9jTPOkDAe3Tk49f7ZLeozdg', '2024-04-17 08:56:42'),
 (19, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzEzMzQ4NDIwLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.gcAL4O-KwFo09bFY-YhorkwLWnMVKxZZW4mu2gbsC4rIGci-1B1Z9prd_l8jEvgaiw0bK0XgxGt9rYcodXXO4g', '2024-04-17 12:07:00'),
-(20, 40, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiamFja28iLCJyb2xlIjoiRGVmYXVsdCIsImlkIjoiNDAiLCJleHAiOjE3MTM0MjM5NDYsImlzcyI6ImF1dGgtYXBpIiwiYXVkIjoiYXV0aC1jbGllbnQifQ.hIqUAyEIl09KatJZv-oPWEunzHjchVtH3lY8k4U5yMKnFwF1kP4TS-wckkR-chWujNjM4tGq4k49OXgZ5vVzQA', '2024-04-18 09:05:46'),
 (21, 18, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmFsaW50VXNlciIsInJvbGUiOiJEZWZhdWx0IiwiaWQiOiIxOCIsImV4cCI6MTcxMzUxODUyMSwiaXNzIjoiYXV0aC1hcGkiLCJhdWQiOiJhdXRoLWNsaWVudCJ9.JI4zXVs4MNNehtXl8jdAewF7pG-ZxCWEqio-9Fev0TJ3i5quiWK810xUA1ObIoNl4IHXct63f7rtNRilVSE56g', '2024-04-19 11:22:01'),
 (22, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzEzNzk2MjQ0LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.sBrNQ2_vSHy4v8V6TJOKJR-6TYKdMUmS_at949AQH9EPVLjdwAKHFuhITydq6diL8uC63nA_UJvnPsHCLDmkRQ', '2024-04-22 16:30:45'),
-(23, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzEzODcwMjk4LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.4EO8raNCj_9DQdwlmgTqN5wa4o-10gC4W-t7SZEAwhRvRhD3Wvc-RzjPpfC-2tNuyNsglXTVHeWcql5jongzyA', '2024-04-23 13:04:59');
+(23, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzEzODcwMjk4LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.4EO8raNCj_9DQdwlmgTqN5wa4o-10gC4W-t7SZEAwhRvRhD3Wvc-RzjPpfC-2tNuyNsglXTVHeWcql5jongzyA', '2024-04-23 13:04:59'),
+(24, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzEzOTczMDI5LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.1EfFlqeosMZNB1Hq2DX1KRfbeDkyRzaETOwLzGhk5ohliGgcisR3KxWqLypHobF2PaXxKX4OdjhijqbzpA_-RA', '2024-04-24 17:37:10');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -335,12 +323,6 @@ ALTER TABLE `disliked_posts`
   ADD KEY `postid` (`postid`);
 
 --
--- A tábla indexei `images`
---
-ALTER TABLE `images`
-  ADD PRIMARY KEY (`Id`);
-
---
 -- A tábla indexei `liked_posts`
 --
 ALTER TABLE `liked_posts`
@@ -374,8 +356,6 @@ ALTER TABLE `user`
 --
 ALTER TABLE `user_post`
   ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `ImageId_2` (`ImageId`,`UserId`),
-  ADD KEY `ImageId` (`ImageId`),
   ADD KEY `UserId` (`UserId`);
 
 --
@@ -421,12 +401,6 @@ ALTER TABLE `disliked_posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT a táblához `images`
---
-ALTER TABLE `images`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT a táblához `liked_posts`
 --
 ALTER TABLE `liked_posts`
@@ -442,13 +416,13 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT a táblához `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT a táblához `user_post`
 --
 ALTER TABLE `user_post`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT a táblához `user_suspicious`
@@ -460,7 +434,7 @@ ALTER TABLE `user_suspicious`
 -- AUTO_INCREMENT a táblához `user_token`
 --
 ALTER TABLE `user_token`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -511,8 +485,7 @@ ALTER TABLE `user`
 -- Megkötések a táblához `user_post`
 --
 ALTER TABLE `user_post`
-  ADD CONSTRAINT `user_post_ibfk_3` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`),
-  ADD CONSTRAINT `user_post_ibfk_4` FOREIGN KEY (`ImageId`) REFERENCES `images` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `user_post_ibfk_3` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`);
 
 --
 -- Megkötések a táblához `user_suspicious`

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Buffers.Text;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 
 namespace Connect2Gether_API.Controllers
@@ -25,7 +26,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    var result = await context.UserPosts.Include(f => f.Comments).ThenInclude(f => f.User).Include(f => f.User).ToListAsync();
+                    var result = await context.UserPosts.Include(f => f.Comments)!.ThenInclude(f => f.User).Include(f => f.User).ToListAsync();
                     var simplifiedResult = result.Select(post => new
                     {
                         post.Id,
@@ -35,7 +36,7 @@ namespace Connect2Gether_API.Controllers
                         post.UploadDate,
                         post.Like,
                         User = post.User != null ? new { post.User.Id, post.User.Username } : null,
-                        Comments = post.Comments.Select(comment => new
+                        Comments = post.Comments!.Select(comment => new
                         {
                             comment.Id,
                             comment.Text,
@@ -74,7 +75,7 @@ namespace Connect2Gether_API.Controllers
                         allUserPostByOwner.Like = item.Like;
                         allUserPostByOwner.User = item.User;
                         allUserPostByOwner.UploadDate = item.UploadDate;
-                        ICollection<Comment> comments = item.Comments;
+                        ICollection<Comment> comments = item.Comments!;
                         foreach (var cmnt in comments)
                         {
                             cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
@@ -127,7 +128,7 @@ namespace Connect2Gether_API.Controllers
                         userPost.Like = item.Like;
                         userPost.UserId = item.UserId;
                         userPost.User = item.User;
-                        ICollection<Comment> comments = item.Comments;
+                        ICollection<Comment> comments = item.Comments!;
 
                         foreach (var cmnt in comments)
                         {
@@ -170,7 +171,7 @@ namespace Connect2Gether_API.Controllers
                 try
                 {
                     List<UserPost> userPostsList = new List<UserPost>();
-                    var result = await context.UserPosts.Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+                    var result = await context.UserPosts.Include(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
                     userPostsList.Add(result!);
                     var simplifiedResult = userPostsList.Select(item => new
                     {
@@ -181,7 +182,7 @@ namespace Connect2Gether_API.Controllers
                         item.UploadDate,
                         item.Like,
                         User = item.User != null ? new { item.User.Id, item.User.Username } : null,
-                        Comments = item.Comments.Select(comment => new
+                        Comments = item.Comments!.Select(comment => new
                         {
                             comment.Id,
                             comment.Text,
@@ -221,7 +222,7 @@ namespace Connect2Gether_API.Controllers
                     userPost.UserName = item.User!.Username;
                     userPost.UploadDate = item.UploadDate;
                     userPost.User = item.User;
-                    ICollection<Comment> comments = item.Comments;
+                    ICollection<Comment> comments = item.Comments!;
 
                     foreach (var cmnt in comments)
                     {
@@ -261,8 +262,8 @@ namespace Connect2Gether_API.Controllers
                     UserPost userPost = new UserPost
                     {
                         UserId = userPostDto.UserId,
-                        Description = userPostDto.Description,
-                        Title = userPostDto.Title,
+                        Description = userPostDto.Description!,
+                        Title = userPostDto.Title!,
                         Image = userPostDto.Image,
                         UploadDate = DateTime.Now
                     };
