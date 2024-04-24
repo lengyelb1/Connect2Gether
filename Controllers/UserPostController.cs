@@ -35,6 +35,7 @@ namespace Connect2Gether_API.Controllers
                         post.Image,
                         post.UploadDate,
                         post.Like,
+                        post.Dislike,
                         User = post.User != null ? new { post.User.Id, post.User.Username } : null,
                         Comments = post.Comments!.Select(comment => new
                         {
@@ -73,6 +74,7 @@ namespace Connect2Gether_API.Controllers
                         allUserPostByOwner.Description = item.Description;
                         allUserPostByOwner.Title = item.Title;
                         allUserPostByOwner.Like = item.Like;
+                        allUserPostByOwner.Dislike = item.Dislike;
                         allUserPostByOwner.User = item.User;
                         allUserPostByOwner.UploadDate = item.UploadDate;
                         ICollection<Comment> comments = item.Comments!;
@@ -126,6 +128,7 @@ namespace Connect2Gether_API.Controllers
                         userPost.Description = item.Description;
                         userPost.Title = item.Title;
                         userPost.Like = item.Like;
+                        userPost.Dislike = item.Dislike;
                         userPost.UserId = item.UserId;
                         userPost.User = item.User;
                         ICollection<Comment> comments = item.Comments!;
@@ -181,6 +184,7 @@ namespace Connect2Gether_API.Controllers
                         item.Image,
                         item.UploadDate,
                         item.Like,
+                        item.Dislike,
                         User = item.User != null ? new { item.User.Id, item.User.Username } : null,
                         Comments = item.Comments!.Select(comment => new
                         {
@@ -218,6 +222,7 @@ namespace Connect2Gether_API.Controllers
                     userPost.Description = item.Description;
                     userPost.Title = item.Title;
                     userPost.Like = item.Like;
+                    userPost.Dislike = item.Dislike;
                     userPost.UserId = item.UserId;
                     userPost.UserName = item.User!.Username;
                     userPost.UploadDate = item.UploadDate;

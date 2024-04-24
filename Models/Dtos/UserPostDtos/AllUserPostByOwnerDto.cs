@@ -15,6 +15,8 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
 
         public long Like { get; set; }
 
+        public long Dislike { get; set; }
+
         [JsonIgnore]
         public int? UserId { get; set; }
 

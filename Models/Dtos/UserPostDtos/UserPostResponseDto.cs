@@ -10,6 +10,7 @@ namespace Connect2Gether_API.Models.Dtos.UserPostDtos
         public string Description { get; set; } = null!;
         public string Title { get; set; } = null!;
         public long Like { get; set; }
+        public long Dislike { get; set; }
         public bool Liked { get; set; }
         public bool Disliked { get; set; }
         public int? UserId { get; set; }

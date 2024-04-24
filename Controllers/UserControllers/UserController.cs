@@ -71,6 +71,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             userPost.Description = item.Description;
                             userPost.Title = item.Title;
                             userPost.Like = item.Like;
+                            userPost.Dislike = item.Dislike;
                             userPost.UserId = item.UserId;
                             userPost.UserName = item.User!.Username;
                             userPost.User = item.User;
@@ -109,6 +110,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                             userPost.Description = item.Description;
                             userPost.Title = item.Title;
                             userPost.Like = item.Like;
+                            userPost.Dislike = item.Dislike;
                             userPost.UserId = item.UserId;
                             userPost.UserName = item.User!.Username;
                             userPost.User = item.User;
@@ -195,6 +197,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                         post.Title,
                         post.UploadDate,
                         post.Like,
+                        post.Dislike,
                         User = post.User != null ? new { post.User.Id, post.User.Username } : null,
                         Comments = post.Comments!.Select(comment => new
                         {
@@ -253,6 +256,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
                                 Description = pts.Description,
                                 Title = pts.Title,
                                 Like = pts.Like,
+                                Dislike = pts.Dislike,
                                 UserId = pts.UserId,
                                 UserName = pts.User!.Username,
                                 UploadDate = pts.UploadDate,
