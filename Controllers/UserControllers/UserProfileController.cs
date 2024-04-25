@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
 using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.UserControllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Default, Admin, Moderator")]
     public class UserProfileController : ControllerBase
     {
         [HttpGet("UserProfileById")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult UserProfileById(int id)
         {
             using (var context = new Connect2getherContext())
@@ -53,6 +54,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpPut("UserChangePassword")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public async Task<IActionResult>UserChangePassword(int UserId,ChangePasswordDto changedUser)
         {
             try
@@ -105,8 +107,41 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        [HttpPut("ForgetPassword")]
-        public async Task<IActionResult> ForgetPassword(int userId, ForgetPasswordDto forgetPasswordDto)
+        [HttpPost("ForgetPassword")]
+        public IActionResult ForgetPassword(string email,string url)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.Email == email);
+                    if (user == null)
+                    {
+                        return BadRequest("This email does not exist!");
+                    }
+
+                    MailMessage mail = new MailMessage();
+                    SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                    mail.From = new MailAddress("connectgether@gmail.com");
+                    mail.To.Add(user.Email!);
+                    mail.Subject = "Elfelejtett jelszó változtatása";
+                    mail.Body = $"Kedves Felhasználó!\n\nSajnálattal értesültünk, hogy elfelejtette jelszavát!\nAz alábbi linken megváltoztathatod a jelszavadat: {url+user.Id}";
+                    smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                    smtpServer.Port = 587;
+                    smtpServer.EnableSsl = true;
+                    smtpServer.Send(mail);
+
+                    return Ok("Email sending successfully!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPut("ForgetPassword2")]
+        public async Task<IActionResult> ForgetPassword2(int userId, [FromBody]string password)
         {
             using (var context = new Connect2getherContext())
             {
@@ -117,31 +152,16 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     {
                         return BadRequest("This user does not exist!");
                     }
-                    if (requestUser.Username != forgetPasswordDto.UserName)
+                    if (requestUser.Email == null)
                     {
-                        return BadRequest("This username does not exist!");
+                        return BadRequest("This email does not exist!");
                     }
-                    if (forgetPasswordDto.NewPassword != forgetPasswordDto.NewPasswordAgain)
+                    if (PasswordChecker.CheckPassword(password!))
                     {
-                        return BadRequest("The two passwords not match!");
-                    }
-                    if (PasswordChecker.CheckPassword(forgetPasswordDto.NewPassword!))
-                    {
-                        var newPassword = BCrypt.Net.BCrypt.HashPassword(forgetPasswordDto.NewPassword);
+                        var newPassword = BCrypt.Net.BCrypt.HashPassword(password);
                         requestUser.Hash = newPassword;
                         context.Update(requestUser);
                         context.SaveChanges();
-
-                        MailMessage mail = new MailMessage();
-                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
-                        mail.From = new MailAddress("connectgether@gmail.com");
-                        mail.To.Add(requestUser.Email);
-                        mail.Subject = "Jelszó változtatás";
-                        mail.Body = "Sikeresen megváltoztattad a jelszavadat!";
-                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
-                        smtpServer.Port = 587;
-                        smtpServer.EnableSsl = true;
-                        smtpServer.Send(mail);
 
                         return Ok("Your password changed!");
                     }
@@ -158,6 +178,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpPut("ChangeUser")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
         public IActionResult ChangeUser(UserPutDto userPutDto, int userId)
         {
             using (var context = new Connect2getherContext())
