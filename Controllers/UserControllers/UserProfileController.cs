@@ -141,13 +141,13 @@ namespace Connect2Gether_API.Controllers.UserControllers
         }
 
         [HttpPut("ForgetPassword2")]
-        public async Task<IActionResult> ForgetPassword2(int userId, [FromBody]string password)
+        public async Task<IActionResult> ForgetPassword2(ForgetPasswordDto forgetPasswordDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+                    var requestUser = await context.Users.FirstOrDefaultAsync(x => x.Id == forgetPasswordDto.userId);
                     if (requestUser == null) 
                     {
                         return BadRequest("This user does not exist!");
@@ -156,9 +156,10 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     {
                         return BadRequest("This email does not exist!");
                     }
-                    if (PasswordChecker.CheckPassword(password!))
+                    await Console.Out.WriteLineAsync(forgetPasswordDto.password);
+                    if (PasswordChecker.CheckPassword(forgetPasswordDto.password))
                     {
-                        var newPassword = BCrypt.Net.BCrypt.HashPassword(password);
+                        var newPassword = BCrypt.Net.BCrypt.HashPassword(forgetPasswordDto.password);
                         requestUser.Hash = newPassword;
                         context.Update(requestUser);
                         context.SaveChanges();

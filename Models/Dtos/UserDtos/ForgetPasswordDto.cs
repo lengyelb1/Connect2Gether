@@ -2,8 +2,8 @@
 {
     public class ForgetPasswordDto
     { 
-        public string? NewPassword { get; set; }
+        public string? password { get; set; }
 
-        public string? NewPasswordAgain { get; set; }
+        public int? userId { get; set; }
     }
 }
