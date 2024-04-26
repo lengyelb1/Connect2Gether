@@ -107,8 +107,8 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        [HttpPost("ForgetPassword")]
-        public IActionResult ForgetPassword(string email,string url)
+        [HttpPost("ForgetPasswordEmailSender")]
+        public IActionResult ForgetPasswordEmailSender(string email,string url)
         {
             using (var context = new Connect2getherContext())
             {
@@ -140,8 +140,8 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        [HttpPut("ForgetPassword2")]
-        public async Task<IActionResult> ForgetPassword2(ForgetPasswordDto forgetPasswordDto)
+        [HttpPut("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordDto forgetPasswordDto)
         {
             using (var context = new Connect2getherContext())
             {
