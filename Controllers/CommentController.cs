@@ -131,7 +131,7 @@ namespace Connect2Gether_API.Controllers
         }
 
         [HttpGet("CommentById")]
-        public IActionResult CommentByPostId(int id)
+        public IActionResult CommentById(int id)
         {
             try
             {
@@ -165,6 +165,44 @@ namespace Connect2Gether_API.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("CommentByPostId")]
+        public IActionResult CommentByPostId(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    List<Comment> comments = new List<Comment>();
+                    var comment = context.Comments.Include(p => p.User).FirstOrDefault(p => p.PostId == id);
+                    comments.Add(comment!);
+
+                    if (comment == null)
+                    {
+                        return NotFound("This comment does not exist!");
+                    }
+                    else
+                    {
+                        var simplifiedComment = comments.Select(item => new
+                        {
+                            item.Id,
+                            item.Text,
+                            item.PostId,
+                            item.UserId,
+                            item.CommentId,
+                            item.UploadDate,
+                            User = item.User != null ? new { item.User.Username } : null,
+
+                        }).ToList();
+                        return Ok(simplifiedComment);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
 
