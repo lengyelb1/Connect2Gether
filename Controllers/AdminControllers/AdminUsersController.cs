@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
+using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.AdminControllers
 {
@@ -196,8 +198,27 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             using (var context = new Connect2getherContext())
             {
                 var deleteUser = context.Users.FirstOrDefault((x) => x.Id == id);
+                var deleteUserPost = context.UserPosts.FirstOrDefault(x => x.UserId == deleteUser!.Id);
+                if (deleteUser == null)
+                {
+                    return BadRequest("This user does not exist!");
+                }
+                context.UserPosts.Remove(deleteUserPost!);
+                context.SaveChanges();
                 context.Users.Remove(deleteUser!);
                 context.SaveChanges();
+
+                MailMessage mail = new MailMessage();
+                SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress("connectgether@gmail.com");
+                mail.To.Add(deleteUser.Email);
+                mail.Subject = "Figyelmeztetés!";
+                mail.Body = $"Kedves Felhasználó!\n\nTájékoztatjuk, hogy fiókja törlésre került!";
+                smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                smtpServer.Port = 587;
+                smtpServer.EnableSsl = true;
+                smtpServer.Send(mail);
+
                 return Ok($"User deleted!");
             }
         }
