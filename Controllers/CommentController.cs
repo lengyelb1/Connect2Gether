@@ -175,9 +175,7 @@ namespace Connect2Gether_API.Controllers
             {
                 try
                 {
-                    List<Comment> comments = new List<Comment>();
-                    var comment = context.Comments.Include(p => p.User).FirstOrDefault(p => p.PostId == id);
-                    comments.Add(comment!);
+                    var comment = context.Comments.Include(p => p.User).Where(x => x.PostId == id).ToList();
 
                     if (comment == null)
                     {
@@ -185,7 +183,7 @@ namespace Connect2Gether_API.Controllers
                     }
                     else
                     {
-                        var simplifiedComment = comments.Select(item => new
+                        var simplifiedComment = comment.Select(item => new
                         {
                             item.Id,
                             item.Text,
