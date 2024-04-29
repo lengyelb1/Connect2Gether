@@ -30,22 +30,6 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        /*[HttpGet("SearchPost")]
-        public IActionResult SearchPost(string nev)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }*/
-
         [HttpGet("UserGetPostById")]
         public IActionResult UserGetPostById(int id)
         {

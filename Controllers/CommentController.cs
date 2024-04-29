@@ -204,31 +204,6 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-        /*[HttpPut("AdminOperation/ChangeCommentByAdmin")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult ChangeCommentByAdmin(int id, CommentPutDto commentPutDto)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var changedComment = context.Comments.FirstOrDefault(x => x.Id == id);
-                    if (changedComment == null)
-                    {
-                        return BadRequest("Nics ilyen comment!");
-                    }
-                    changedComment.Text = commentPutDto.Text!;
-                    context.Comments.Update(changedComment);
-                    context.SaveChanges();
-                    return Ok("Sikeres módosítás!");
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }*/
-
         [HttpPut("ChangeOwnComment")]
         [Authorize(Roles = "Default,Admin,Moderator")]
         public IActionResult ChangeOwnComment(CommentPutDto commentPutDto, int id, int userId)
@@ -322,37 +297,5 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-
-        /*[HttpDelete("DeleteCommentByPostUserId")]
-        [Authorize(Roles = "Default, Admin")]
-        public IActionResult DeleteByPostUserId(int id, int userId)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
-                    if (deleteComment == null)
-                    {
-                        return BadRequest("Nincs ilyen comment!");
-                    }
-                    var deletedCommentPost = context.UserPosts.FirstOrDefault(x => x.Id == deleteComment.PostId);
-                    if (deletedCommentPost!.UserId == userId)
-                    {
-                        context.Comments.Remove(deleteComment);
-                        context.SaveChanges();
-                        return Ok("Sikeres törlés!");
-                    }
-                    else
-                    {
-                        return BadRequest("Ez a user nem törölhet!");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }*/
     }
 }

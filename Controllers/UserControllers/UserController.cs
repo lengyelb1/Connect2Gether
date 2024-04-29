@@ -149,39 +149,6 @@ namespace Connect2Gether_API.Controllers.UserControllers
             }
         }
 
-        /*[HttpGet("SearchUser")]
-        [Authorize(Roles = "Default, Admin")]
-        public IActionResult SearchUser(string nev)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).Include(x => x.Permission).ToList());
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }*/
-
-        /*[HttpGet("SearchPost")]
-        public IActionResult SearchPost(string nev)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    return Ok(context.UserPosts.Where(x => x.Title.Contains(nev)).Include(x => x.User).Include(x => x.User!.Permission).ToList());
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }*/
-
         [HttpGet("UserGetPost")]
         public IActionResult UserGetPost(int id)
         {
@@ -318,6 +285,26 @@ namespace Connect2Gether_API.Controllers.UserControllers
 
                     }).ToList();
                     return Ok(simplifiedUserAlertMessage);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpDelete("DeleteAlertMessageById")]
+        [Authorize(Roles = "Default")]
+        public IActionResult DeleteAlertMessageById(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var deletedMessage = context.Alertmessages.FirstOrDefault(x => x.Id == id);
+                    context.Alertmessages.Remove(deletedMessage!);
+                    context.SaveChanges();
+                    return Ok("AlertMessage deleted sucessfully!");
                 }
                 catch (Exception ex)
                 {
