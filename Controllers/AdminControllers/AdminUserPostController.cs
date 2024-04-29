@@ -38,7 +38,28 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 try
                 {
                     var request = context.UserPosts.Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User).Where(x => x.Id == id).ToList();
-                    return Ok(request);
+                    var simplifiedRequest = request.Select(item => new
+                    {
+                        item.Id,
+                        item.Description,
+                        item.Title,
+                        item.Image,
+                        item.UploadDate,
+                        item.Like,
+                        item.Dislike,
+                        User = item.User != null ? new { item.User.Id, item.User.Username } : null,
+                        Comments = item.Comments!.Select(comment => new
+                        {
+                            comment.Id,
+                            comment.Text,
+                            comment.PostId,
+                            comment.UserId,
+                            User = comment.User != null ? new { comment.User.Username } : null,
+                            comment.UploadDate
+                        }).ToList()
+
+                    }).ToList();
+                    return Ok(simplifiedRequest);
                 }
                 catch (Exception ex)
                 {
