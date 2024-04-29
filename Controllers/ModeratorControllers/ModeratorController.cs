@@ -86,24 +86,6 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                             Description = userSuspiciousDto.Descrpition 
                         });
 
-                        MailMessage mail = new MailMessage();
-                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
-                        mail.From = new MailAddress("connectgether@gmail.com");
-                        mail.To.Add(user.Email!);
-                        mail.Subject = $"{userSuspiciousDto.Subject}";
-                        mail.Body = $"Kedves {user.Username}!\n{userSuspiciousDto.Message}\nÜdv,{userSuspiciousDto.Sender}";
-                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
-                        smtpServer.Port = 587;
-                        smtpServer.EnableSsl = true;
-                        smtpServer.Send(mail);
-
-                        context.Alertmessages.Add(new Alertmessage
-                        {
-                            UserId = user.Id,
-                            Title = userSuspiciousDto.Subject,
-                            Description = userSuspiciousDto.Descrpition
-                        });
-
                         context.SaveChanges();
 
                         return Ok("Added successfully!");

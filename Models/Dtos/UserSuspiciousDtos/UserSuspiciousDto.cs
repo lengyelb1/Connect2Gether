@@ -5,8 +5,6 @@
         public string Message { get; set; }
         public string Sender { get; set; }
         public string Descrpition { get; set; }
-        //public int UserId { get; set; }
-
         public string Subject { get; set; }
     }
 }

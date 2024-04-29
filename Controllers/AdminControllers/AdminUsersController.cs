@@ -126,21 +126,34 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        /*[HttpGet("SearchName")]
-        public IActionResult SearchName(string nev)
+        [HttpPost("EmailSender")]
+        public IActionResult EmailSender(int id, EmailSenderDto emailSenderDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).Include(x => x.Permission).ToList());
+                    var user = context.Users.FirstOrDefault(x => x.Id == id);
+
+                    MailMessage mail = new MailMessage();
+                    SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                    mail.From = new MailAddress("connectgether@gmail.com");
+                    mail.To.Add(user!.Email!);
+                    mail.Subject = $"{emailSenderDto.Subject}";
+                    mail.Body = $"{emailSenderDto.Body}";
+                    smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                    smtpServer.Port = 587;
+                    smtpServer.EnableSsl = true;
+                    smtpServer.Send(mail);
+
+                    return Ok("Email sent successfully!");
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
             }
-        }*/
+        }
 
         [HttpPost("RegisterWithOutCriterion")]
         public ActionResult<User> RegisterWithOutCriterion(RegistrationRequestDto registrationRequestDto)
