@@ -59,6 +59,13 @@ namespace Connect2Gether_API.Controllers
                     comment1.UploadDate = DateTime.Now;
 
                     context.Comments.Add(comment1);
+
+                    Alertmessage alertmessage = new Alertmessage();
+                    alertmessage.Title = "Kommenteltek!";
+                    alertmessage.Description = "Valaki kommentelt az egyik postod alá!";
+                    alertmessage.UserId = comment1.Post.UserId.Value;
+                    context.Alertmessages.Add(alertmessage);
+
                     context.SaveChanges();
                     return Ok("Upload successfully!");
                 }

@@ -1,4 +1,6 @@
-﻿namespace Connect2Gether_API.Models.Dtos.CommentDtos
+﻿using System.Text.Json.Serialization;
+
+namespace Connect2Gether_API.Models.Dtos.CommentDtos
 {
     public class CommentDto
     {
