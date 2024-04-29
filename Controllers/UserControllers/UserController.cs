@@ -189,7 +189,7 @@ namespace Connect2Gether_API.Controllers.UserControllers
             {
                 try
                 {
-                    var request = context.UserPosts.Include(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.User).Where(x => x.Id == id).ToList();
+                    var request = context.UserPosts.Include(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.User).Where(x => x.UserId == id).ToList();
                     var simplifiedRequest = request.Select(post => new
                     {
                         post.Id,
