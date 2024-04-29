@@ -1,11 +1,14 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.CommentDtos;
 using Connect2Gether_API.Models.Dtos.UserDtos;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Validations;
+using MySqlX.XDevAPI.Common;
 using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.AdminControllers
@@ -70,7 +73,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         }
 
         [HttpPost("SearchWithNameOrTitle")]
-        public IActionResult SearchWithNameOrTitle([FromBody] SearchDto keresettErtek)
+        public IActionResult SearchWithNameOrTitle([FromBody] SearchDto keresettErtek, int userId)
         {
             // Error 4001 nincs @ de van @
             using (var context = new Connect2getherContext())
@@ -97,22 +100,95 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                         }
                     }
 
-
+                    List<UserPostResponseDto> userPostDtoToLikes = new List<UserPostResponseDto>();
                     if (vankuk == true && nincskuk == false)
                     {
                         var outp = context.Users.Where(x => x.Username.Contains(keresettErtek.searchValue.TrimStart('@'))).ToList();
+                        var simplifiedOutp = outp.Select(user => new
+                        {
+                            user.Id,
+                            user.Username
+                        }).ToList();
 
-                        return Ok(outp.Count != 0 ? outp : null);
+                        return Ok(simplifiedOutp.Count != 0 ? simplifiedOutp : null);
                     }
                     else if (vankuk == false && nincskuk == true)
                     {
-                        var outp2 = context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek.searchValue)).ToList();
-                        return Ok(outp2.Count != 0 ? outp2 : null);
+                        var outp2 = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek.searchValue)).ToList();
+                        foreach (var item in outp2)
+                        {
+                            UserPostResponseDto userPost = new UserPostResponseDto();
+                            userPost.Id = item.Id;
+                            userPost.Image = item.Image;
+                            userPost.Description = item.Description;
+                            userPost.Title = item.Title;
+                            userPost.Like = item.Like;
+                            userPost.Dislike = item.Dislike;
+                            userPost.UserId = item.UserId;
+                            userPost.UserName = item.User!.Username;
+                            userPost.User = item.User;
+                            ICollection<Comment> comments = item.Comments!;
+                            foreach (var cmnt in comments)
+                            {
+                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
+
+                                userPost.Comments.Add(new CommentResponseDto
+                                {
+                                    Id = cmnt.Id,
+                                    Text = cmnt.Text,
+                                    PostId = cmnt.PostId,
+                                    UserId = cmnt.UserId,
+                                    UserName = cmnt.User!.Username,
+                                    CommentId = cmnt.CommentId,
+                                    UploadDate = cmnt.UploadDate
+                                });
+                            }
+                            userPost.UploadDate = item.UploadDate;
+                            userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
+                            userPostDtoToLikes.Add(userPost);
+                        }
+
+                        return Ok(userPostDtoToLikes.Count != 0 ? userPostDtoToLikes : null);
                     }
                     else if (vankuk == true && nincskuk == true)
                     {
-                        var outp3 = context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList();
-                        return Ok(outp3.Count != 0 ? outp3 : null);
+                        var outp3 = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList();
+                        foreach (var item in outp3)
+                        {
+                            UserPostResponseDto userPost = new UserPostResponseDto();
+                            userPost.Id = item.Id;
+                            userPost.Image = item.Image;
+                            userPost.Description = item.Description;
+                            userPost.Title = item.Title;
+                            userPost.Like = item.Like;
+                            userPost.Dislike = item.Dislike;
+                            userPost.UserId = item.UserId;
+                            userPost.UserName = item.User!.Username;
+                            userPost.User = item.User;
+                            ICollection<Comment> comments = item.Comments!;
+                            foreach (var cmnt in comments)
+                            {
+                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
+
+                                userPost.Comments.Add(new CommentResponseDto
+                                {
+                                    Id = cmnt.Id,
+                                    Text = cmnt.Text,
+                                    PostId = cmnt.PostId,
+                                    UserId = cmnt.UserId,
+                                    UserName = cmnt.User!.Username,
+                                    CommentId = cmnt.CommentId,
+                                    UploadDate = cmnt.UploadDate
+                                });
+                            }
+                            userPost.UploadDate = item.UploadDate;
+                            userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
+                            userPostDtoToLikes.Add(userPost);
+                        }
+
+                        return Ok(userPostDtoToLikes.Count != 0 ? userPostDtoToLikes : null);
                     }
                     else
                     {
