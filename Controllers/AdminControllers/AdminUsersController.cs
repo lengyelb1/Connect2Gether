@@ -203,7 +203,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         }
 
         [HttpPost("EmailSender")]
-        public IActionResult EmailSender(int id, EmailSenderDto emailSenderDto)
+        public IActionResult EmailSender(int id, string sender, EmailSenderDto emailSenderDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -216,7 +216,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     mail.From = new MailAddress("connectgether@gmail.com");
                     mail.To.Add(user!.Email!);
                     mail.Subject = $"{emailSenderDto.Subject}";
-                    mail.Body = $"{emailSenderDto.Body}";
+                    mail.Body = $"Kedves {user.Username}\n\n {emailSenderDto.Body} \n\nTisztelettel: {sender}";
                     smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
                     smtpServer.Port = 587;
                     smtpServer.EnableSsl = true;
