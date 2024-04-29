@@ -62,8 +62,48 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             {
                 try
                 {
-                    var request = context.Users.Include(x => x.Permission).FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
+                    List<User> usersList = new List<User>();
+                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.Rank).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    usersList.Add(userById!);
+                    List<UserByIdDto> userByIdDtoList = new List<UserByIdDto>();
+                    if (userById == null)
+                    {
+                        return BadRequest("This user does not exist!");
+                    }
+
+                    foreach (var item in usersList)
+                    {
+                        UserByIdDto userByIdDto = new UserByIdDto();
+                        userByIdDto.Id = item.Id;
+                        userByIdDto.Username = item.Username;
+                        userByIdDto.Rank = item.Rank;
+                        userByIdDto.Points = item.Point;
+                        userByIdDto.RegistrationDate = item.RegistrationDate;
+                        userByIdDto.LastLogin = item.LastLogin;
+                        ICollection<UserPost> posts = item.UserPosts!;
+                        foreach (var pts in posts)
+                        {
+                            pts.User = context.Users.FirstOrDefault(x => x.Id == pts.UserId);
+
+                            userByIdDto.UserPosts!.Add(new UserPostResponseDto
+                            {
+                                Id = pts.Id,
+                                Image = pts.Image,
+                                Description = pts.Description,
+                                Title = pts.Title,
+                                Like = pts.Like,
+                                Dislike = pts.Dislike,
+                                UserId = pts.UserId,
+                                UserName = pts.User!.Username,
+                                UploadDate = pts.UploadDate,
+                                Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null),
+                                Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Postid == pts.Id) != null)
+                            });
+                        }
+                        userByIdDtoList.Add(userByIdDto);
+                    }
+
+                    return Ok(userByIdDtoList);
                 }
                 catch (Exception ex)
                 {
