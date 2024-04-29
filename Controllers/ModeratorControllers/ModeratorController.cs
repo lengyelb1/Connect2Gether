@@ -1,9 +1,13 @@
 ﻿using Connect2Gether_API.Models;
+using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.UserSuspiciousDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Validations;
+using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.ModeratorControllers
 {
@@ -63,7 +67,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
         }
 
         [HttpPost("AddSuspicious")]
-        public IActionResult AddSuspicious(int id)
+        public IActionResult AddSuspicious(int id, UserSuspiciousDto userSuspiciousDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -76,8 +80,32 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                     }
                     else
                     {
-                        context.UserSuspicious.Add(new UserSuspiciou { UserId = user.Id });
+                        context.UserSuspicious.Add(new UserSuspiciou {
+                            UserId = user.Id, 
+                            Message = userSuspiciousDto.Message, 
+                            Description = userSuspiciousDto.Descrpition 
+                        });
+
+                        MailMessage mail = new MailMessage();
+                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("connectgether@gmail.com");
+                        mail.To.Add(user.Email!);
+                        mail.Subject = $"{userSuspiciousDto.Subject}";
+                        mail.Body = $"Kedves {user.Username}!\n{userSuspiciousDto.Message}\nÜdv,{userSuspiciousDto.Sender}";
+                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                        smtpServer.Port = 587;
+                        smtpServer.EnableSsl = true;
+                        smtpServer.Send(mail);
+
+                        context.Alertmessages.Add(new Alertmessage
+                        {
+                            UserId = user.Id,
+                            Title = userSuspiciousDto.Subject,
+                            Description = userSuspiciousDto.Descrpition
+                        });
+
                         context.SaveChanges();
+
                         return Ok("Added successfully!");
                     }
                 }

@@ -38,6 +38,45 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
+        [HttpGet("AlertMessageByUserId")]
+        public IActionResult AlertMessageByUserId(int userid)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Alertmessages.Where(x => x.UserId == userid).ToList();
+                    return Ok(user);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost("SendAlertMessageByUserId")]
+        public IActionResult SendAlertMessageByUserId(AlertMessageDto alertMessageDto)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    Alertmessage alertmessage = new Alertmessage();
+                    alertmessage.Title = alertMessageDto.title;
+                    alertmessage.Description = alertMessageDto.description;
+                    alertmessage.UserId = alertMessageDto.userId;
+                    context.Alertmessages.Add(alertmessage);
+                    context.SaveChanges();
+                    return Ok("User alertmessage sent successfully!");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         [HttpDelete("DeleteAlertMessageById")]
         public IActionResult DeleteAlertMessageById(int id)
         {

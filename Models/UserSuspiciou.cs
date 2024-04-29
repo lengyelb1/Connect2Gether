@@ -9,5 +9,9 @@ public partial class UserSuspiciou
 
     public int UserId { get; set; }
 
+    public string Description { get; set; } = null!;
+
+    public string Message { get; set; } = null!;
+
     public virtual User User { get; set; } = null!;
 }
