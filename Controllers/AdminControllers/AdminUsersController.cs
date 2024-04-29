@@ -77,6 +77,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                         userByIdDto.Id = item.Id;
                         userByIdDto.Username = item.Username;
                         userByIdDto.Rank = item.Rank;
+                        userByIdDto.Email = item.Email;
                         userByIdDto.Points = item.Point;
                         userByIdDto.RegistrationDate = item.RegistrationDate;
                         userByIdDto.LastLogin = item.LastLogin;
