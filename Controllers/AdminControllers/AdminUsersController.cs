@@ -96,6 +96,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                                 UserId = pts.UserId,
                                 UserName = pts.User!.Username,
                                 UploadDate = pts.UploadDate,
+                                Comments = convertComments(pts.Comments!.ToList()),
                                 Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null),
                                 Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Postid == pts.Id) != null)
                             });
@@ -110,6 +111,28 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                     return BadRequest(ex.Message);
                 }
             }
+        }
+
+        private ICollection<CommentResponseDto> convertComments(List<Comment> comments)
+        {
+            int x = 0;
+
+            List<CommentResponseDto> response = new List<CommentResponseDto>();
+
+            while (comments.Count != x)
+            {
+                response.Add(new CommentResponseDto
+                {
+                    Id = comments[x].Id,
+                    Text = comments[x].Text,
+                    PostId = comments[x].PostId,
+                    UserId = comments[x].UserId,
+                    UploadDate = comments[x].UploadDate,
+                    UserName = comments[x].User.Username
+                });
+                x++;
+            }
+            return response;
         }
 
         [HttpPost("SearchWithNameOrTitle")]
