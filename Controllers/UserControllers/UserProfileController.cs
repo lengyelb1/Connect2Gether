@@ -194,6 +194,12 @@ namespace Connect2Gether_API.Controllers.UserControllers
                     user!.Id = userId;
                     user.Username = userPutDto.UserName;
                     user.Email = userPutDto.Email;
+
+                    if (context.Users.FirstOrDefault((x) => x.Email == user.Email) != null)
+                    {
+                        return BadRequest("User existing!");
+                    }
+
                     context.Users.Update(user);
                     context.SaveChanges();
                     return Ok("Changes successfully!");

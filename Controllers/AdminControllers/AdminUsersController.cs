@@ -325,14 +325,14 @@ namespace Connect2Gether_API.Controllers.AdminControllers
         }
 
         [HttpPut("ChangeRegisterById")]
-        public ActionResult<User> ChangeRegisterById(UserPutDto userPutDto, int id)
+        public ActionResult<User> ChangeRegisterById(AdminUserPutDto adminUserPutDto, int id)
         {
             using (var context = new Connect2getherContext())
             {
                 var user = context.Users.FirstOrDefault((x) => x.Id == id);
-                user!.Username = userPutDto.UserName;
-                user.Email = userPutDto.Email;
-                user.PermissionId = userPutDto.permissionId;
+                user!.Username = adminUserPutDto.UserName;
+                user.Email = adminUserPutDto.Email;
+                user.PermissionId = adminUserPutDto.permissionId;
 
                 context.Users.Update(user);
                 context.SaveChanges();
