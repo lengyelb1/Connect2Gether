@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Ápr 29. 13:30
+-- Gép: localhost
+-- Létrehozás ideje: 2024. Ápr 30. 16:39
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -49,9 +49,10 @@ INSERT INTO `alertmessage` (`Id`, `Title`, `UserId`, `Description`) VALUES
 (8, 'string', 18, 'string'),
 (9, 'string', 18, 'string'),
 (10, 'stringdsadsadsad', 18, 'stringdsadsadad'),
-(11, 'stringdsadsada', 43, 'stringdsadsad'),
-(13, 'Kommenteltek!', 18, 'Valaki kommentelt az egyik postod alá!'),
-(14, 'Kommenteltek!', 19, 'Valaki kommentelt az egyik postod alá!');
+(14, 'Kommenteltek!', 19, 'Valaki kommentelt az egyik postod alá!'),
+(15, 'asd', 18, 'asd'),
+(16, 'asd', 18, 'asd'),
+(17, 'Kommenteltek!', 19, 'Valaki kommentelt az egyik postod alá!');
 
 -- --------------------------------------------------------
 
@@ -87,13 +88,6 @@ CREATE TABLE `deletedlikes` (
   `UserId` int(11) NOT NULL,
   `postId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
-
---
--- A tábla adatainak kiíratása `deletedlikes`
---
-
-INSERT INTO `deletedlikes` (`id`, `UserId`, `postId`) VALUES
-(7, 43, 31);
 
 -- --------------------------------------------------------
 
@@ -201,14 +195,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`Id`, `Username`, `HASH`, `Email`, `ActiveUser`, `RankId`, `RegistrationDate`, `Point`, `PermissionId`, `LastLogin`, `ProfileImage`, `ValidatedKey`) VALUES
-(16, 'bazsi', '$2a$04$Q0C3ffL38mWpwMz1okBehOJxe53Lr8r2dWjyKDJm71av6Ems.43iC', 'jb@gmail.com', 1, 1, '2024-03-18', 0, 3, '2024-04-29 11:10:12', '', ''),
+(16, 'bazsi', '$2a$04$Q0C3ffL38mWpwMz1okBehOJxe53Lr8r2dWjyKDJm71av6Ems.43iC', 'jb@gmail.com', 1, 1, '2024-03-18', 0, 3, '2024-04-30 16:16:31', '', ''),
 (17, 'balint', '$2a$04$/quw9t7VqhWaO.tks5Q2L.q3JIFmehNUj5TAbZ6He/aOBoDTfNBeW', 'string', 1, 1, '2024-03-18', 0, 3, '2024-04-29 11:47:27', '', ''),
 (18, 'balintUser', '$2a$04$echo9khsZ8hNJWAITgbcpuUQSxGHdP50U16x1IobDHB2kAi8h6C9O', 'string@gmail.com', 1, 1, '2024-03-18', 0, 1, '2024-04-18 11:22:01', '', ''),
 (19, 'bazsiUser', '$2a$11$CjA9IpkMvxYs9hgjHr4Mk.O.TuW6CvXQXwAlMIBWBFVSfXK3DWqBq', 'juhaszbazsi13@gmail.com', 1, 1, '2024-03-18', 2, 1, '2024-04-29 12:48:58', '', ''),
-(21, 'stringasd', '$2a$04$I5xhS9IIXDeLgWqUXKTxhuObH1PA7rW453bFqik75FYyIXGESU0he', 'stringasd@gmail.com', 1, 1, '2024-04-16', 0, 1, '2024-04-03 11:31:30', '', ''),
+(21, 'adamTest', '$2a$04$I5xhS9IIXDeLgWqUXKTxhuObH1PA7rW453bFqik75FYyIXGESU0he', 'adam@gmail@com', 1, 1, '2024-04-16', 0, 1, '2024-04-03 11:31:30', '', ''),
 (27, 'viktor', '$2a$04$or979DyWbZAUeiC2T9lRW.r1XU.TRmBJd9BdIvyevvMq9MHK5z89u', 'tviktor20000717@gmail.com', 1, 1, '2024-04-11', 0, 2, '2024-04-15 08:13:43', '', ''),
-(41, 'balintTest', '$2a$04$v7arXpq.wyXgDfv7iLVVb.f6/mhjB5CP7Aw9EYVBo6ABm.DHg.KzC', 'lengyelb@kkszki.hu', 1, 1, '2024-04-25', 0, 1, '0001-01-01 00:00:00', NULL, NULL),
-(42, 'jacko', '$2a$04$l3D8r97QBYrYBuqBekfR5OMxxo5ibCuSSyEoewf5U2UDT6VgM5TQm', 'juhaszb@kkszki.hu', 0, 1, '2024-04-29', 0, 1, '0001-01-01 00:00:00', NULL, '9ZFOcLGyvGffKlaQ'),
 (43, 'adam', '$2a$04$Iktj15rwuuwWECzDpfWvBOx2nYZBTFdgrmyarqN2b/FXG2Aj4stbm', 'kelemena@kkszki.hu', 1, 1, '2024-04-29', 0, 1, '2024-04-29 12:08:39', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -233,9 +225,7 @@ CREATE TABLE `user_post` (
 --
 
 INSERT INTO `user_post` (`Id`, `Image`, `Description`, `Title`, `Like`, `Dislike`, `UserId`, `uploadDate`) VALUES
-(31, NULL, 'Ez egy post!', 'Post címe', 0, 0, 19, '2024-03-25'),
-(42, NULL, 'string', 'string', 0, 0, 18, '2024-04-21'),
-(43, NULL, 'string', 'string', 0, 0, 18, '2024-04-21');
+(31, NULL, 'Ez egy post!', 'Post címe', 0, 0, 19, '2024-03-25');
 
 -- --------------------------------------------------------
 
@@ -249,14 +239,6 @@ CREATE TABLE `user_suspicious` (
   `Description` text NOT NULL,
   `Message` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- A tábla adatainak kiíratása `user_suspicious`
---
-
-INSERT INTO `user_suspicious` (`Id`, `UserId`, `Description`, `Message`) VALUES
-(7, 43, '+18 tartalom', 'Ez az üzenet amit a felhasználó kap!'),
-(8, 42, '+18 tartalom', 'Ez az üzenet amit a felhasználó kap!');
 
 -- --------------------------------------------------------
 
@@ -304,9 +286,14 @@ INSERT INTO `user_token` (`Id`, `UserId`, `Token`, `Token_expire_date`) VALUES
 (28, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NDY1MDYwLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.It_ttHnEz6k0S2l4v4UorxQaRx-OvFMTQ0LhTj2lZIpYo1tNGDhC7jjOc17DY8uzkss-Ebwcjazchk-st5I37A', '2024-04-30 10:17:40'),
 (29, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NDY4MjEyLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.7IicRXPimbswa779Y-RBtqwyU8lnwrfGuXVPFyFXxqmlLWSxeJ34DtAGNJgWmFKCPRB9BhC9oa0--DhZ-Dws_Q', '2024-04-30 11:10:12'),
 (30, 17, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmFsaW50Iiwicm9sZSI6IkFkbWluIiwiaWQiOiIxNyIsImV4cCI6MTcxNDQ3MDQ0NywiaXNzIjoiYXV0aC1hcGkiLCJhdWQiOiJhdXRoLWNsaWVudCJ9.nG1LqIEnjIdau-YQMojjGffVP1sP8GWzsz8Y8cgmk2OUC0ry2B_AtEnDyNS_-vevgie-3Ajf6bztqMhgkK-isw', '2024-04-30 11:47:27'),
-(31, 43, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYWRhbSIsInJvbGUiOiJEZWZhdWx0IiwiaWQiOiI0MyIsImV4cCI6MTcxNDQ3MDkxOSwiaXNzIjoiYXV0aC1hcGkiLCJhdWQiOiJhdXRoLWNsaWVudCJ9.YK2ILUQ9tTY0wZYw3GGGd8kClXvlYxuRpJU4BqbO8gfoVmpRoATQhxrdb4yDxaevk9k3jS2jzBUIpXyQN0h6-A', '2024-04-30 11:55:19'),
-(32, 43, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYWRhbSIsInJvbGUiOiJEZWZhdWx0IiwiaWQiOiI0MyIsImV4cCI6MTcxNDQ3MTcxOSwiaXNzIjoiYXV0aC1hcGkiLCJhdWQiOiJhdXRoLWNsaWVudCJ9.0TB2KdxtxqUO751fQJgs6A9ZZvWNdCFmhHfi9GIlhBrTCBg56hH2soR8mQ2g3GckN3ghzDVj4G_F-e_QiBZIMg', '2024-04-30 12:08:39'),
-(33, 19, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2lVc2VyIiwicm9sZSI6IkRlZmF1bHQiLCJpZCI6IjE5IiwiZXhwIjoxNzE0NDc0MTM4LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.LEqTPjOoBu7v8ahbC7gkWY5Bzwl_uuH5tXUk6ZPlAkZ3DWyvrYVM1c678sPmGtGSD23YnHJfGNJ0Bpmv-i8yow', '2024-04-30 12:48:58');
+(33, 19, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2lVc2VyIiwicm9sZSI6IkRlZmF1bHQiLCJpZCI6IjE5IiwiZXhwIjoxNzE0NDc0MTM4LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.LEqTPjOoBu7v8ahbC7gkWY5Bzwl_uuH5tXUk6ZPlAkZ3DWyvrYVM1c678sPmGtGSD23YnHJfGNJ0Bpmv-i8yow', '2024-04-30 12:48:58'),
+(34, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NDg4Mzg5LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.EEX9j1hO1KCG9kI3Zu7sNyPHbqCZZr5pNjnrCGy2BBREkfiYobx21Bs6bZiN_mXSNZNUqFCdKMX0PEX_HbotNQ', '2024-04-30 16:46:30'),
+(35, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NTY1ODYyLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0._fsiKKCBWplfxJwlb7KEyeKiO6A97o-T6FYJN2Hym4rNNUoOYAVraVm6Y-nkNq6fbX4ku0QGLlB4031lmLypjQ', '2024-05-01 14:17:42'),
+(36, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NTY1ODYyLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0._fsiKKCBWplfxJwlb7KEyeKiO6A97o-T6FYJN2Hym4rNNUoOYAVraVm6Y-nkNq6fbX4ku0QGLlB4031lmLypjQ', '2024-05-01 14:17:42'),
+(37, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NTY1OTY0LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.NGXd0Py65gNrPJyXJAVr48Fno9NKS2AGhbDaku8rnsgWinqNA4RekFvEsdiH9MjPsKSXeqJEK4fUv3t4XQZXSw', '2024-05-01 14:19:24'),
+(38, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NTY1OTY0LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.NGXd0Py65gNrPJyXJAVr48Fno9NKS2AGhbDaku8rnsgWinqNA4RekFvEsdiH9MjPsKSXeqJEK4fUv3t4XQZXSw', '2024-05-01 14:19:24'),
+(39, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NTY2OTg4LCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.qKW_zoT7Y7Hkgc4NY3NyOkdTdi_eHYXQEFfTIW8tOYTJBiXmfYQ-ZkqfLWIS0ckcmF3dbJtraJdvu9_1c5Ic2w', '2024-05-01 14:36:28'),
+(40, 16, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiYmF6c2kiLCJyb2xlIjoiQWRtaW4iLCJpZCI6IjE2IiwiZXhwIjoxNzE0NTcyOTkyLCJpc3MiOiJhdXRoLWFwaSIsImF1ZCI6ImF1dGgtY2xpZW50In0.Tb4IM7o9p7Mfd42bhbgap9smXXOtF_JdURqlOZ2UiMMIsU0j5lPko1F7q_kW6JvtTQ2gdBmLcdaQVsTqs1ncqA', '2024-05-01 16:16:32');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -402,31 +389,31 @@ ALTER TABLE `user_token`
 -- AUTO_INCREMENT a táblához `alertmessage`
 --
 ALTER TABLE `alertmessage`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT a táblához `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT a táblához `deletedlikes`
 --
 ALTER TABLE `deletedlikes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT a táblához `disliked_posts`
 --
 ALTER TABLE `disliked_posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT a táblához `liked_posts`
 --
 ALTER TABLE `liked_posts`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT a táblához `permissions`
@@ -438,25 +425,25 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT a táblához `user`
 --
 ALTER TABLE `user`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT a táblához `user_post`
 --
 ALTER TABLE `user_post`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT a táblához `user_suspicious`
 --
 ALTER TABLE `user_suspicious`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT a táblához `user_token`
 --
 ALTER TABLE `user_token`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Megkötések a kiírt táblákhoz
@@ -466,35 +453,35 @@ ALTER TABLE `user_token`
 -- Megkötések a táblához `alertmessage`
 --
 ALTER TABLE `alertmessage`
-  ADD CONSTRAINT `alertmessage_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`);
+  ADD CONSTRAINT `alertmessage_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `comment`
 --
 ALTER TABLE `comment`
-  ADD CONSTRAINT `comment_ibfk_3` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `comment_ibfk_4` FOREIGN KEY (`PostId`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `comment_ibfk_4` FOREIGN KEY (`PostId`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comment_ibfk_5` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `deletedlikes`
 --
 ALTER TABLE `deletedlikes`
-  ADD CONSTRAINT `deletedlikes_ibfk_2` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `deletedlikes_ibfk_3` FOREIGN KEY (`postId`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `deletedlikes_ibfk_3` FOREIGN KEY (`postId`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `deletedlikes_ibfk_4` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `disliked_posts`
 --
 ALTER TABLE `disliked_posts`
-  ADD CONSTRAINT `disliked_posts_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `disliked_posts_ibfk_2` FOREIGN KEY (`postid`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `disliked_posts_ibfk_2` FOREIGN KEY (`postid`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `disliked_posts_ibfk_3` FOREIGN KEY (`userid`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `liked_posts`
 --
 ALTER TABLE `liked_posts`
-  ADD CONSTRAINT `liked_posts_ibfk_3` FOREIGN KEY (`UserID`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `liked_posts_ibfk_4` FOREIGN KEY (`PostID`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `liked_posts_ibfk_4` FOREIGN KEY (`PostID`) REFERENCES `user_post` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `liked_posts_ibfk_5` FOREIGN KEY (`UserID`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `user`
@@ -507,7 +494,7 @@ ALTER TABLE `user`
 -- Megkötések a táblához `user_post`
 --
 ALTER TABLE `user_post`
-  ADD CONSTRAINT `user_post_ibfk_3` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`);
+  ADD CONSTRAINT `user_post_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `user_suspicious`

@@ -346,14 +346,11 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             using (var context = new Connect2getherContext())
             {
                 var deleteUser = context.Users.FirstOrDefault((x) => x.Id == id);
-                var deleteUserPost = context.UserPosts.FirstOrDefault(x => x.UserId == deleteUser!.Id);
                 if (deleteUser == null)
                 {
                     return BadRequest("This user does not exist!");
                 }
-                context.UserPosts.Remove(deleteUserPost!);
-                context.SaveChanges();
-                context.Users.Remove(deleteUser!);
+                context.Users.Remove(deleteUser);
                 context.SaveChanges();
 
                 MailMessage mail = new MailMessage();

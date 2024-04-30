@@ -22,7 +22,7 @@ public partial class UserPost
 
     public DateTime? UploadDate { get; set; }
 
-    public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     [JsonIgnore]
     public virtual ICollection<Deletedlike>? Deletedlikes { get; set; } = new List<Deletedlike>();

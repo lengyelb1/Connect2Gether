@@ -58,7 +58,6 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Alertmessages)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("alertmessage_ibfk_1");
         });
 
@@ -90,7 +89,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("comment_ibfk_3");
+                .HasConstraintName("comment_ibfk_5");
         });
 
         modelBuilder.Entity<Deletedlike>(entity =>
@@ -117,7 +116,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Deletedlikes)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("deletedlikes_ibfk_2");
+                .HasConstraintName("deletedlikes_ibfk_4");
         });
 
         modelBuilder.Entity<DislikedPost>(entity =>
@@ -146,7 +145,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.DislikedPosts)
                 .HasForeignKey(d => d.Userid)
-                .HasConstraintName("disliked_posts_ibfk_1");
+                .HasConstraintName("disliked_posts_ibfk_3");
         });
 
         modelBuilder.Entity<LikedPost>(entity =>
@@ -173,7 +172,7 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("liked_posts_ibfk_3");
+                .HasConstraintName("liked_posts_ibfk_5");
         });
 
         modelBuilder.Entity<Permission>(entity =>
@@ -275,8 +274,8 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.UserPosts)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("user_post_ibfk_3");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("user_post_ibfk_1");
         });
 
         modelBuilder.Entity<UserSuspiciou>(entity =>
