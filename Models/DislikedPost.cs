@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace Connect2Gether_API.Models;
 
-public partial class UserSuspiciou
+public partial class DislikedPost
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int Userid { get; set; }
 
-    public string Description { get; set; } = null!;
+    public int Postid { get; set; }
 
-    public string Message { get; set; } = null!;
+    public virtual UserPost Post { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

@@ -1,25 +1,38 @@
 ﻿using Connect2Gether_API.Models;
+using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.UserSuspiciousDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Validations;
+using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.ModeratorControllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Moderator")]
+    [Authorize(Roles = "Moderator, Admin")]
     public class ModeratorController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpGet("AllSuspiciousUser")]
+        public IActionResult AllSuspiciousUser()
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var request = context.UserSuspicious.ToList();
-                    return Ok(request);
+                    var request = context.UserSuspicious.Include(x => x.User).ToList();
+                    var simplifiedRequest = request.Select(userSuspicious => new
+                    {
+                        userSuspicious.Id,
+                        userSuspicious.UserId,
+                        userSuspicious.Description,
+                        User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedRequest);
                 }
                 catch (Exception ex)
                 {
@@ -28,15 +41,25 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id) 
+        [HttpGet("SuspiciousUserById")]
+        public IActionResult SuspiciousUserById(int id) 
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
+                    List<UserSuspiciou> userSuspiciousList = new List<UserSuspiciou>();
+                    var request = context.UserSuspicious.Include(x => x.User).FirstOrDefault(x => x.Id == id);
+                    userSuspiciousList.Add(request!);
+                    var simplifiedRequest = userSuspiciousList.Select(userSuspicious => new
+                    {
+                        userSuspicious.Id,
+                        userSuspicious.UserId,
+                        userSuspicious.Description,
+                        User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
+
+                    }).ToList();
+                    return Ok(simplifiedRequest);
                 }
                 catch (Exception ex)
                 {
@@ -45,8 +68,8 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
             }
         }
 
-        [HttpPost("{suspicious}")]
-        public IActionResult Post(int id)
+        [HttpPost("AddSuspicious")]
+        public IActionResult AddSuspicious(int id, UserSuspiciousDto userSuspiciousDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -55,19 +78,37 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                     var user = context.Users.FirstOrDefault(x => x.Id == id);
                     if (user == null)
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
                     else
                     {
-                        context.UserSuspicious.Add(new UserSuspiciou { UserId = user.Id });
+                        context.UserSuspicious.Add(new UserSuspiciou {
+                            UserId = user.Id, 
+                            Description = userSuspiciousDto.Descrpition,
+                            Message = ""
+                        });;
+
                         context.SaveChanges();
-                        return Ok("Sikeres hozzáadás!");
+
+                        return Ok("Added successfully!");
                     }
                 }
                 catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
+            }
+        }
+
+        [HttpDelete("DeleteSuspiciousById")]
+        public ActionResult DeleteSuspiciousById(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                var suspiciousUser = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
+                context.UserSuspicious.Remove(suspiciousUser!);
+                context.SaveChanges();
+                return Ok($"User removed suspicious!");
             }
         }
     }

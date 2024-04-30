@@ -8,17 +8,17 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     [Route("[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
-    public class AdminPermissionsController : ControllerBase
+    public class AdminPermissionController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult GetPermission()
+        [HttpGet("AllPermission")]
+        public IActionResult AllPermission()
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var request = context.Permissions.ToList();
-                    return Ok(request);
+                    var permissions = context.Permissions.ToList();
+                    return Ok(permissions);
                 }
                 catch (Exception ex)
                 {

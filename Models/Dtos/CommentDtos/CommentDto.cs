@@ -1,4 +1,6 @@
-﻿namespace Connect2Gether_API.Models.Dtos
+﻿using System.Text.Json.Serialization;
+
+namespace Connect2Gether_API.Models.Dtos.CommentDtos
 {
     public class CommentDto
     {
@@ -7,7 +9,5 @@
         public int PostId { get; set; }
         public int UserId { get; set; }
         public int CommentId { get; set; }
-
-
     }
 }

@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Data;
+using Connect2Gether_API.Controllers.Utilities;
+using System.Net.Mail;
+using System.Collections;
 
 namespace Connect2Gether_API.Controllers
 {
@@ -19,81 +22,79 @@ namespace Connect2Gether_API.Controllers
 
         private readonly int expire_day = 1;
 
-        public AuthController(IConfiguration configuration) { 
+        public AuthController(IConfiguration configuration)
+        {
             _configuration = configuration;
         }
 
-        [HttpPost("register")]
-
-        public ActionResult<User> Register(RegistrationRequestDto registrationRequestDto)
+        [HttpPost("Register")]
+        public ActionResult<User> Register(RegistrationRequestDto registrationRequestDto,string validationUrl)
         {
-            //try
-            //{
+            try
+            {
                 using (var context = new Connect2getherContext())
                 {
                     Permission defaultPermission = new Permission();
                     defaultPermission.Id = 1;
                     defaultPermission.Name = "Default";
 
-                    if (registrationRequestDto.Password.Length <8)
+                    if (PasswordChecker.CheckPassword(registrationRequestDto.Password!))
                     {
-                        return BadRequest("The password need to be 8 character lenght!");
-                    }else if (!(registrationRequestDto.Password.Any(char.IsUpper) && registrationRequestDto.Password.Any(char.IsLower)))
-                    {
-                        return BadRequest("The password need to contain upper and lower character!");
-                    }else if (!registrationRequestDto.Password.Any(char.IsDigit))
-                    {
-                        return BadRequest("The password need to contain number!");
-                    }else if (!registrationRequestDto.Password.Any(char.IsSymbol))
-                    {
-                        return BadRequest("The password need to contain special character!");
-                    }
+                        string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password, 4);
+                        User user = new User();
+                        user.Id = 0;
+                        user.Username = registrationRequestDto.UserName!;
+                        user.Hash = passwordHash;
+                        user.Email = registrationRequestDto.Email!;
+                        user.ActiveUser = false;
+                        user.RankId = 1;
+                        user.RegistrationDate = DateTime.Today;
+                        user.PermissionId = defaultPermission.Id;
+                        user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
+                        user.ProfileImage = null;
+                        user.ValidatedKey = RandomToken(16);
 
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password,4);
-                    User user = new User();
-                    user.Username = registrationRequestDto.UserName;
-                    user.Hash = passwordHash;
-                    user.Email = registrationRequestDto.Email;
-                    user.RegistrationDate = DateTime.Today;
-                    user.PermissionId = defaultPermission.Id;
-                    user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+                        if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null || context.Users.FirstOrDefault((x) => x.Email == user.Email) != null)
+                        {
+                            return BadRequest("User existing!");
+                        }
 
-                    /*
-                    if (context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name) != null)
-                    {
-                        //user.PermissionId = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name).Id;
-                        //user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+                        context.Users.Add(user);
+                        context.SaveChanges();
+
+                        MailMessage mail = new MailMessage();
+                        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                        mail.From = new MailAddress("connectgether@gmail.com");
+                        mail.To.Add(registrationRequestDto.Email!);
+                        mail.Subject = "Sikeres regisztráció";
+                        mail.Body = $"Kedves Felhasználó!\n\nTájékoztatunk téged, hogy a regisztráció sikeres volt!\nItt találod a visszaigazoló url: {validationUrl+user.ValidatedKey}\n\nReméljük meg lesz elégetve oldalunkkal!";
+                        smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                        smtpServer.Port = 587;
+                        smtpServer.EnableSsl = true;
+                        smtpServer.Send(mail);
+
+                        return Ok("User added!");
                     }
                     else
                     {
+                        return BadRequest("The password does not meet the criteria!");
                     }
-                    */
-
-                    if (context.Users.FirstOrDefault((x)=> x.Username == user.Username) != null)
-                    {
-                        return BadRequest("User existing!");
-                    }
-
-                    context.Users.Add(user);
-                    context.SaveChanges();
-                    return Ok("User added!");
                 }
-            /*}
+            }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            */
         }
-        [HttpPost("login")]
 
+        [HttpPost("Login")]
         public ActionResult<User> Login(LoginRequestDto loginRequestDto)
         {
             try
             {
                 using (var context = new Connect2getherContext())
                 {
-                    User user = context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName);
+                    User user = context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName)!;
 
                     if (user == null)
                     {
@@ -105,28 +106,64 @@ namespace Connect2Gether_API.Controllers
                         return BadRequest("Wrong password or Username!");
                     }
 
-                    context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName).LastLogin = DateTime.Now;
-                    string token = CreateToken(user);
-                    context.UserTokens.Add(new UserToken { UserId = user.Id, Token = token, TokenExpireDate = DateTime.Now.AddDays(expire_day) });
-                    context.SaveChanges();
+                    if (user.ActiveUser == true)
+                    {
+                        context.Users.FirstOrDefault((x) => x.Username == loginRequestDto.UserName)!.LastLogin = DateTime.Now;
+                        string token = CreateToken(user);
+                        context.UserTokens.Add(new UserToken { UserId = user.Id, Token = token, TokenExpireDate = DateTime.Now.AddDays(expire_day) });
+                        context.SaveChanges();
 
-                    return Ok(token);
+                        return Ok(token);
+                    }
+                    else
+                    {
+                        return BadRequest("You cannot log in with this user!");
+                    }
                 }
-                
+
 
             }
             catch (Exception e)
             {
-                return BadRequest("Something went wrong!");   
+                Console.WriteLine(e.Message);
+                return BadRequest("Something went wrong!");
             }
-            
+
+        }
+
+        [HttpPut("ValidatedUser")]
+        public IActionResult ValidatedUser(string key)
+        {
+            using (var context = new Connect2getherContext())
+            {
+                try
+                {
+                    var user = context.Users.FirstOrDefault(x => x.ValidatedKey == key);
+                    if (user == null)
+                    {
+                        return BadRequest("This user does not exist!");
+                    }
+                    else
+                    {
+                        user!.ActiveUser = true;
+                        user.ValidatedKey = null!;
+                        context.Update(user);
+                        context.SaveChanges();
+                        return Ok("Confirmation successfully!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
         }
 
         private string CreateToken(User user)
         {
             using (var context = new Connect2getherContext())
             {
-                string permission = context.Permissions.FirstOrDefault((x)=> x.Id == context.Users.FirstOrDefault((x) => x.Username == user.Username).PermissionId).Name;
+                string permission = context.Permissions.FirstOrDefault((x) => x.Id == context.Users.FirstOrDefault((x) => x.Username == user.Username)!.PermissionId)!.Name;
 
                 List<Claim> claims = new List<Claim>()
                 {
@@ -138,10 +175,10 @@ namespace Connect2Gether_API.Controllers
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AuthSettings:JwtOptions:Token").Value!));
 
-                var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
                 var token = new JwtSecurityToken(
-                    claims:claims,
+                    claims: claims,
                     expires: DateTime.Now.AddDays(expire_day),
                     signingCredentials: creds,
                     audience: _configuration.GetSection("AuthSettings:JwtOptions:Audience").Value,
@@ -152,7 +189,29 @@ namespace Connect2Gether_API.Controllers
 
                 return jwt;
             }
+        }
 
+        private string RandomToken(int length)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            Random r = new Random();
+
+            string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string alpha_lower = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLower();
+            string nums = "0123456789";
+
+            List<string> list = new List<string>()
+            {
+                alpha, nums, alpha_lower
+            };
+            
+            for (int i = 0; i < length; i++)
+            {
+                string randomChar = list[r.Next(list.Count)];
+                stringBuilder.Append(randomChar[r.Next(randomChar.Length)]);
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

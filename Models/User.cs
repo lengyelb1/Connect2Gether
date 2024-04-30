@@ -35,14 +35,28 @@ public partial class User
 
     public DateTime LastLogin { get; set; }
 
-    public virtual ICollection<Alertmessage> Alertmessages { get; set; } = new List<Alertmessage>();
+    public byte[]? ProfileImage { get; set; }
+
+    public string? ValidatedKey { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<Alertmessage>? Alertmessages { get; set; } = new List<Alertmessage>();
 
     [JsonIgnore]
     public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<LikedPost> LikedPosts { get; set; } = new List<LikedPost>();
+    [JsonIgnore]
+    public virtual ICollection<Deletedlike>? Deletedlikes { get; set; } = new List<Deletedlike>();
+
+    [JsonIgnore]
+    public virtual ICollection<DislikedPost>? DislikedPosts { get; set; } = new List<DislikedPost>();
+
+    [JsonIgnore]
+    public virtual ICollection<LikedPost>? LikedPosts { get; set; } = new List<LikedPost>();
 
     public virtual Permission Permission { get; set; } = null!;
+
+    public virtual Rank Rank { get; set; } = null!;
 
     [JsonIgnore]
     public virtual ICollection<UserPost>? UserPosts { get; set; } = new List<UserPost>();
@@ -50,5 +64,6 @@ public partial class User
     [JsonIgnore]
     public virtual UserSuspiciou? UserSuspiciou { get; set; }
 
-    public virtual UserToken? UserToken { get; set; }
+    [JsonIgnore]
+    public virtual ICollection<UserToken>? UserTokens { get; set; } = new List<UserToken>();
 }

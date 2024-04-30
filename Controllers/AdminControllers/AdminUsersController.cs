@@ -1,10 +1,15 @@
 ﻿using Connect2Gether_API.Models;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.CommentDtos;
 using Connect2Gether_API.Models.Dtos.UserDtos;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
+using MySqlX.XDevAPI.Common;
+using System.Net.Mail;
 
 namespace Connect2Gether_API.Controllers.AdminControllers
 {
@@ -15,8 +20,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
     {
         public static User user = new User();
 
-        [HttpGet("userdb")]
-        public IActionResult UserDB()
+        [HttpGet("UserCount")]
+        public IActionResult UserCount()
         {
             using (var context = new Connect2getherContext())
             {
@@ -32,25 +37,8 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("userpostdb")]
-        public IActionResult UserPostDB()
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var db = context.UserPosts.ToList().Count();
-                    return Ok(db);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("AllUser")]
+        public async Task<IActionResult> AllUser()
         {
             using (var context = new Connect2getherContext())
             {
@@ -67,75 +55,58 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("GetAllSuspicious")]
-        public IActionResult GetAllSuspicious()
+        [HttpGet("UserById")]
+        public IActionResult UserById(int id)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var user = context.UserSuspicious.Include(x => x.User).Include(x => x.User.Permission).ToList();
-                    return Ok(user);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var request = context.Users.Include(x => x.Permission).FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet("SuspiciousId")]
-        public IActionResult GetByIdSuspicious(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var request = context.UserSuspicious.FirstOrDefault(x => x.Id == id);
-                    return Ok(request);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpPost("suspicious")]
-        public IActionResult Post(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var user = context.Users.FirstOrDefault(x => x.Id == id);
-                    if (user == null)
+                    List<User> usersList = new List<User>();
+                    var userById = context.Users.Include(x => x.UserPosts)!.ThenInclude(x => x.Comments)!.ThenInclude(x => x.User).Include(x => x.Rank).Include(x => x.Permission).Include(x => x.LikedPosts).FirstOrDefault(x => x.Id == id);
+                    usersList.Add(userById!);
+                    List<UserByIdDto> userByIdDtoList = new List<UserByIdDto>();
+                    if (userById == null)
                     {
-                        return BadRequest("Nincs ilyen user!");
+                        return BadRequest("This user does not exist!");
                     }
-                    else
+
+                    foreach (var item in usersList)
                     {
-                        context.UserSuspicious.Add(new UserSuspiciou { UserId = user.Id });
-                        context.SaveChanges();
-                        return Ok("Sikeres hozzáadás!");
+                        UserByIdDto userByIdDto = new UserByIdDto();
+                        userByIdDto.Id = item.Id;
+                        userByIdDto.Username = item.Username;
+                        userByIdDto.Rank = item.Rank;
+                        userByIdDto.Email = item.Email;
+                        userByIdDto.Points = item.Point;
+                        userByIdDto.PermissionId = item.PermissionId;
+                        userByIdDto.RegistrationDate = item.RegistrationDate;
+                        userByIdDto.LastLogin = item.LastLogin;
+                        ICollection<UserPost> posts = item.UserPosts!;
+                        foreach (var pts in posts)
+                        {
+                            pts.User = context.Users.FirstOrDefault(x => x.Id == pts.UserId);
+
+                            userByIdDto.UserPosts!.Add(new UserPostResponseDto
+                            {
+                                Id = pts.Id,
+                                Image = pts.Image,
+                                Description = pts.Description,
+                                Title = pts.Title,
+                                Like = pts.Like,
+                                Dislike = pts.Dislike,
+                                UserId = pts.UserId,
+                                UserName = pts.User!.Username,
+                                UploadDate = pts.UploadDate,
+                                Comments = convertComments(pts.Comments!.ToList()),
+                                Liked = (context.LikedPosts.FirstOrDefault(x => x.PostId == pts.Id) != null),
+                                Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Postid == pts.Id) != null)
+                            });
+                        }
+                        userByIdDtoList.Add(userByIdDto);
                     }
+
+                    return Ok(userByIdDtoList);
                 }
                 catch (Exception ex)
                 {
@@ -144,15 +115,37 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("KeresoWithNevOrCim")]
-        public IActionResult SearchWithNameOrTitle(string keresettErtek)
+        private ICollection<CommentResponseDto> convertComments(List<Comment> comments)
+        {
+            int x = 0;
+
+            List<CommentResponseDto> response = new List<CommentResponseDto>();
+
+            while (comments.Count != x)
+            {
+                response.Add(new CommentResponseDto
+                {
+                    Id = comments[x].Id,
+                    Text = comments[x].Text,
+                    PostId = comments[x].PostId,
+                    UserId = comments[x].UserId,
+                    UploadDate = comments[x].UploadDate,
+                    UserName = comments[x].User.Username
+                });
+                x++;
+            }
+            return response;
+        }
+
+        [HttpPost("SearchWithNameOrTitle")]
+        public IActionResult SearchWithNameOrTitle([FromBody] SearchDto keresettErtek, int userId)
         {
             // Error 4001 nincs @ de van @
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    string[] strings = keresettErtek.Split(' ');
+                    string[] strings = keresettErtek.searchValue!.Split(' ');
                     bool vankuk = false;
                     bool nincskuk = false;
                     string usernev = "";
@@ -171,17 +164,96 @@ namespace Connect2Gether_API.Controllers.AdminControllers
 
                         }
                     }
+
+                    List<UserPostResponseDto> userPostDtoToLikes = new List<UserPostResponseDto>();
                     if (vankuk == true && nincskuk == false)
                     {
-                        return Ok(context.Users.Where(x => x.Username.Contains(keresettErtek.TrimStart('@'))).ToList());
+                        var outp = context.Users.Where(x => x.Username.Contains(keresettErtek.searchValue.TrimStart('@'))).ToList();
+                        var simplifiedOutp = outp.Select(user => new
+                        {
+                            user.Id,
+                            user.Username
+                        }).ToList();
+
+                        return Ok(simplifiedOutp.Count != 0 ? simplifiedOutp : null);
                     }
                     else if (vankuk == false && nincskuk == true)
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek)).ToList());
+                        var outp2 = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(keresettErtek.searchValue)).ToList();
+                        foreach (var item in outp2)
+                        {
+                            UserPostResponseDto userPost = new UserPostResponseDto();
+                            userPost.Id = item.Id;
+                            userPost.Image = item.Image;
+                            userPost.Description = item.Description;
+                            userPost.Title = item.Title;
+                            userPost.Like = item.Like;
+                            userPost.Dislike = item.Dislike;
+                            userPost.UserId = item.UserId;
+                            userPost.UserName = item.User!.Username;
+                            userPost.User = item.User;
+                            ICollection<Comment> comments = item.Comments!;
+                            foreach (var cmnt in comments)
+                            {
+                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
+
+                                userPost.Comments.Add(new CommentResponseDto
+                                {
+                                    Id = cmnt.Id,
+                                    Text = cmnt.Text,
+                                    PostId = cmnt.PostId,
+                                    UserId = cmnt.UserId,
+                                    UserName = cmnt.User!.Username,
+                                    CommentId = cmnt.CommentId,
+                                    UploadDate = cmnt.UploadDate
+                                });
+                            }
+                            userPost.UploadDate = item.UploadDate;
+                            userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
+                            userPostDtoToLikes.Add(userPost);
+                        }
+
+                        return Ok(userPostDtoToLikes.Count != 0 ? userPostDtoToLikes : null);
                     }
                     else if (vankuk == true && nincskuk == true)
                     {
-                        return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList());
+                        var outp3 = context.UserPosts.Include(x => x.Comments).Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.ToLower().Contains(cim.ToLower().TrimStart())).ToList();
+                        foreach (var item in outp3)
+                        {
+                            UserPostResponseDto userPost = new UserPostResponseDto();
+                            userPost.Id = item.Id;
+                            userPost.Image = item.Image;
+                            userPost.Description = item.Description;
+                            userPost.Title = item.Title;
+                            userPost.Like = item.Like;
+                            userPost.Dislike = item.Dislike;
+                            userPost.UserId = item.UserId;
+                            userPost.UserName = item.User!.Username;
+                            userPost.User = item.User;
+                            ICollection<Comment> comments = item.Comments!;
+                            foreach (var cmnt in comments)
+                            {
+                                cmnt.User = context.Users.FirstOrDefault(u => u.Id == cmnt.UserId)!;
+
+                                userPost.Comments.Add(new CommentResponseDto
+                                {
+                                    Id = cmnt.Id,
+                                    Text = cmnt.Text,
+                                    PostId = cmnt.PostId,
+                                    UserId = cmnt.UserId,
+                                    UserName = cmnt.User!.Username,
+                                    CommentId = cmnt.CommentId,
+                                    UploadDate = cmnt.UploadDate
+                                });
+                            }
+                            userPost.UploadDate = item.UploadDate;
+                            userPost.Liked = (context.LikedPosts.FirstOrDefault(x => x.UserId == userId && x.PostId == userPost.Id) != null);
+                            userPost.Disliked = (context.DislikedPosts.FirstOrDefault(x => x.Userid == userId && x.Postid == userPost.Id) != null);
+                            userPostDtoToLikes.Add(userPost);
+                        }
+
+                        return Ok(userPostDtoToLikes.Count != 0 ? userPostDtoToLikes : null);
                     }
                     else
                     {
@@ -195,14 +267,27 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("nev")]
-        public IActionResult GetNev(string nev)
+        [HttpPost("EmailSender")]
+        public IActionResult EmailSender(int id, string sender, EmailSenderDto emailSenderDto)
         {
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    return Ok(context.Users.Where(x => x.Username.Contains(nev)).ToList());
+                    var user = context.Users.FirstOrDefault(x => x.Id == id);
+
+                    MailMessage mail = new MailMessage();
+                    SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                    mail.From = new MailAddress("connectgether@gmail.com");
+                    mail.To.Add(user!.Email!);
+                    mail.Subject = $"{emailSenderDto.Subject}";
+                    mail.Body = $"Kedves {user.Username}\n\n {emailSenderDto.Body} \n\nTisztelettel: {sender}";
+                    smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                    smtpServer.Port = 587;
+                    smtpServer.EnableSsl = true;
+                    smtpServer.Send(mail);
+
+                    return Ok("Email sent successfully!");
                 }
                 catch (Exception ex)
                 {
@@ -211,41 +296,7 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpGet("postnev")]
-        public IActionResult GetPostNev(string nev)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    return Ok(context.UserPosts.Include(x => x.User).Include(x => x.User!.Permission).Where(x => x.Title.Contains(nev)).ToList());
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpGet("UserGetPosts")]
-        public IActionResult UserGetPosts(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                try
-                {
-                    var request = context.UserPosts.Include(x => x.Comments).Where(x => x.User!.Id == id).ToList();
-                    return Ok(request);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-        }
-
-        [HttpPost("register")]
-
+        [HttpPost("RegisterWithOutCriterion")]
         public ActionResult<User> RegisterWithOutCriterion(RegistrationRequestDto registrationRequestDto)
         {
             using (var context = new Connect2getherContext())
@@ -255,12 +306,12 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 defaultPermission.Name = "Default";
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationRequestDto.Password, 4);
                 User user = new User();
-                user.Username = registrationRequestDto.UserName;
+                user.Username = registrationRequestDto.UserName!;
                 user.Hash = passwordHash;
-                user.Email = registrationRequestDto.Email;
+                user.Email = registrationRequestDto.Email!;
                 user.RegistrationDate = DateTime.Today;
                 user.PermissionId = defaultPermission.Id;
-                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name);
+                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == defaultPermission.Id && x.Name == defaultPermission.Name)!;
 
                 if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
                 {
@@ -273,24 +324,15 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpPut("id")]
-
-        public ActionResult<User> RegisterPut(UserPutDto userPutDto, int id)
+        [HttpPut("ChangeRegisterById")]
+        public ActionResult<User> ChangeRegisterById(AdminUserPutDto adminUserPutDto, int id)
         {
             using (var context = new Connect2getherContext())
             {
-                User user = new User();
-                user.Id = id;
-                user.Username = userPutDto.UserName;
-                user.Email = userPutDto.Email;
-                user.RegistrationDate = DateTime.Today;
-                user.PermissionId = userPutDto.PermissionId;
-                user.Permission = context.Permissions.FirstOrDefault((x) => x.Id == id);
-
-                if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
-                {
-                    return BadRequest("User existing!");
-                }
+                var user = context.Users.FirstOrDefault((x) => x.Id == id);
+                user!.Username = adminUserPutDto.UserName;
+                user.Email = adminUserPutDto.Email;
+                user.PermissionId = adminUserPutDto.permissionId;
 
                 context.Users.Update(user);
                 context.SaveChanges();
@@ -298,26 +340,30 @@ namespace Connect2Gether_API.Controllers.AdminControllers
             }
         }
 
-        [HttpDelete("id")]
-        public ActionResult Delete(int id) 
+        [HttpDelete("DeleteUserById")]
+        public ActionResult DeleteUserById(int id) 
         {
             using (var context = new Connect2getherContext())
             {
-                User user = new User { Id = id };
-                context.Users.Remove(user);
+                var deleteUser = context.Users.FirstOrDefault((x) => x.Id == id);
+                if (deleteUser == null)
+                {
+                    return BadRequest("This user does not exist!");
+                }
+                context.Users.Remove(deleteUser);
                 context.SaveChanges();
-                return Ok($"User deleted!");
-            }
-        }
 
-        [HttpDelete("SuspiciousId")]
-        public ActionResult DeleteSuspicious(int id)
-        {
-            using (var context = new Connect2getherContext())
-            {
-                UserSuspiciou userSuspiciou = new UserSuspiciou { Id = id };
-                context.UserSuspicious.Remove(userSuspiciou);
-                context.SaveChanges();
+                MailMessage mail = new MailMessage();
+                SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress("connectgether@gmail.com");
+                mail.To.Add(deleteUser.Email);
+                mail.Subject = "Figyelmeztetés!";
+                mail.Body = $"Kedves Felhasználó!\n\nTájékoztatjuk, hogy fiókja törlésre került!";
+                smtpServer.Credentials = new System.Net.NetworkCredential("connectgether@gmail.com", "sdph etlk bmbw vopl");
+                smtpServer.Port = 587;
+                smtpServer.EnableSsl = true;
+                smtpServer.Send(mail);
+
                 return Ok($"User deleted!");
             }
         }

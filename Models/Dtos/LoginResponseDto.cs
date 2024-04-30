@@ -1,4 +1,6 @@
-﻿namespace Connect2Gether_API.Models.Dtos
+﻿using Connect2Gether_API.Models.Dtos.UserDtos;
+
+namespace Connect2Gether_API.Models.Dtos
 {
     public class LoginResponseDto
     {

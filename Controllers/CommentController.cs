@@ -12,7 +12,11 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
+using MySqlX.XDevAPI.Common;
+using Connect2Gether_API.Models.Dtos.CommentDtos;
+using System.Collections.Generic;
 using Connect2Gether_API.Models.Dtos;
+using Connect2Gether_API.Models.Dtos.UserPostDtos;
 
 
 
@@ -30,14 +34,16 @@ namespace Connect2Gether_API.Controllers
             var jwtHandler = new JwtSecurityTokenHandler();
             return jwtHandler.ReadJwtToken(token);
         }
+
         public static int JWTokenDecodeID(string jwt)
         {
             JwtSecurityToken token = JWTokenDecoder(jwt);
             return int.Parse(token.Claims.First(claim => claim.Type == "id").Value);
         }
-        [HttpPost]
-        [Authorize(Roles = "Admin, Default, Moderator")]
-        public IActionResult Post(Comment comment)
+
+        [HttpPost("AddComment")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
+        public IActionResult AddComment(CommentDto commentDto)
         {
             using (var context = new Connect2getherContext())
             {
@@ -45,16 +51,23 @@ namespace Connect2Gether_API.Controllers
                 {
                     Comment comment1 = new Comment();
 
-                    comment1.Id = comment.Id;
-                    comment1.Post = context.UserPosts.FirstOrDefault(p => p.Id == comment.PostId);
-                    comment1.User = context.Users.FirstOrDefault(p => p.Id == comment.UserId);
-                    comment1.Text = comment.Text;
-                    comment1.CommentId = comment.CommentId;
+                    comment1.Id = commentDto.Id;
+                    comment1.Post = context.UserPosts.FirstOrDefault(p => p.Id == commentDto.PostId);
+                    comment1.User = context.Users.FirstOrDefault(p => p.Id == commentDto.UserId);
+                    comment1.Text = commentDto.Text;
+                    comment1.CommentId = commentDto.CommentId;
                     comment1.UploadDate = DateTime.Now;
 
                     context.Comments.Add(comment1);
+
+                    Alertmessage alertmessage = new Alertmessage();
+                    alertmessage.Title = "Kommenteltek!";
+                    alertmessage.Description = "Valaki kommentelt az egyik postod alá!";
+                    alertmessage.UserId = comment1.Post.UserId.Value;
+                    context.Alertmessages.Add(alertmessage);
+
                     context.SaveChanges();
-                    return Ok("Sikeres feltöltés!");
+                    return Ok("Upload successfully!");
                 }
                 catch (Exception ex)
                 {
@@ -62,45 +75,25 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-        [HttpGet]
-        public IActionResult Get()
+
+        [HttpGet("AllComment")]
+        public IActionResult AllComment()
         {
             try
             {
                 using (var context = new Connect2getherContext())
                 {
-                    return Ok(context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToList());
-
-                }
-
-
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-
-            }
-
-        }
-        [HttpGet("{id}")]
-        public IActionResult GetByPost(int id)
-        {
-            try
-            {
-                using (var context = new Connect2getherContext())
-                {
-
-                    var post = context.UserPosts.Include(p => p.Comments).FirstOrDefault(p => p.Id == id);
-
-                    if (post == null)
+                    var result = context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToList();
+                    var simplifiedResult = result.Select(comment => new
                     {
-                        return NotFound("Nincs ilyen Post");
-                    }
-                    else
-                    {
-
-                        return Ok(post.Comments.ToList());
-                    }
+                        comment.Id,
+                        comment.Text,
+                        comment.PostId,
+                        comment.UserId,
+                        comment.UploadDate,
+                        User = new { comment.User!.Username },
+                    }).ToList();
+                    return Ok(simplifiedResult);
                 }
             }
             catch (Exception e)
@@ -109,29 +102,33 @@ namespace Connect2Gether_API.Controllers
             }
         }
 
-
-
-        [Authorize(Roles = "Admin")]
-        [HttpPut("AdminOperation/{id}")]
-        public IActionResult Put(int id, CommentDto updatedCommentDto)
+        [HttpGet("AllCommentByOwner")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
+        public async Task<IActionResult> AllCommentByOwner(int userId)
         {
-
             using (var context = new Connect2getherContext())
             {
                 try
                 {
-                    var existingComment = context.Comments.FirstOrDefault(c => c.Id == id);
-
-                    if (existingComment == null)
+                    List<AllCommentByOwnerDto> listAllCommentByOwners = new List<AllCommentByOwnerDto>();
+                    var result = await context.Comments.Include(x => x.User).Include(x => x.User!.Permission).ToListAsync();
+                    foreach (var item in result)
                     {
-                        return NotFound("A megadott komment nem található.");
+                        AllCommentByOwnerDto allCommentByOwner = new AllCommentByOwnerDto();
+                        allCommentByOwner.Id = item.Id;
+                        allCommentByOwner.Text = item.Text;
+                        allCommentByOwner.PostId = item.PostId;
+                        allCommentByOwner.UserId = item.UserId;
+                        allCommentByOwner.CommentId = item.CommentId;
+                        allCommentByOwner.UploadDate = item.UploadDate;
+                        allCommentByOwner.UserName = item.User!.Username;
+                        allCommentByOwner.OwnComment = item.UserId == userId;
+
+                        listAllCommentByOwners.Add(allCommentByOwner);
                     }
 
-                    existingComment.Text = updatedCommentDto.Text;
-
                     context.SaveChanges();
-
-                    return Ok("Sikeres frissítés!");
+                    return Ok(listAllCommentByOwners);
                 }
                 catch (Exception ex)
                 {
@@ -139,38 +136,72 @@ namespace Connect2Gether_API.Controllers
                 }
             }
         }
-        [Authorize(Roles = "Default,Admin")]
-        [HttpPut]
-        public IActionResult OwnCommentPut(CommentDto commentDto, string token)
+
+        [HttpGet("CommentById")]
+        public IActionResult CommentById(int id)
         {
-
-            int JWTUserid = JWTokenDecodeID(token); //itt kiszedi a  tokenből az ID-t
-
-            if (JWTUserid == commentDto.UserId) //ellenőrzi a useré a komment?
+            try
             {
+                using (var context = new Connect2getherContext())
+                {
+                    List<Comment> comments = new List<Comment>();
+                    var comment = context.Comments.Include(p => p.User).FirstOrDefault(p => p.Id == id);
+                    comments.Add(comment!);
 
+                    if (comment == null)
+                    {
+                        return NotFound("This comment does not exist!");
+                    }
+                    else
+                    {
+                        var simplifiedComment = comments.Select(item => new
+                        {
+                            item.Id,
+                            item.Text,
+                            item.PostId,
+                            item.UserId,
+                            item.CommentId,
+                            item.UploadDate,
+                            User = item.User != null ? new { item.User.Username } : null,
+
+                        }).ToList();
+                        return Ok(simplifiedComment);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("CommentByPostId")]
+        public IActionResult CommentByPostId(int id)
+        {
+            using (var context = new Connect2getherContext())
+            {
                 try
                 {
+                    var comment = context.Comments.Include(p => p.User).Where(x => x.PostId == id).ToList();
 
-
-
-                    using (var context = new Connect2getherContext())
+                    if (comment == null)
                     {
-                        var existingComment = context.Comments.FirstOrDefault(c => c.Id == commentDto.Id);
-
-                        if (existingComment == null)
+                        return NotFound("This comment does not exist!");
+                    }
+                    else
+                    {
+                        var simplifiedComment = comment.Select(item => new
                         {
-                            return NotFound("A megadott komment nem található.");
-                        }
+                            item.Id,
+                            item.Text,
+                            item.PostId,
+                            item.UserId,
+                            item.CommentId,
+                            item.UploadDate,
+                            User = item.User != null ? new { item.User.Username } : null,
 
-
-
-
-                        existingComment.Text = commentDto.Text;
-
-                        context.SaveChanges();
-
-                        return Ok("Sikeres frissítés!");
+                        }).ToList();
+                        return Ok(simplifiedComment);
                     }
                 }
                 catch (Exception ex)
@@ -178,74 +209,99 @@ namespace Connect2Gether_API.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-            else 
+        }
+
+        [HttpPut("ChangeOwnComment")]
+        [Authorize(Roles = "Default,Admin,Moderator")]
+        public IActionResult ChangeOwnComment(CommentPutDto commentPutDto, int id, int userId)
+        {
+            using (var context = new Connect2getherContext())
             {
-                return StatusCode(404, "Nincs komment vagy kommenthez tartozó felhazsnáló");
+                try
+                {
+                    var changedComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (changedComment == null)
+                    {
+                        return BadRequest("This comment does not exist!");
+                    }
+                    if (changedComment!.UserId == userId)
+                    {
+                        changedComment.Text = commentPutDto.Text!;
+                        context.Comments.Update(changedComment);
+                        context.SaveChanges();
+                        return Ok("Changes successfully!");
+                    }
+                    else
+                    {
+                        return BadRequest("This user cannot make changes!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
 
-        [HttpDelete("AdminOperation/{id}")]
+        [HttpDelete("AdminOperation/DeleteCommentByAdmin")]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteByAdmin(int id)
+        public IActionResult DeleteByAdmin(int id, AlertMessageDto alertMessageDto)
         {
-            try
+            using (var context = new Connect2getherContext())
             {
-                int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-                using (var context = new Connect2getherContext())
+                try
                 {
-                    var existingComment = context.Comments.FirstOrDefault(c => c.Id == id);
-
-                    if (existingComment == null)
+                    var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    if (deleteComment == null)
                     {
-                        return NotFound("A megadott komment nem található.");
+                        return BadRequest("This comment does not exist!");
                     }
-
-                    context.Comments.Remove(existingComment);
+                    context.Comments.Remove(deleteComment);
                     context.SaveChanges();
-
-                    return Ok("A komment sikeresen törölve lett.");
+                    Alertmessage alertmessage = new Alertmessage();
+                    alertmessage.Title = alertMessageDto.title;
+                    alertmessage.Description = alertMessageDto.description;
+                    alertmessage.UserId = deleteComment.UserId;
+                    context.Alertmessages.Add(alertmessage);
+                    context.SaveChanges();
+                    return Ok("Deleted successfully!");
                 }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
 
-        [HttpDelete("{id}")]
-        [Authorize]
-        public IActionResult DeleteByUser(int id)
+        [HttpDelete("DeleteCommentByUserId")]
+        [Authorize(Roles = "Default, Admin, Moderator")]
+        public IActionResult DeleteByUser(int id, int userId)
         {
-            try
+            using (var context = new Connect2getherContext())
             {
-
-                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-                using (var context = new Connect2getherContext())
+                try
                 {
-                    var existingComment = context.Comments.FirstOrDefault(c => c.Id == id);
-
-                    if (existingComment == null)
+                    var deleteComment = context.Comments.FirstOrDefault(x => x.Id == id);
+                    var deletedCommentPost = context.UserPosts.FirstOrDefault(x => x.Id == deleteComment!.PostId);
+                    if (deleteComment == null)
                     {
-                        return NotFound("A megadott komment nem található.");
+                        return BadRequest("This comment does not exist!");
                     }
-
-
-                    if (existingComment.UserId != userId)
+                    if (deleteComment!.UserId == userId || deletedCommentPost!.UserId == userId)
                     {
-                        return Forbid();
+                        context.Comments.Remove(deleteComment);
+                        context.SaveChanges();
+                        return Ok("Deleted successfully!");
                     }
-
-                    context.Comments.Remove(existingComment);
-                    context.SaveChanges();
-
-                    return Ok("A komment sikeresen törölve lett.");
+                    else
+                    {
+                        return BadRequest("This user cannot make deleted!");
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
     }

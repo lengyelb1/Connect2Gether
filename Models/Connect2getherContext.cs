@@ -19,7 +19,9 @@ public partial class Connect2getherContext : DbContext
 
     public virtual DbSet<Comment> Comments { get; set; }
 
-    public virtual DbSet<Image> Images { get; set; }
+    public virtual DbSet<Deletedlike> Deletedlikes { get; set; }
+
+    public virtual DbSet<DislikedPost> DislikedPosts { get; set; }
 
     public virtual DbSet<LikedPost> LikedPosts { get; set; }
 
@@ -56,7 +58,6 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Alertmessages)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("alertmessage_ibfk_1");
         });
 
@@ -84,26 +85,67 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.PostId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("comment_ibfk_2");
+                .HasConstraintName("comment_ibfk_4");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("comment_ibfk_1");
+                .HasConstraintName("comment_ibfk_5");
         });
 
-        modelBuilder.Entity<Image>(entity =>
+        modelBuilder.Entity<Deletedlike>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("images");
+            entity.ToTable("deletedlikes");
 
-            entity.Property(e => e.Id).HasColumnType("int(11)");
-            entity.Property(e => e.Image1).HasColumnType("mediumblob");
-            entity.Property(e => e.Image2).HasColumnType("mediumblob");
-            entity.Property(e => e.Image3).HasColumnType("mediumblob");
-            entity.Property(e => e.Image4).HasColumnType("mediumblob");
+            entity.HasIndex(e => e.UserId, "UserId");
+
+            entity.HasIndex(e => e.PostId, "postId");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.PostId)
+                .HasColumnType("int(11)")
+                .HasColumnName("postId");
+            entity.Property(e => e.UserId).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.Deletedlikes)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("deletedlikes_ibfk_3");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Deletedlikes)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("deletedlikes_ibfk_4");
+        });
+
+        modelBuilder.Entity<DislikedPost>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("disliked_posts");
+
+            entity.HasIndex(e => e.Postid, "postid");
+
+            entity.HasIndex(e => new { e.Userid, e.Postid }, "userid");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.Postid)
+                .HasColumnType("int(11)")
+                .HasColumnName("postid");
+            entity.Property(e => e.Userid)
+                .HasColumnType("int(11)")
+                .HasColumnName("userid");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.DislikedPosts)
+                .HasForeignKey(d => d.Postid)
+                .HasConstraintName("disliked_posts_ibfk_2");
+
+            entity.HasOne(d => d.User).WithMany(p => p.DislikedPosts)
+                .HasForeignKey(d => d.Userid)
+                .HasConstraintName("disliked_posts_ibfk_3");
         });
 
         modelBuilder.Entity<LikedPost>(entity =>
@@ -126,13 +168,11 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.Post).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.PostId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("liked_posts_ibfk_2");
+                .HasConstraintName("liked_posts_ibfk_4");
 
             entity.HasOne(d => d.User).WithMany(p => p.LikedPosts)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("liked_posts_ibfk_1");
+                .HasConstraintName("liked_posts_ibfk_5");
         });
 
         modelBuilder.Entity<Permission>(entity =>
@@ -186,16 +226,26 @@ public partial class Connect2getherContext : DbContext
             entity.Property(e => e.Point)
                 .HasComment("Pontszám")
                 .HasColumnType("int(11)");
+            entity.Property(e => e.ProfileImage)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("mediumblob");
             entity.Property(e => e.RankId)
                 .HasComment("Pontszámhoz kötött rangok")
                 .HasColumnType("int(11)");
             entity.Property(e => e.RegistrationDate).HasColumnType("date");
             entity.Property(e => e.Username).HasMaxLength(128);
+            entity.Property(e => e.ValidatedKey)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("text");
 
             entity.HasOne(d => d.Permission).WithMany(p => p.Users)
                 .HasForeignKey(d => d.PermissionId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("user_ibfk_2");
+
+            entity.HasOne(d => d.Rank).WithMany(p => p.Users)
+                .HasForeignKey(d => d.RankId)
+                .HasConstraintName("user_ibfk_3");
         });
 
         modelBuilder.Entity<UserPost>(entity =>
@@ -204,17 +254,14 @@ public partial class Connect2getherContext : DbContext
 
             entity.ToTable("user_post");
 
-            entity.HasIndex(e => e.ImageId, "ImageId");
-
-            entity.HasIndex(e => new { e.ImageId, e.UserId }, "ImageId_2").IsUnique();
-
             entity.HasIndex(e => e.UserId, "UserId");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Description).HasColumnType("text");
-            entity.Property(e => e.ImageId)
+            entity.Property(e => e.Dislike).HasColumnType("int(11)");
+            entity.Property(e => e.Image)
                 .HasDefaultValueSql("'NULL'")
-                .HasColumnType("int(11)");
+                .HasColumnType("mediumblob");
             entity.Property(e => e.Like).HasColumnType("bigint(20)");
             entity.Property(e => e.Title).HasMaxLength(128);
             entity.Property(e => e.UploadDate)
@@ -227,8 +274,8 @@ public partial class Connect2getherContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.UserPosts)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("user_post_ibfk_3");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("user_post_ibfk_1");
         });
 
         modelBuilder.Entity<UserSuspiciou>(entity =>
@@ -240,6 +287,8 @@ public partial class Connect2getherContext : DbContext
             entity.HasIndex(e => e.UserId, "UserId").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Message).HasColumnType("text");
             entity.Property(e => e.UserId).HasColumnType("int(11)");
 
             entity.HasOne(d => d.User).WithOne(p => p.UserSuspiciou)
@@ -249,20 +298,21 @@ public partial class Connect2getherContext : DbContext
 
         modelBuilder.Entity<UserToken>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("user_token");
 
-            entity.Property(e => e.UserId)
-                .ValueGeneratedOnAdd()
-                .HasColumnType("int(11)");
+            entity.HasIndex(e => e.UserId, "UserId");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Token).HasColumnType("text");
             entity.Property(e => e.TokenExpireDate)
                 .HasColumnType("datetime")
-                .HasColumnName("token_expire_date");
+                .HasColumnName("Token_expire_date");
+            entity.Property(e => e.UserId).HasColumnType("int(11)");
 
-            entity.HasOne(d => d.User).WithOne(p => p.UserToken)
-                .HasForeignKey<UserToken>(d => d.UserId)
+            entity.HasOne(d => d.User).WithMany(p => p.UserTokens)
+                .HasForeignKey(d => d.UserId)
                 .HasConstraintName("user_token_ibfk_1");
         });
 
