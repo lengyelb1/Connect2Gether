@@ -84,7 +84,6 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                     {
                         context.UserSuspicious.Add(new UserSuspiciou {
                             UserId = user.Id, 
-                            Message = userSuspiciousDto.Message, 
                             Description = userSuspiciousDto.Descrpition 
                         });
 
