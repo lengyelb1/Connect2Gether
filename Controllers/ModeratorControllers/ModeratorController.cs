@@ -28,7 +28,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                     {
                         userSuspicious.Id,
                         userSuspicious.UserId,
-                        userSuspicious.Message,
+                        userSuspicious.Description,
                         User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
 
                     }).ToList();
@@ -55,7 +55,7 @@ namespace Connect2Gether_API.Controllers.ModeratorControllers
                     {
                         userSuspicious.Id,
                         userSuspicious.UserId,
-                        userSuspicious.Message,
+                        userSuspicious.Description,
                         User = userSuspicious.User != null ? new { userSuspicious.User.Username } : null,
 
                     }).ToList();
