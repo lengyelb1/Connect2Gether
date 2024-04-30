@@ -335,30 +335,6 @@ namespace Connect2Gether_API.Controllers
                             {
                                 user!.Point++;
                                 context.SaveChanges();
-                                if (user.Point > 10)
-                                {
-                                    user.RankId = 2;
-                                    context.SaveChanges();
-                                    return Ok("You have reached a new rank!");
-                                }
-                                else if (user.Point > 20)
-                                {
-                                    user.RankId = 3;
-                                    context.SaveChanges();
-                                    return Ok("You have reached a new rank!");
-                                }
-                                else if (user.Point > 30)
-                                {
-                                    user.RankId = 4;
-                                    context.SaveChanges();
-                                    return Ok("You have reached a new rank!");
-                                }
-                                else if (user.Point > 40)
-                                {
-                                    user.RankId = 5;
-                                    context.SaveChanges();
-                                    return Ok("You have reached a new rank!");
-                                }
                                 return Ok("The post has been liked successfully! +1 point");
                             }
                             context.SaveChanges();
