@@ -334,11 +334,6 @@ namespace Connect2Gether_API.Controllers.AdminControllers
                 user.Email = userPutDto.Email;
                 user.PermissionId = userPutDto.permissionId;
 
-                if (context.Users.FirstOrDefault((x) => x.Username == user.Username) != null)
-                {
-                    return BadRequest("User existing!");
-                }
-
                 context.Users.Update(user);
                 context.SaveChanges();
                 return Ok("User changes!");
